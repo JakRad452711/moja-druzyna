@@ -16,4 +16,12 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.16" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\views\home\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\icons\navigation.svg" />
+  </ItemGroup>
+
 </Project>
