@@ -12,7 +12,8 @@
     <div class="screen">
         <header>
             <nav class="upper-panel navbar-expand-sm">
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <img src="~/icons/layout/split-bar.png" style="position:absolute;width:2px;height:49px;left:256px;top:8px;" />
+                <div style="position:absolute;right:0px;top:8px;">
                     <partial name="_LoginPartial" />
                 </div>
             </nav>
@@ -20,23 +21,104 @@
         <div class="center-section-container">
             <input type="checkbox" id="is-sb-collapsed" />
             <label id="hamburger" for="is-sb-collapsed">
-                <img id="hamburger-icon" src="~/icons/navigation.svg" />
+                <img id="hamburger-icon" src="~/icons/main/navigation-hamburger.svg" />
             </label>
             <div class="left-panel">
             </div>
             <div class="sidebar">
-                <div class="navigations">
-                    <div id="sidebar-profile">
-                        Profil
-                    </div>
-                    <div id="sidebar-reports">
-                        Raporty
-                    </div>
-                    <div id="sidebar-team">
-                        Drużyna
-                    </div>
-                    <div id="sidebar-ranking">
-                        Ranking
+                <div id="sidebar-header">
+                </div>
+                <div id="sidebar-content">
+                    <div class="navigations">
+                        <div id="sidebar-profile">
+                            <div id="sidebar-section-header">
+                                <img src="~/icons/main/person.png" style="width:24px;height:24px;margin-left:8px;margin-top:4px;" />
+                                <div style="margin:4px;">
+                                    Profil
+                                </div>
+                            </div>
+                            <div style="margin-left:16px;margin-top:8px;">
+                                Dane
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                Historia służby
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                Stopnie
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                Osiągnięcia
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                Role
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                Kursy szkoleniowe i uprawnienia
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                Zgody RODO
+                            </div>
+                        </div>
+                        <div id="sidebar-reports">
+                            <div id="sidebar-section-header">
+                                <img src="~/icons/main/sticky-note.png" style="width:24px;height:24px;margin-left:8px;margin-top:4px;" />
+                                <div style="margin:4px;">
+                                    Raporty
+                                </div>
+                            </div>
+                            <div style="margin-left:16px;margin-top:8px;">
+                                1
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                2
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                3
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                4
+                            </div>
+                        </div>
+                        <div id="sidebar-team">
+                            <div id="sidebar-section-header">
+                                <img src="~/icons/main/flag.png" style="width:24px;height:24px;margin-left:8px;margin-top:4px;" />
+                                <div style="margin:4px;">
+                                    Drużyna
+                                </div>
+                            </div>
+                            <div style="margin-left:16px;margin-top:8px;">
+                                Moja drużyna
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                2
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                3
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                4
+                            </div>
+                        </div>
+                        <div id="sidebar-ranking">
+                            <div id="sidebar-section-header">
+                                <img src="~/icons/main/cup.png" style="width:24px;height:24px;margin-left:8px;margin-top:4px;" />
+                                <div style="margin:4px;">
+                                    Ranking
+                                </div>
+                            </div>
+                            <div style="margin-left:16px;margin-top:8px;">
+                                Punktacje
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                Zasady
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                3
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                4
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
