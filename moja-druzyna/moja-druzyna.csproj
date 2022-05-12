@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\icons\main\navigation-hamburger.svg" />
+    <None Include="wwwroot\icons\navigation\nav-hamburger.svg" />
   </ItemGroup>
 
 </Project>

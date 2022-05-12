@@ -1,0 +1,26 @@
+﻿#go-back:hover
+{
+    filter: opacity(50%)
+}
+
+.screen {
+    position: fixed;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.upper-panel {
+    width: 100%;
+    height: 64px;
+    background-color: #27A688;
+}
+
+.center-section-container {
+    position: absolute;
+    flex-shrink: 0;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background-color: #F9F9F9;
+}
