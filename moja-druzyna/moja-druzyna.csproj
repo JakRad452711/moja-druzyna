@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\views\home\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\icons\navigation\nav-hamburger.svg" />
   </ItemGroup>
 
