@@ -16,4 +16,12 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.16" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\icons\navigation\nav-hamburger.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\views\home\" />
+  </ItemGroup>
+
 </Project>

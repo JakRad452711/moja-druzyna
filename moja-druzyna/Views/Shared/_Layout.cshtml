@@ -3,44 +3,132 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - moja_druzyna</title>
+    <title>Moja Drużyna - @ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/views/shared/_Layout.css" asp-append-version="true"/>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">moja_druzyna</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+    <div class="screen">
+        <header>
+            <nav class="upper-panel navbar-expand-sm">
+                <img src="~/icons/layout/split-bar.png" style="position:absolute;width:2px;height:49px;left:256px;top:8px;" />
+                <div style="position:absolute;right:0px;top:8px;">
                     <partial name="_LoginPartial" />
                 </div>
+            </nav>
+        </header>
+        <div class="center-section-container">
+            <input type="checkbox" id="is-sb-collapsed" />
+            <label id="hamburger" for="is-sb-collapsed">
+                <img id="hamburger-icon" src="~/icons/navigation/nav-hamburger.svg" />
+            </label>
+            <div class="left-panel">
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - moja_druzyna - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="sidebar">
+                <div id="sidebar-header">
+                </div>
+                <div id="sidebar-content">
+                    <div class="navigations">
+                        <div id="sidebar-profile">
+                            <div id="sidebar-section-header">
+                                <img src="~/icons/main/person.png" style="width:24px;height:24px;margin-left:8px;margin-top:4px;" />
+                                <div style="margin:4px;">
+                                    Profil
+                                </div>
+                            </div>
+                            <div style="margin-left:16px;margin-top:8px;">
+                                Dane
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                Historia służby
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                Stopnie
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                Osiągnięcia
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                Role
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                Kursy szkoleniowe i uprawnienia
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                Zgody RODO
+                            </div>
+                        </div>
+                        <div id="sidebar-reports">
+                            <div id="sidebar-section-header">
+                                <img src="~/icons/main/sticky-note.png" style="width:24px;height:24px;margin-left:8px;margin-top:4px;" />
+                                <div style="margin:4px;">
+                                    Raporty
+                                </div>
+                            </div>
+                            <div style="margin-left:16px;margin-top:8px;">
+                                1
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                2
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                3
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                4
+                            </div>
+                        </div>
+                        <div id="sidebar-team">
+                            <div id="sidebar-section-header">
+                                <img src="~/icons/main/flag.png" style="width:24px;height:24px;margin-left:8px;margin-top:4px;" />
+                                <div style="margin:4px;">
+                                    Drużyna
+                                </div>
+                            </div>
+                            <div style="margin-left:16px;margin-top:8px;">
+                                Moja drużyna
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                2
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                3
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                4
+                            </div>
+                        </div>
+                        <div id="sidebar-ranking">
+                            <div id="sidebar-section-header">
+                                <img src="~/icons/main/cup.png" style="width:24px;height:24px;margin-left:8px;margin-top:4px;" />
+                                <div style="margin:4px;">
+                                    Ranking
+                                </div>
+                            </div>
+                            <div style="margin-left:16px;margin-top:8px;">
+                                Punktacje
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                Zasady
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                3
+                            </div>
+                            <div style="margin-left:16px;margin-top:16px;">
+                                4
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
         </div>
-    </footer>
+    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
