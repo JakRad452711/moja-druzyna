@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Moja Drużyna - @ViewData["Title"]</title>
+    <title>mojadrużyna - @ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/views/shared/_Layout.css" asp-append-version="true"/>
@@ -34,29 +34,45 @@
                             <div id="sidebar-section-header">
                                 <img src="~/icons/main/person.png" style="width:24px;height:24px;margin-left:8px;margin-top:4px;" />
                                 <div style="margin:4px;">
-                                    Profil
+                                    <a class="text-dark" asp-controller="profile" asp-action="personaldata">
+                                        Profil
+                                    </a>
                                 </div>
                             </div>
                             <div style="margin-left:16px;margin-top:8px;">
-                                Dane
+                                <a class="text-dark" asp-controller="profile" asp-action="personaldata">
+                                    Dane
+                                </a>
                             </div>
                             <div style="margin-left:16px;margin-top:16px;">
-                                Historia służby
+                                <a class="text-dark" asp-controller="profile" asp-action="servicehistory">
+                                    Historia służby
+                                </a>
                             </div>
                             <div style="margin-left:16px;margin-top:16px;">
-                                Stopnie
+                                <a class="text-dark" asp-controller="profile" asp-action="ranks">
+                                    Stopnie
+                                </a>
                             </div>
                             <div style="margin-left:16px;margin-top:16px;">
-                                Osiągnięcia
+                                <a class="text-dark" asp-controller="profile" asp-action="achievments">
+                                    Osiągnięcia
+                                </a>
                             </div>
                             <div style="margin-left:16px;margin-top:16px;">
-                                Role
+                                <a class="text-dark" asp-controller="profile" asp-action="roles">
+                                    Role
+                                </a>
                             </div>
                             <div style="margin-left:16px;margin-top:16px;">
-                                Kursy szkoleniowe i uprawnienia
+                                <a class="text-dark" asp-controller="profile" asp-action="coursesandpermissions">
+                                    Kursy szkoleniowe i uprawnienia
+                                </a>
                             </div>
                             <div style="margin-left:16px;margin-top:16px;">
-                                Zgody RODO
+                                <a class="text-dark" asp-controller="profile" asp-action="gdprconsents">
+                                    Zgody RODO
+                                </a>
                             </div>
                         </div>
                         <div id="sidebar-reports">
