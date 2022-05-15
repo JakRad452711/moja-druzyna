@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\views\home\" />
+    <Folder Include="wwwroot\css\views\home\" />
   </ItemGroup>
 
 </Project>

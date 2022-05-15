@@ -5,33 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>mojadrużyna - @ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/views/shared/_Layout.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/views/shared/_Layout.css" asp-append-version="true"/>
 </head>
 <body>
-    <div class="screen">
+    <div id="screen">
         <header>
-            <nav class="upper-panel navbar-expand-sm">
+            <nav id="upper-panel" class="emerald-green navbar-expand-sm">
                 <img src="~/icons/layout/split-bar.png" style="position:absolute;width:2px;height:49px;left:256px;top:8px;" />
                 <div style="position:absolute;right:0px;top:8px;">
                     <partial name="_LoginPartial" />
                 </div>
             </nav>
         </header>
-        <div class="center-section-container">
+        <div id="center-section-container" class="muddy-white">
             <input type="checkbox" id="is-sb-collapsed" />
             <label id="hamburger" for="is-sb-collapsed">
                 <img id="hamburger-icon" src="~/icons/navigation/nav-hamburger.svg" />
             </label>
-            <div class="left-panel">
+            <div id="left-panel">
             </div>
-            <div class="sidebar">
-                <div id="sidebar-header">
+            <div id="sidebar" class="clear-white">
+                <div id="sidebar-header" class="clear-white">
                 </div>
-                <div id="sidebar-content">
-                    <div class="navigations">
-                        <div id="sidebar-profile">
-                            <div id="sidebar-section-header">
+                <div id="sidebar-content" class="font-muddy-black medium-regular">
+                    <div id="navigations">
+                        <div id="sidebar-profile" class="muddy-white-2">
+                            <div id="sidebar-section-header" class="light-gray paragraph-regular">
                                 <img src="~/icons/main/person.png" style="width:24px;height:24px;margin-left:8px;margin-top:4px;" />
                                 <div style="margin:4px;">
                                     <a class="text-dark" asp-controller="profile" asp-action="personaldata">
@@ -75,8 +75,8 @@
                                 </a>
                             </div>
                         </div>
-                        <div id="sidebar-reports">
-                            <div id="sidebar-section-header">
+                        <div id="sidebar-reports" class="muddy-white-2">
+                            <div id="sidebar-section-header" class="light-gray paragraph-regular">
                                 <img src="~/icons/main/sticky-note.png" style="width:24px;height:24px;margin-left:8px;margin-top:4px;" />
                                 <div style="margin:4px;">
                                     Raporty
@@ -95,8 +95,8 @@
                                 4
                             </div>
                         </div>
-                        <div id="sidebar-team">
-                            <div id="sidebar-section-header">
+                        <div id="sidebar-team" class="muddy-white-2">
+                            <div id="sidebar-section-header" class="light-gray paragraph-regular">
                                 <img src="~/icons/main/flag.png" style="width:24px;height:24px;margin-left:8px;margin-top:4px;" />
                                 <div style="margin:4px;">
                                     Drużyna
@@ -115,8 +115,8 @@
                                 4
                             </div>
                         </div>
-                        <div id="sidebar-ranking">
-                            <div id="sidebar-section-header">
+                        <div id="sidebar-ranking" class="muddy-white-2">
+                            <div id="sidebar-section-header" class="light-gray paragraph-regular">
                                 <img src="~/icons/main/cup.png" style="width:24px;height:24px;margin-left:8px;margin-top:4px;" />
                                 <div style="margin:4px;">
                                     Ranking
