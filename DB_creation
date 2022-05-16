@@ -1,0 +1,113 @@
+DROP DATABASE IF EXISTS MojaDruzyna;
+CREATE DATABASE MojaDruzyna;
+
+USE MojaDruzyna;
+
+CREATE TABLE scout
+(
+[PESEL] VARCHAR( 12),
+[name] VARCHAR(50),
+[second_name] VARCHAR(50),
+[surname] VARCHAR(50),
+[nationality] VARCHAR(50),
+[date_of_birth] date,
+[date_of_joining] DATE,
+[date_of_leaving] DATE,
+[NS] varchar(5),
+[NUMBER_OF_CROSS] VARCHAR(25),
+);
+
+CREATE TABLE parent
+(
+[PESEL] VARCHAR( 12),
+[name] VARCHAR(50),
+[second_name] VARCHAR(50),
+[surname] VARCHAR(50)
+);
+CREATE TABLE adress
+(
+[adres_zam] VARCHAR(100),
+[kraj_zam]	VARCHAR(50),
+[miast_zam]	VARCHAR(50),
+[ulica_zam]	VARCHAR(100),
+[kod_pocztowy_zam]	VARCHAR(8),
+[numer_bloku_domu_zam]	VARCHAR(50),
+[adres_kor] VARCHAR(100),
+[kraj_kor]	VARCHAR(50),
+[miast_kor]	VARCHAR(50),
+[ulica_kor]	VARCHAR(100),
+[kod_pocztowy_kor]	VARCHAR(8),
+[numer_bloku_domu_kor]	VARCHAR(50)
+
+);
+
+CREATE TABLE history_of_service
+(
+[banner] VARCHAR(200),
+[detachment] VARCHAR(200),
+[team] VARCHAR(200),
+[host] VARCHAR(200),
+[date_start] DATE,
+[date_end] DATE
+);
+CREATE TABLE [team]
+(
+[id_team] INT PRIMARY KEY,
+[name] VARCHAR (200),
+[number_of_people] INT
+);
+CREATE TABLE host
+(
+[id_host] INT PRIMARY KEY,
+[name] VARCHAR (200),
+[number_of_people] INT
+);
+CREATE TABLE attendance_list
+(
+[id_list] VARCHAR (20),
+[date] DATE,
+[team_host] VARCHAR(5),
+
+
+);
+CREATE TABLE [event]
+(
+[id_event] INT PRIMARY KEY,
+[date_start] DATE,
+[date_end] DATE,
+[paid] INT,
+[description] VARCHAR (400),
+[type] VARCHAR ( 200)
+);
+CREATE TABLE [collection]
+(
+[id_collection] INT PRIMARY KEY,
+[type] VARCHAR (200),
+[date_of_collection] DATE,
+[quarter] INT,
+[confirmation] INT
+
+);
+CREATE TABLE [rank]
+(
+[name] VARCHAR(200) PRIMARY KEY
+);
+CREATE TABLE legal_agreement
+(
+[id_agreement] INT PRIMARY KEY,
+[name] VARCHAR(200),
+[description] VARCHAR(400)
+);
+CREATE TABLE achievement
+(
+[id_achievement] INT PRIMARY KEY,
+[name] VARCHAR(200),
+[description] VARCHAR(400),
+[type] VARCHAR(50)
+);
+CREATE TABLE training_course
+(
+[id_course] INT PRIMARY KEY,
+[name] VARCHAR(200) ,
+[description] VARCHAR (400)
+);
