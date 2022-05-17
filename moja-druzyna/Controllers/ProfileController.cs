@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using moja_druzyna.Data;
 using moja_druzyna.Models;
 using System.Diagnostics;
+using System.Linq;
 
 namespace moja_druzyna.Controllers
 {
@@ -22,7 +23,9 @@ namespace moja_druzyna.Controllers
             if (!User.Identity.IsAuthenticated)
                 return Redirect("/Identity/Account/Login");
 
-            return View();
+            Scout userData = _dbContext.Scouts.First();
+
+            return View(userData);
         }
 
         public IActionResult ServiceHistory()

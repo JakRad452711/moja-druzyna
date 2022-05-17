@@ -5,77 +5,77 @@
     font-style: normal;
     font-weight: 300;
     font-size: 20px;
-    line-height: 23px;
+    line-height: 32px;
 }
 
 .paragraph-light {
     font-style: normal;
     font-weight: 200;
     font-size: 20px;
-    line-height: 23px;
+    line-height: 32px;
 }
 
 .large-bold {
     font-style: normal;
     font-weight: 600;
     font-size: 16px;
-    line-height: 19px;
+    line-height: 26px;
 }
 
 .large-regular {
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
-    line-height: 19px;
+    line-height: 26px;
 }
 
 .large-light {
     font-style: normal;
     font-weight: 200;
     font-size: 16px;
-    line-height: 19px;
+    line-height: 26px;
 }
 
 .medium-bold {
     font-style: normal;
     font-weight: 600;
     font-size: 14px;
-    line-height: 16px;
+    line-height: 22px;
 }
 
 .medium-regular {
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
-    line-height: 16px;
+    line-height: 22px;
 }
 
 .medium-light {
     font-style: normal;
     font-weight: 200;
     font-size: 14px;
-    line-height: 16px;
+    line-height: 22px;
 }
 
 .small-bold {
     font-style: normal;
     font-weight: 600;
     font-size: 12px;
-    line-height: 14px;
+    line-height: 19px;
 }
 
 small-regular {
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
-    line-height: 14px;
+    line-height: 19px;
 }
 
 small-light {
     font-style: normal;
     font-weight: 200;
     font-size: 12px;
-    line-height: 14px;
+    line-height: 19px;
 }
 
 /* background colors */
