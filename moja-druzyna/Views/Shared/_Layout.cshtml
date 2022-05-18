@@ -32,44 +32,44 @@
                     <div id="navigations">
                         <div id="sidebar-profile" class="muddy-white-2">
                             <div id="sidebar-section-header" class="light-gray paragraph-regular">
-                                <img src="~/icons/main/person.png" style="width:24px;height:24px;margin-left:8px;margin-top:4px;" />
-                                <div style="margin-left:10px;margin-top:-2px;">
+                                <img src="~/icons/main/person.png" id="navigations-icon" />
+                                <div id="sidebar-section-header-text">
                                     <a class="text-dark" asp-controller="profile" asp-action="personaldata">
                                         Profil
                                     </a>
                                 </div>
                             </div>
-                            <div style="margin-left:16px;margin-top:4px;">
+                            <div id="navigations-item-first">
                                 <a class="text-dark" asp-controller="profile" asp-action="personaldata">
                                     Dane
                                 </a>
                             </div>
-                            <div style="margin-left:16px;margin-top:10px;">
+                            <div id="navigations-item-next">
                                 <a class="text-dark" asp-controller="profile" asp-action="servicehistory">
                                     Historia służby
                                 </a>
                             </div>
-                            <div style="margin-left:16px;margin-top:10px;">
+                            <div id="navigations-item-next">
                                 <a class="text-dark" asp-controller="profile" asp-action="ranks">
                                     Stopnie
                                 </a>
                             </div>
-                            <div style="margin-left:16px;margin-top:10px;">
+                            <div id="navigations-item-next">
                                 <a class="text-dark" asp-controller="profile" asp-action="achievments">
                                     Osiągnięcia
                                 </a>
                             </div>
-                            <div style="margin-left:16px;margin-top:10px;">
+                            <div id="navigations-item-next">
                                 <a class="text-dark" asp-controller="profile" asp-action="roles">
                                     Role
                                 </a>
                             </div>
-                            <div style="margin-left:16px;margin-top:10px;">
+                            <div id="navigations-item-next">
                                 <a class="text-dark" asp-controller="profile" asp-action="coursesandpermissions">
                                     Kursy szkoleniowe i uprawnienia
                                 </a>
                             </div>
-                            <div style="margin-left:16px;margin-top:10px;">
+                            <div id="navigations-item-next">
                                 <a class="text-dark" asp-controller="profile" asp-action="gdprconsents">
                                     Zgody RODO
                                 </a>
@@ -77,69 +77,69 @@
                         </div>
                         <div id="sidebar-reports" class="muddy-white-2">
                             <div id="sidebar-section-header" class="light-gray paragraph-regular">
-                                <img src="~/icons/main/sticky-note.png" style="width:24px;height:24px;margin-left:8px;margin-top:4px;" />
-                                <div style="margin-left:10px;margin-top:-2px;">
+                                <img src="~/icons/main/sticky-note.png" id="navigations-icon" />
+                                <div id="sidebar-section-header-text">
                                     Raporty
                                 </div>
                             </div>
-                            <div style="margin-left:16px;margin-top:4px;">
+                            <div id="navigations-item-first">
                                 1
                             </div>
-                            <div style="margin-left:16px;margin-top:10px;">
+                            <div id="navigations-item-next">
                                 2
                             </div>
-                            <div style="margin-left:16px;margin-top:10px;">
+                            <div id="navigations-item-next">
                                 3
                             </div>
-                            <div style="margin-left:16px;margin-top:10px;">
+                            <div id="navigations-item-next">
                                 4
                             </div>
                         </div>
                         <div id="sidebar-team" class="muddy-white-2">
                             <div id="sidebar-section-header" class="light-gray paragraph-regular">
-                                <img src="~/icons/main/flag.png" style="width:24px;height:24px;margin-left:8px;margin-top:4px;" />
-                                <div style="margin-left:10px;margin-top:-2px;">
+                                <img src="~/icons/main/flag.png" id="navigations-icon" />
+                                <div id="sidebar-section-header-text">
                                     Drużyna
                                 </div>
                             </div>
-                            <div style="margin-left:16px;margin-top:4px;">
+                            <div id="navigations-item-first">
                                 Moja drużyna
                             </div>
-                            <div style="margin-left:16px;margin-top:10px;">
+                            <div id="navigations-item-next">
                                 2
                             </div>
-                            <div style="margin-left:16px;margin-top:10px;">
+                            <div id="navigations-item-next">
                                 3
                             </div>
-                            <div style="margin-left:16px;margin-top:10px;">
+                            <div id="navigations-item-next">
                                 4
                             </div>
                         </div>
                         <div id="sidebar-ranking" class="muddy-white-2">
                             <div id="sidebar-section-header" class="light-gray paragraph-regular">
-                                <img src="~/icons/main/cup.png" style="width:24px;height:24px;margin-left:8px;margin-top:4px;" />
-                                <div style="margin-left:10px;margin-top:-2px;">
+                                <img src="~/icons/main/cup.png" id="navigations-icon" />
+                                <div id="sidebar-section-header-text">
                                     Ranking
                                 </div>
                             </div>
-                            <div style="margin-left:16px;margin-top:4px;">
+                            <div id="navigations-item-first">
                                 Punktacje
                             </div>
-                            <div style="margin-left:16px;margin-top:10px;">
+                            <div id="navigations-item-next">
                                 Zasady
                             </div>
-                            <div style="margin-left:16px;margin-top:10px;">
+                            <div id="navigations-item-next">
                                 3
                             </div>
-                            <div style="margin-left:16px;margin-top:10px;">
+                            <div id="navigations-item-next">
                                 4
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div style="margin:20px;width:100vw">
-                <main role="main" class="pb-3">
+            <div id="center-section-content-box">
+                <main id="center-section-content" role="main" class="pb-3" style="">
                     @RenderBody()
                 </main>
             </div>
