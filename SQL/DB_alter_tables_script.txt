@@ -1,0 +1,9 @@
+use MojaDruzyna
+
+ALTER TABLE scout
+ADD [password] BINARY(64);
+
+
+
+ALTER TABLE parent
+ADD [password] BINARY (64);
