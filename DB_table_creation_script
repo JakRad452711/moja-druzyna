@@ -1,14 +1,20 @@
-DROP DATABASE IF EXISTS MojaDruzyna;
-CREATE DATABASE MojaDruzyna;
+--DROP DATABASE IF EXISTS MojaDruzyna;
+--CREATE DATABASE MojaDruzyna;
 
 USE MojaDruzyna;
 
-DROP TABLE IF EXISTS scout ;
-DROP TABLE IF EXISTS team ;
-DROP TABLE IF EXISTS parent ;
+DROP TABLE IF EXISTS scout_achievement ;
+DROP TABLE IF EXISTS scout_agreement ;
+DROP TABLE IF EXISTS scout_collection ;
+DROP TABLE IF EXISTS scout_course ;
+DROP TABLE IF EXISTS scout_event ;
+DROP TABLE IF EXISTS scout_rank ;
+DROP TABLE IF EXISTS scout_team ;
+DROP TABLE IF EXISTS event_team ;
+DROP TABLE IF EXISTS duty_history ;
+DROP TABLE IF EXISTS agreement ;
 DROP TABLE IF EXISTS adress;
 DROP TABLE IF EXISTS history_of_service ;
-DROP TABLE IF EXISTS host ;
 DROP TABLE IF EXISTS attendance_list ;
 DROP TABLE IF EXISTS training_course ;
 DROP TABLE IF EXISTS achievement ;
@@ -16,6 +22,10 @@ DROP TABLE IF EXISTS legal_agreement ;
 DROP TABLE IF EXISTS [collection] ;
 DROP TABLE IF EXISTS [event] ;
 DROP TABLE IF EXISTS [rank] ;
+DROP TABLE IF EXISTS scout ;
+DROP TABLE IF EXISTS parent ;
+DROP TABLE IF EXISTS host ;
+DROP TABLE IF EXISTS team ;
 
 CREATE TABLE [achievement]
 (
@@ -59,6 +69,7 @@ CREATE TABLE [parent]
   [name] VARCHAR(50) NOT NULL,
   [second_name] VARCHAR(50) ,
   [surname] VARCHAR(50) NOT NULL,
+  [password] BINARY(64),
   PRIMARY KEY (PESEL)
 );
 
@@ -98,6 +109,7 @@ CREATE TABLE [scout]
   [date_of_leaving] DATE ,
   [cross_number] VARCHAR(50) ,
   [PESEL_parent] VARCHAR(12),
+  [password] BINARY(64) NOT NULL,
   PRIMARY KEY (PESEL_scout),
   FOREIGN KEY ([PESEL_parent]) REFERENCES parent(PESEL)
 );
@@ -230,7 +242,7 @@ CREATE TABLE scout_event
   FOREIGN KEY (id_event) REFERENCES [event](id_event)
 );
 
-CREATE TABLE SCOUT_RANK
+CREATE TABLE [scout_rank]
 (
   date_acquirement DATE NOT NULL,
   PESEL VARCHAR(12) NOT NULL,
