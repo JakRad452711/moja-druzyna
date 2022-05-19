@@ -1,0 +1,20 @@
+ALTER TABLE scout
+ADD CONSTRAINT CHK_NS CHECK ( NS IN ('T','N')),
+CONSTRAINT CHK_PESEL_scout CHECK  ( LEN(PESEL_scout) = 11),
+CONSTRAINT CHK_PESEL_parent CHECK  ( LEN(PESEL_parent) = 11),
+CONSTRAINT CHK_dates CHECK (date_of_birth > date_of_entry AND date_of_entry > date_of_leave)
+--
+ALTER TABLE parent
+ADD CONSTRAINT CHK_PESEL CHECK  ( LEN(PESEL) = 11);
+--
+ALTER TABLE [rank]
+ADD CONSTRAINT CHK_rank_name CHECK ( [name] IN ('młodzik','wywiadowca','odkrywca','ćwik','harcerz orli','harcerz Rzeczpospolitej','ochotniczka','tropicielka','pionierka','samarytanka','harcerka orla','harcerka
+Rzeczypospolitej');
+--
+ALTER TABLE  [event]
+ADD CONSTRAINT CHK_dates CHECK (date_start > date_end)
+
+ALTER TABLE [collection]
+ADD CONSTRAINT CHK_quarter CHECK ([quarter] IN (1,2,3,4));
+--
+

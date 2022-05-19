@@ -14,7 +14,8 @@ CREATE OR ALTER PROC procedure_add_scout
   @pdate_of_leaving DATE  ,
   @pcross_number VARCHAR(50) ,
   @pPESEL_parent VARCHAR(12),
-  @ppassword NVARCHAR(50) 
+  @ppassword NVARCHAR(50),
+  @pemail VARCHAR(50)
     
 AS
 BEGIN
@@ -34,7 +35,8 @@ BEGIN
 							date_of_leaving,
 							cross_number,
 							PESEL_parent,
-							[password])
+							[password],
+							email)
         VALUES( @pPESEL_scout  ,
   @pname  ,
   @psecond_name  ,
@@ -47,7 +49,8 @@ BEGIN
   @pdate_of_leaving   ,
   @pcross_number ,
   @pPESEL_parent ,
-  HASHBYTES('SHA2_512', @pPassword)  )
+  HASHBYTES('SHA2_512', @pPassword),
+	@pemail)
 
 
 
@@ -67,7 +70,8 @@ END
   @pdate_of_leaving  = '2008-11-11' ,
   @pcross_number ='T' ,
   @pPESEL_parent = '0032'  ,
-  @pPassword = 'haslo'
+  @pPassword = 'haslo',
+  @pemail ='test@maila'
          
 
 INSERT INTO parent VALUES ('0032', 'RODZIC IMIE' , ' second name rodzic', ' rodzic nazwisko');

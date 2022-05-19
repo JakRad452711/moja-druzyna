@@ -1,0 +1,21 @@
+GO 
+CREATE OR ALTER  FUNCTION    [user_authentication] ( @input_login VARCHAR(50),@input_password NVARCHAR(50))
+	RETURNS INT
+AS BEGIN 
+	DECLARE @password BINARY(64);
+	DECLARE @flag INT;
+	SET @password = HASHBYTES('SHA2_512', @input_password);
+	
+	IF @password = (SELECT s.password  FROM scout s WHERE s.email = @input_login)
+		SET @flag = 1;
+	ELSE
+		SET @flag = 0; 
+	
+	RETURN @flag;
+
+
+END
+GO
+select password from scout WHERE email = 'test@maila';
+SELECT  dbo.user_authentication('test@maila', 'haslo') 
+
