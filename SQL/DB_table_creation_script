@@ -54,8 +54,8 @@ CREATE TABLE [training_course]
 CREATE TABLE [event]
 (
   [id_event] INT NOT NULL,
-  [data_start DATE NOT NULL,
-  [data_end] DATE NOT NULL,
+  [date_start DATE NOT NULL,
+  [date_end] DATE NOT NULL,
   [has_cost] VARCHAR(1) NOT NULL,
   [type] VARCHAR(50) NOT NULL,
   [description] VARCHAR(500) NOT NULL,
@@ -69,7 +69,8 @@ CREATE TABLE [parent]
   [name] VARCHAR(50) NOT NULL,
   [second_name] VARCHAR(50) ,
   [surname] VARCHAR(50) NOT NULL,
-  [password] BINARY(64),
+  [email] VARCHAR(50) NOT NULL,
+  [password] BINARY(64) NOT NULL,
   PRIMARY KEY (PESEL)
 );
 
@@ -109,6 +110,7 @@ CREATE TABLE [scout]
   [date_of_leaving] DATE ,
   [cross_number] VARCHAR(50) ,
   [PESEL_parent] VARCHAR(12),
+  [email] VARCHAR(50) NOT NULL,
   [password] BINARY(64) NOT NULL,
   PRIMARY KEY (PESEL_scout),
   FOREIGN KEY ([PESEL_parent]) REFERENCES parent(PESEL)
