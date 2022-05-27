@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@using moja_druzyna.Models
+@inject SignInManager<Scout> SignInManager
+@inject UserManager<Scout> UserManager
 
 @{
     if (SignInManager.IsSignedIn(User))

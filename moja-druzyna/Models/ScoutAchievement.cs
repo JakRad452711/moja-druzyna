@@ -5,13 +5,13 @@ using System.Collections.Generic;
 
 namespace moja_druzyna.Models​
 {
-    /*public partial class ScoutTeam
+    /*public partial class ScoutAchievement
     {
-        public string Role { get; set; }
+        public DateTime Date { get; set; }
         public string Pesel { get; set; }
-        public int IdHost { get; set; }
+        public int IdAchievement { get; set; }
 
-        public virtual Host IdHostNavigation { get; set; }
+        public virtual Achievement IdAchievementNavigation { get; set; }
         public virtual Scout PeselNavigation { get; set; }
     }*/
 }
