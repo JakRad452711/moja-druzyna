@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+
+#nullable disable
+
+namespace moja_druzyna.Models​
+{
+    /*public partial class AttendanceList
+    {
+        public DateTime DateOfList { get; set; }
+        public int IdList { get; set; }
+        public int? IdEvent { get; set; }
+        public int? IdHost { get; set; }
+        public int? IdTeam { get; set; }
+
+        public virtual Event IdEventNavigation { get; set; }
+        public virtual Host IdHostNavigation { get; set; }
+        public virtual Team IdTeamNavigation { get; set; }
+    }*/
+}

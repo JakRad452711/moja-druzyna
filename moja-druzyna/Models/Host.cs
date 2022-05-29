@@ -5,20 +5,20 @@ using System.Collections.Generic;
 
 namespace moja_druzyna.Models​
 {
-    /*public partial class Team
+    /*public partial class Host
     {
-        public Team()
+        public Host()
         {
             AttendanceLists = new HashSet<AttendanceList>();
-            EventTeams = new HashSet<EventTeam>();
-            Hosts = new HashSet<Host>();
+            ScoutTeams = new HashSet<ScoutTeam>();
         }
 
+        public int IdHost { get; set; }
         public string Name { get; set; }
         public int IdTeam { get; set; }
 
+        public virtual Team IdTeamNavigation { get; set; }
         public virtual ICollection<AttendanceList> AttendanceLists { get; set; }
-        public virtual ICollection<EventTeam> EventTeams { get; set; }
-        public virtual ICollection<Host> Hosts { get; set; }
+        public virtual ICollection<ScoutTeam> ScoutTeams { get; set; }
     }*/
 }

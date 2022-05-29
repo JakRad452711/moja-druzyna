@@ -1,0 +1,80 @@
+use MojaDruzyna;
+
+GO
+CREATE OR ALTER PROC procedure_add_scout
+  @pPESEL_scout NVARCHAR(50) ,
+  @pname VARCHAR(50) ,
+  @psecond_name VARCHAR(50) ,
+  @psurname VARCHAR(50) ,
+  @pdate_of_birth DATE,
+  @pnationality VARCHAR(50),
+  @pmembership_number VARCHAR(50) ,
+  @pdate_of_entry DATE ,
+  @pNS VARCHAR(1) ,
+  @pdate_of_leaving DATE  ,
+  @pcross_number VARCHAR(50) ,
+  @pPESEL_parent VARCHAR(12),
+  @ppassword NVARCHAR(50),
+  @pemail VARCHAR(50)
+    
+AS
+BEGIN
+    SET NOCOUNT ON
+
+
+
+        INSERT INTO [scout] (PESEL_scout,
+							[name],
+							second_name,
+							surname,
+							date_of_birth,
+							nationality,
+							membership_number,
+							date_of_entry,
+							NS,
+							date_of_leaving,
+							cross_number,
+							PESEL_parent,
+							[password],
+							email)
+        VALUES( @pPESEL_scout  ,
+  @pname  ,
+  @psecond_name  ,
+  @psurname  ,
+  @pdate_of_birth ,
+  @pnationality,
+  @pmembership_number  ,
+  @pdate_of_entry  ,
+  @pNS  ,
+  @pdate_of_leaving   ,
+  @pcross_number ,
+  @pPESEL_parent ,
+  HASHBYTES('SHA2_512', @pPassword),
+	@pemail)
+
+
+
+END
+
+
+/*EXEC dbo.procedure_add_scout
+@pPESEL_scout = '12345' ,
+	@pname =' imie eins' ,
+  @psecond_name = 'drugie imiojko' ,
+  @psurname = 'nazwiskoooooo' ,
+  @pdate_of_birth = '2002-11-11',
+  @pnationality = 'polskie',
+  @pmembership_number = '123dsf'  ,
+  @pdate_of_entry = '2008-11-11'  ,
+  @pNS = 'T' ,
+  @pdate_of_leaving  = '2008-11-11' ,
+  @pcross_number ='T' ,
+  @pPESEL_parent = '0032'  ,
+  @pPassword = 'haslo',
+  @pemail ='test@maila'
+         
+
+INSERT INTO parent VALUES ('0032', 'RODZIC IMIE' , ' second name rodzic', ' rodzic nazwisko');
+SELECT * FROM scout 
+SELECT * FROM parent
+*/
