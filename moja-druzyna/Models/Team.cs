@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace moja_druzyna.Models​
 {
-    /*public partial class Team
+    public partial class Team
     {
         public Team()
         {
@@ -20,5 +20,5 @@ namespace moja_druzyna.Models​
         public virtual ICollection<AttendanceList> AttendanceLists { get; set; }
         public virtual ICollection<EventTeam> EventTeams { get; set; }
         public virtual ICollection<Host> Hosts { get; set; }
-    }*/
+    }
 }

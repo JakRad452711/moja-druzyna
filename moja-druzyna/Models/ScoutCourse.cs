@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace moja_druzyna.Models​
 {
-    /*public partial class ScoutCourse
+    public partial class ScoutCourse
     {
         public DateTime DateAcquirement { get; set; }
         public string Pesel { get; set; }
@@ -13,5 +13,5 @@ namespace moja_druzyna.Models​
 
         public virtual TrainingCourse IdCourseNavigation { get; set; }
         public virtual Scout PeselNavigation { get; set; }
-    }*/
+    }
 }

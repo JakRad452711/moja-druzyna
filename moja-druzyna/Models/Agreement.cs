@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace moja_druzyna.Models​
 {
-    /*public partial class Agreement
+    public partial class Agreement
     {
         public Agreement()
         {
@@ -17,5 +17,5 @@ namespace moja_druzyna.Models​
         public string Description { get; set; }
 
         public virtual ICollection<ScoutAgreement> ScoutAgreements { get; set; }
-    }*/
+    }
 }

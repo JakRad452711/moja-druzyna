@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace moja_druzyna.Models​
 {
-    /*public partial class Collection
+    public partial class Collection
     {
         public Collection()
         {
@@ -19,5 +19,5 @@ namespace moja_druzyna.Models​
 
         public virtual Event IdEventNavigation { get; set; }
         public virtual ICollection<ScoutCollection> ScoutCollections { get; set; }
-    }*/
+    }
 }

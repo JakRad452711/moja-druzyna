@@ -10,13 +10,14 @@ namespace moja_druzyna.Models​
     {
         public Scout()
         {
-            /*Adresses = new HashSet<Adress>();
+            Adresses = new HashSet<Adress>();
             ScoutAgreements = new HashSet<ScoutAgreement>();
             ScoutCollections = new HashSet<ScoutCollection>();
             ScoutCourses = new HashSet<ScoutCourse>();
             ScoutEvents = new HashSet<ScoutEvent>();
             ScoutRanks = new HashSet<ScoutRank>();
-            ScoutTeams = new HashSet<ScoutTeam>();*/
+            ScoutTeams = new HashSet<ScoutTeam>();
+            AttendanceList = new HashSet<AttendanceList>();
         }
 
         public string PeselScout { get; set; }
@@ -31,7 +32,7 @@ namespace moja_druzyna.Models​
         public string CrossNumber { get; set; }
         public string PeselParent { get; set; }
         
-        /*public virtual Parent PeselParentNavigation { get; set; }
+        public virtual Parent PeselParentNavigation { get; set; }
         public virtual DutyHistory DutyHistory { get; set; }
         public virtual ScoutAchievement ScoutAchievement { get; set; }
         public virtual ICollection<Adress> Adresses { get; set; }
@@ -40,6 +41,7 @@ namespace moja_druzyna.Models​
         public virtual ICollection<ScoutCourse> ScoutCourses { get; set; }
         public virtual ICollection<ScoutEvent> ScoutEvents { get; set; }
         public virtual ICollection<ScoutRank> ScoutRanks { get; set; }
-        public virtual ICollection<ScoutTeam> ScoutTeams { get; set; }*/
+        public virtual ICollection<ScoutTeam> ScoutTeams { get; set; }
+        public virtual ICollection<AttendanceList> AttendanceList { get; set; }
     }
 }

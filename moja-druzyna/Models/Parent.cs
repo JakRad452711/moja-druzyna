@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace moja_druzyna.Models​
 {
-    /*public partial class Parent
+    public partial class Parent
     {
         public Parent()
         {
@@ -22,5 +22,5 @@ namespace moja_druzyna.Models​
 
         public virtual ICollection<Adress> Adresses { get; set; }
         public virtual ICollection<Scout> Scouts { get; set; }
-    }*/
+    }
 }

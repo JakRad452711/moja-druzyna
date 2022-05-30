@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace moja_druzyna.Models​
 {
-    /*public partial class Event
+    public partial class Event
     {
         public Event()
         {
@@ -26,5 +26,5 @@ namespace moja_druzyna.Models​
         public virtual ICollection<Collection> Collections { get; set; }
         public virtual ICollection<EventTeam> EventTeams { get; set; }
         public virtual ICollection<ScoutEvent> ScoutEvents { get; set; }
-    }*/
+    }
 }

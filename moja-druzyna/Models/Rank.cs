@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace moja_druzyna.Models​
 {
-    /*public partial class Rank
+    public partial class Rank
     {
         public Rank()
         {
@@ -15,5 +15,5 @@ namespace moja_druzyna.Models​
         public string Name { get; set; }
 
         public virtual ICollection<ScoutRank> ScoutRanks { get; set; }
-    }*/
+    }
 }

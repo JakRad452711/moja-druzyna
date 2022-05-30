@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace moja_druzyna.Models​
 {
-    /*public partial class DutyHistory
+    public partial class DutyHistory
     {
         public DateTime DateStart { get; set; }
         public DateTime? DateEnd { get; set; }
@@ -16,5 +16,5 @@ namespace moja_druzyna.Models​
         public string Pesel { get; set; }
 
         public virtual Scout PeselNavigation { get; set; }
-    }*/
+    }
 }

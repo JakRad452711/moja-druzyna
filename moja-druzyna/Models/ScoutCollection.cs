@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace moja_druzyna.Models​
 {
-    /*public partial class ScoutCollection
+    public partial class ScoutCollection
     {
         public int Ammount { get; set; }
         public DateTime DateAcquirement { get; set; }
@@ -15,5 +15,5 @@ namespace moja_druzyna.Models​
 
         public virtual Collection IdCollectionNavigation { get; set; }
         public virtual Scout PeselNavigation { get; set; }
-    }*/
+    }
 }

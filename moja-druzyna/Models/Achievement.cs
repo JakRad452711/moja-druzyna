@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace moja_druzyna.Models​
 {
-    /*public partial class Achievement
+    public partial class Achievement
     {
         public Achievement()
         {
@@ -17,5 +17,5 @@ namespace moja_druzyna.Models​
         public int IdAchievement { get; set; }
 
         public virtual ICollection<ScoutAchievement> ScoutAchievements { get; set; }
-    }*/
+    }
 }

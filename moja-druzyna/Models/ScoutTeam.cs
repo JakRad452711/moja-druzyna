@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace moja_druzyna.Models​
 {
-    /*public partial class ScoutTeam
+    public partial class ScoutTeam
     {
         public string Role { get; set; }
         public string Pesel { get; set; }
@@ -13,5 +13,5 @@ namespace moja_druzyna.Models​
 
         public virtual Host IdHostNavigation { get; set; }
         public virtual Scout PeselNavigation { get; set; }
-    }*/
+    }
 }

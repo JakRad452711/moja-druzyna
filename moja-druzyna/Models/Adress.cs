@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace moja_druzyna.Models​
 {
-    /*public partial class Adress
+    public partial class Adress
     {
         public string AddresZam { get; set; }
         public string StreatZam { get; set; }
@@ -24,5 +24,5 @@ namespace moja_druzyna.Models​
 
         public virtual Parent PeselParentNavigation { get; set; }
         public virtual Scout PeselScoutNavigation { get; set; }
-    }*/
+    }
 }

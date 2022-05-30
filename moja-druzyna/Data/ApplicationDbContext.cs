@@ -12,7 +12,7 @@ namespace moja_druzyna.Data
         {
         }
 
-        /*public virtual DbSet<Achievement> Achievements { get; set; }
+        public virtual DbSet<Achievement> Achievements { get; set; }
         public virtual DbSet<Adress> Adresses { get; set; } 
         public virtual DbSet<Agreement> Agreements { get; set; }
         public virtual DbSet<AttendanceList> AttendanceLists { get; set; }
@@ -22,9 +22,9 @@ namespace moja_druzyna.Data
         public virtual DbSet<EventTeam> EventTeams { get; set; }
         public virtual DbSet<Host> Hosts { get; set; }
         public virtual DbSet<Parent> Parents { get; set; }
-        public virtual DbSet<Rank> Ranks { get; set; }*/
+        public virtual DbSet<Rank> Ranks { get; set; }
         public virtual DbSet<Scout> Scouts { get; set; }
-        /*public virtual DbSet<ScoutAchievement> ScoutAchievements { get; set; }
+        public virtual DbSet<ScoutAchievement> ScoutAchievements { get; set; }
         public virtual DbSet<ScoutAgreement> ScoutAgreements{ get; set; }
         public virtual DbSet<ScoutCollection> ScoutCollections { get; set; }
         public virtual DbSet<ScoutCourse> ScoutCourses { get; set; }
@@ -32,7 +32,7 @@ namespace moja_druzyna.Data
         public virtual DbSet<ScoutRank> ScoutRanks { get; set; }
         public virtual DbSet<ScoutTeam> ScoutTeams { get; set; }
         public virtual DbSet<Team> Teams { get; set; }
-        public virtual DbSet<TrainingCourse> TrainingCourses { get; set; }*/
+        public virtual DbSet<TrainingCourse> TrainingCourses { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -49,7 +49,7 @@ namespace moja_druzyna.Data
 
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
-            /*modelBuilder.Entity<Achievement>(entity =>
+            modelBuilder.Entity<Achievement>(entity =>
             {
                 entity.HasKey(e => e.IdAchievement)
                     .HasName("PK__achievem__719AF69DD4D4300D");
@@ -75,18 +75,17 @@ namespace moja_druzyna.Data
 
             modelBuilder.Entity<Adress>(entity =>
             {
-                entity.HasKey(e => new { e.PeselScout, e.PeselParent })
-                    .HasName("PK__adress__A4FDAC3BFD1F6F63");
+            
 
                 entity.ToTable("adress");
 
                 entity.Property(e => e.PeselScout)
-                    .HasMaxLength(12)
+                    .HasMaxLength(11)
                     .IsUnicode(false)
                     .HasColumnName("PESEL_scout");
 
                 entity.Property(e => e.PeselParent)
-                    .HasMaxLength(12)
+                    .HasMaxLength(11)
                     .IsUnicode(false)
                     .HasColumnName("PESEL_parent");
 
@@ -151,7 +150,7 @@ namespace moja_druzyna.Data
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("zip_zam");
-
+#warning
                 entity.HasOne(d => d.PeselParentNavigation)
                     .WithMany(p => p.Adresses)
                     .HasForeignKey(d => d.PeselParent)
@@ -224,6 +223,11 @@ namespace moja_druzyna.Data
                     .WithMany(p => p.AttendanceLists)
                     .HasForeignKey(d => d.IdTeam)
                     .HasConstraintName("FK__attendanc__id_te__3C69FB99");
+                entity.HasOne(d => d.IdScoutNavigation)
+                    .WithMany(p => p.AttendanceList)
+                    .HasForeignKey(d => d.IdList)
+                    .HasConstraintName("FK_attendance_test");
+                    #warning //nazwa
             });
 
             modelBuilder.Entity<Collection>(entity =>
@@ -255,13 +259,12 @@ namespace moja_druzyna.Data
 
             modelBuilder.Entity<DutyHistory>(entity =>
             {
-                entity.HasKey(e => e.Pesel)
-                    .HasName("PK__duty_his__4F16EE7EF330C483");
+                
 
                 entity.ToTable("duty_history");
 
                 entity.Property(e => e.Pesel)
-                    .HasMaxLength(12)
+                    .HasMaxLength(11)
                     .IsUnicode(false)
                     .HasColumnName("PESEL");
 
@@ -394,7 +397,7 @@ namespace moja_druzyna.Data
                 entity.ToTable("parent");
 
                 entity.Property(e => e.Pesel)
-                    .HasMaxLength(12)
+                    .HasMaxLength(11)
                     .IsUnicode(false)
                     .HasColumnName("PESEL");
 
@@ -439,7 +442,7 @@ namespace moja_druzyna.Data
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("name");
-            });*/
+            });
 
             modelBuilder.Entity<Scout>(entity =>
             {
@@ -449,7 +452,7 @@ namespace moja_druzyna.Data
                 entity.ToTable("scout");
 
                 entity.Property(e => e.PeselScout)
-                    .HasMaxLength(12)
+                    .HasMaxLength(11)
                     .IsUnicode(false)
                     .HasColumnName("PESEL_scout");
 
@@ -489,7 +492,7 @@ namespace moja_druzyna.Data
                     .HasColumnName("NS");
 
                 entity.Property(e => e.PeselParent)
-                    .HasMaxLength(12)
+                    .HasMaxLength(11)
                     .IsUnicode(false)
                     .HasColumnName("PESEL_parent");
 
@@ -504,13 +507,13 @@ namespace moja_druzyna.Data
                     .IsUnicode(false)
                     .HasColumnName("surname");
 
-                /*entity.HasOne(d => d.PeselParentNavigation)
+                entity.HasOne(d => d.PeselParentNavigation)
                     .WithMany(p => p.Scouts)
                     .HasForeignKey(d => d.PeselParent)
-                    .HasConstraintName("FK__scout__PESEL_par__34C8D9D1");*/
+                    .HasConstraintName("FK__scout__PESEL_par__34C8D9D1");
             });
 
-            /*modelBuilder.Entity<ScoutAchievement>(entity =>
+            modelBuilder.Entity<ScoutAchievement>(entity =>
             {
                 entity.HasKey(e => e.Pesel)
                     .HasName("PK__scout_ac__4F16EE7E0DF9BDD4");
@@ -518,7 +521,7 @@ namespace moja_druzyna.Data
                 entity.ToTable("scout_achievement");
 
                 entity.Property(e => e.Pesel)
-                    .HasMaxLength(12)
+                    .HasMaxLength(11)
                     .IsUnicode(false)
                     .HasColumnName("PESEL");
 
@@ -549,7 +552,7 @@ namespace moja_druzyna.Data
                 entity.ToTable("scout_agreement");
 
                 entity.Property(e => e.Pesel)
-                    .HasMaxLength(12)
+                    .HasMaxLength(11)
                     .IsUnicode(false)
                     .HasColumnName("PESEL");
 
@@ -584,7 +587,7 @@ namespace moja_druzyna.Data
                 entity.ToTable("scout_collection");
 
                 entity.Property(e => e.Pesel)
-                    .HasMaxLength(12)
+                    .HasMaxLength(11)
                     .IsUnicode(false)
                     .HasColumnName("PESEL");
 
@@ -607,7 +610,7 @@ namespace moja_druzyna.Data
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__scout_col__id_co__59063A47");
 
-                entity.HasOne(d => d.PeselNavigation)
+                entity.HasOne(d => d.PeselNavigation           )
                     .WithMany(p => p.ScoutCollections)
                     .HasForeignKey(d => d.Pesel)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -622,7 +625,7 @@ namespace moja_druzyna.Data
                 entity.ToTable("scout_course");
 
                 entity.Property(e => e.Pesel)
-                    .HasMaxLength(12)
+                    .HasMaxLength(11)
                     .IsUnicode(false)
                     .HasColumnName("PESEL");
 
@@ -653,7 +656,7 @@ namespace moja_druzyna.Data
                 entity.ToTable("scout_event");
 
                 entity.Property(e => e.Pesel)
-                    .HasMaxLength(12)
+                    .HasMaxLength(11)
                     .IsUnicode(false)
                     .HasColumnName("PESEL");
 
@@ -680,7 +683,7 @@ namespace moja_druzyna.Data
                 entity.ToTable("scout_rank");
 
                 entity.Property(e => e.Pesel)
-                    .HasMaxLength(12)
+                    .HasMaxLength(11)
                     .IsUnicode(false)
                     .HasColumnName("PESEL");
 
@@ -714,7 +717,7 @@ namespace moja_druzyna.Data
                 entity.ToTable("scout_team");
 
                 entity.Property(e => e.Pesel)
-                    .HasMaxLength(12)
+                    .HasMaxLength(11)
                     .IsUnicode(false)
                     .HasColumnName("PESEL");
 
@@ -779,7 +782,7 @@ namespace moja_druzyna.Data
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("name");
-            });*/
+            });
         }
     }
 }
