@@ -1,0 +1,211 @@
+﻿.content {
+    width: auto;
+    height: auto;
+}
+
+#content-title {
+    width: auto;
+    height: auto;
+}
+
+#header-box {
+    height: 75px;
+    width: auto;
+}
+
+#header-box-inside {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: space-evenly;
+    text-align: center;
+}
+
+#header-box-inside-data {
+    display: flex;
+    min-width: 720px;
+    max-width: 920px;
+    width: calc(36vw + 320px);
+}
+
+#gear-picture {
+    position: sticky;
+    width: 100px;
+    height: 100px;
+    margin-top: 0px;
+}
+
+.account-name {
+    z-index: 100;
+    margin-top: 75px;
+    margin-left: calc(5vw - 15px);
+    min-width: 400px;
+    max-width: 600px;
+    width: 40vw;
+}
+
+.account-content {
+    z-index: 100;
+    margin-left: calc(5vw - 15px);
+    width: auto;
+}
+
+.form-content {
+    width: 200%;
+    width: inherit;
+}
+
+#login-form-id {
+    width: 100%;
+}
+
+    #login-form-id > input {
+        width: 100%;
+    }
+
+#login-form-text-field-id {
+    width: 100%;
+}
+
+#data-box-1 {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: -26px;
+    width: inherit;
+    min-width: 640px;
+    height: 280px;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 19px;
+}
+
+#data-box-2 {
+    display: flex;
+    justify-content: space-evenly;
+    width: inherit;
+    min-width: 640px;
+    height: 330px;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 19px;
+}
+
+#labels {
+    display: flex;
+    text-align: left;
+    min-width: 200px;
+    width: 18vw;
+    max-width: 300px;
+}
+
+#data {
+    display: flex;
+    text-align: left;
+    width: 160px;
+}
+
+#data-box-1a {
+    display: flex;
+    z-index: 100;
+    min-width: 320px;
+}
+
+#data-box-1b {
+    display: flex;
+    z-index: 100;
+    min-width: 320px;
+}
+
+#data-box-2a {
+    display: flex;
+    z-index: 100;
+    min-width: 320px;
+}
+
+#data-box-2b {
+    display: flex;
+    z-index: 100;
+    min-width: 320px;
+}
+
+
+
+#settings-title {
+    display: flex;
+    text-align: center;
+}
+
+
+#big-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: auto;
+}
+
+
+
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+    /* Hide default HTML checkbox */
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
