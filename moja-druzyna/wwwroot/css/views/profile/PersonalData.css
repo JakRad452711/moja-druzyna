@@ -31,7 +31,6 @@
 }
 
 #team-name {
-    z-index: 100;
     margin-top: 75px;
     margin-left: calc(5vw - 15px);
     min-width: 400px;
@@ -80,24 +79,20 @@
 
 #data-box-1a {
     display: flex;
-    z-index: 100;
     min-width: 320px;
 }
 
 #data-box-1b {
     display: flex;
-    z-index: 100;
     min-width: 320px;
 }
 
 #data-box-2a {
     display: flex;
-    z-index: 100;
     min-width: 320px;
 }
 
 #data-box-2b {
     display: flex;
-    z-index: 100;
     min-width: 320px;
 }

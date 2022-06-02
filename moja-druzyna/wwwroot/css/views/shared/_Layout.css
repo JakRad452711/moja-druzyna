@@ -37,7 +37,7 @@
 #sidebar-header {
     position: relative;
     left: 0px;
-    width: 100%;
+    width: 256px;
     height: 40px;
     z-index: 10;
 }
@@ -46,7 +46,7 @@
     position: fixed;
     top: 64px;
     overflow: auto;
-    width: 100%;
+    width: 256px;
     height: calc(100vh - 72px);
     scrollbar-width: none;
 }
