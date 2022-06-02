@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
@@ -10,6 +11,8 @@ namespace moja_druzyna.Models​
         public string AddresZam { get; set; }
         public string StreatZam { get; set; }
         public string HouseZam { get; set; }
+        [MaxLength (50)]
+
         public string ZipZam { get; set; }
         public string CountryZam { get; set; }
         public string CityZam { get; set; }

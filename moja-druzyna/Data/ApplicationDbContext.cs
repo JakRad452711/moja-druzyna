@@ -152,7 +152,7 @@ namespace moja_druzyna.Data
                     .HasColumnName("zip_zam");
 #warning
                 entity.HasOne(d => d.PeselParentNavigation)
-                    .WithMany(p => p.Adresses)
+                    .WithMany (p => p.Adresses)
                     .HasForeignKey(d => d.PeselParent)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__adress__PESEL_pa__4316F928");

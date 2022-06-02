@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 #nullable disable
-#warning
+
 namespace moja_druzyna.Models​
 {
     public partial class AttendanceList
