@@ -1,0 +1,168 @@
+﻿@model moja_druzyna.Models.Scout
+
+@{
+    ViewData["Title"] = "dane";
+}
+
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/views/profile/PersonalData.css" asp-append-version="true" />
+<div id="content" class="text-center">
+    <div id="header-box" class="large-regular font-dark-green">
+        <div id="header-box-inside">
+            <div id="header-box-inside-data">
+                <div>
+                    <img id="profile-picture" src="~/icons/design/profile picture.svg" />
+                </div>
+                <div id="team-name">
+                    Chorągiew Wielkopolska im. Powstańców Wielkopolskich 1918/1919 Hufiec Poznań Jeżyce im. Stefana Czarneckiego
+                </div>
+            </div>
+            <div style="width:1px"><br /></div>
+        </div>
+    </div>
+    <div id="data-box-1" class="font-muddy-black">
+        <div id="data-box-1a">
+            <div id="labels" class="large-light font-muddy-black">
+                <div>
+                    <div class="paragraph-regular font-dark-green">
+                        Dane<br />
+                    </div>
+                    <br />
+                    Imię:<br />
+                    Drugie imię:<br />
+                    Nazwisko:<br />
+                    Płeć:<br />
+                    PESEL:<br />
+                    Data urodzenia:<br />
+                    Obywatelstwo:<br />
+                    Numer członkowski:<br />
+                </div>
+            </div>
+            <div id="data" class="large-light font-muddy-black">
+                <div>
+                    <div class="paragraph-regular">
+                        <br />
+                    </div>
+                    <br />
+                    @Html.DisplayFor(user => user.Name) <br />
+                    @if (Model.SecondName == null)
+                    {<a>n/a</a> }
+                    else
+                    { <a>@Model.SecondName</a>} <br />
+                    @Html.DisplayFor(user => user.Surname) <br />
+                    @Html.DisplayFor(user => user.Pesel) <br />
+                    @Html.DisplayFor(user => user.DateOfBirth) <br />
+                    @Html.DisplayFor(user => user.Nationality) <br />
+                    @Html.DisplayFor(user => user.ScoutId) <br />
+                </div>
+            </div>
+        </div>
+        <div id="data-box-1b">
+            <div id="labels" class="large-light font-muddy-black">
+                <div>
+                    <div class="paragraph-regular font-dark-green">
+                        Adres<br />
+                    </div>
+                    <br />
+                    Adres zamieszkania:<br />
+                    Ulica:<br />
+                    Numer domu/bloku:<br />
+                    Miasto:<br />
+                    Kod pocztowy:<br />
+                    Kraj:<br />
+                </div>
+            </div>
+            <div id="data" class="large-light font-muddy-black">
+                <div>
+                    <div class="paragraph-regular">
+                        <br />
+                    </div>
+                    <br />
+                    @Html.DisplayFor(user => user.Name) <br />
+                    @if (Model.SecondName == null)
+                    {<a>n/a</a> }
+                    else
+                    { <a>@Model.SecondName</a>} <br />
+                    @Html.DisplayFor(user => user.Surname) <br />
+                    @Html.DisplayFor(user => user.Pesel) <br />
+                    @Html.DisplayFor(user => user.DateOfBirth) <br />
+                    @Html.DisplayFor(user => user.Nationality) <br />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="data-box-2" class="font-muddy-black">
+        <div id="data-box-2a">
+            <div id="labels" class="large-light font-muddy-black">
+                <div>
+                    <div class="paragraph-regular font-dark-green">
+                        <br />
+                    </div>
+                    <br />
+                    <br />
+                    Data wstąpienia do ZHP:<br />
+                    NS:<br />
+                    Data odejścia z ZHP:<br />
+                    Numer krzyża harcerskiego:<br />
+                </div>
+            </div>
+            <div id="data" class="large-light font-muddy-black">
+                <div>
+                    <div class="paragraph-regular font-dark-green">
+                        <br />
+                    </div>
+                    <br />
+                    <br />
+                    @Html.DisplayFor(user => user.Name) <br />
+                    @if (Model.SecondName == null)
+                    {<a>n/a</a> }
+                    else
+                    { <a>@Model.SecondName</a>} <br />
+                    @Html.DisplayFor(user => user.Surname) <br />
+                    @Html.DisplayFor(user => user.Pesel) <br />
+                </div>
+            </div>
+        </div>
+        <div id="data-box-2b">
+            <div id="labels" class="large-light font-muddy-black">
+                <div style="width:160px">
+                    <div class="paragraph-regular font-dark-green" style="width:300px">
+                        Adres korespondencji<br />
+                    </div>
+                    <div style="width:300px;line-height:42px;">
+                        <input type="checkbox" /> Taki sam jak zamieszkania <br />
+                    </div>
+                    Adres zamieszkania:<br />
+                    Ulica:<br />
+                    Numer domu/bloku:<br />
+                    Miasto:<br />
+                    Kod pocztowy:<br />
+                    Kraj:<br />
+                </div>
+            </div>
+            <div id="data" class="large-light font-muddy-black">
+                <div>
+                    <div class="paragraph-regular">
+                        <br />
+                    </div>
+                    <div style="line-height:42px">
+                        <br />
+                    </div>
+                    @Html.DisplayFor(user => user.Name) <br />
+                    @if (Model.SecondName == null)
+                    {<a>n/a</a> }
+                    else
+                    { <a>@Model.SecondName</a>} <br />
+                    @Html.DisplayFor(user => user.Surname) <br />
+                    @Html.DisplayFor(user => user.Pesel) <br />
+                    @Html.DisplayFor(user => user.DateOfBirth) <br />
+                    @Html.DisplayFor(user => user.Nationality) <br />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

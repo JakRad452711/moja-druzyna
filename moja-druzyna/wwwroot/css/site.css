@@ -1,4 +1,120 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+﻿/* Our .css code is from here...  < - - - - - - - - - - - - - - - */
+/* font styles */
+
+.paragraph-regular {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 32px;
+}
+
+.paragraph-light {
+    font-style: normal;
+    font-weight: 200;
+    font-size: 20px;
+    line-height: 32px;
+}
+
+.large-bold {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 26px;
+}
+
+.large-regular {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 26px;
+}
+
+.large-light {
+    font-style: normal;
+    font-weight: 200;
+    font-size: 16px;
+    line-height: 26px;
+}
+
+.medium-bold {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 22px;
+}
+
+.medium-regular {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+}
+
+.medium-light {
+    font-style: normal;
+    font-weight: 200;
+    font-size: 14px;
+    line-height: 22px;
+}
+
+.small-bold {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 19px;
+}
+
+small-regular {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 19px;
+}
+
+small-light {
+    font-style: normal;
+    font-weight: 200;
+    font-size: 12px;
+    line-height: 19px;
+}
+
+/* background colors */
+.clear-white {
+    background-color: #FFFFFF;
+}
+
+.muddy-white {
+    background-color: #F9F9F9;
+}
+
+.muddy-white-2 {
+    background-color: #F6F6F6;
+}
+
+.light-gray {
+    background-color: #EBEEEC;
+}
+
+.emerald-green {
+    background-color: #27A688;
+}
+
+.blueish-gray {
+    background-color: blue;
+}
+
+/* font colors */
+.font-muddy-black {
+    color: #383838;
+}
+
+.font-dark-green {
+    color: #2F662E;
+}
+
+/* ...to here!                    < - - - - - - - - - - - - - - - */
+
+/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
 a.navbar-brand {
