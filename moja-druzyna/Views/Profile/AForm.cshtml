@@ -1,0 +1,44 @@
+﻿@model moja_druzyna.ViewModel.AFormViewModel
+@using moja_druzyna.ViewModel
+
+@{
+    ViewData["Title"] = "AForm";
+}
+
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<div id="content" class="text-center">
+    <form asp-action="AForm_Submit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @for (int i = 0; i < Model.AForm_Scouts.Count; i++)
+        {
+            AFormViewModel.AForm_Scout scout = ViewBag.Scouts[i];
+            <div class="form-group">
+                <input hidden asp-for="AForm_Scouts[i].Id" value=@scout.Id />
+                <input hidden asp-for="AForm_Scouts[i].Label" value=@scout.Label />
+                <label>@scout.Label</label><br />
+                <label>prop1</label>
+                <input asp-for="AForm_Scouts[i].Prop1" value=@scout.Prop1 />
+                <label>prop2</label>
+                <input asp-for="AForm_Scouts[i].Prop2" />
+                <button asp-action="AForm_RemoveScout" name="scoutIndex" value=@i>Usuń</button>
+            </div>
+        }
+        @if (ViewBag.DropDownList_Scouts.Count != 0)
+        {
+            <center class="form-group">
+                <select name="scoutId" class="form-control" style="width:400px" asp-items="@ViewBag.DropDownList_Scouts"></select>
+            </center>
+            <div class="form-group">
+                <button asp-action="AForm_AddScout">dodaj harcerza</button>
+            </div>
+        }
+
+        <div class="form-group">
+            <input type="submit" value="Zatwierdź" />
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
