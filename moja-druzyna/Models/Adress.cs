@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
+﻿
+using System.ComponentModel.DataAnnotations.Schema;
 #nullable disable
 
 namespace moja_druzyna.Models​
@@ -11,7 +9,7 @@ namespace moja_druzyna.Models​
         public string AddresZam { get; set; }
         public string StreatZam { get; set; }
         public string HouseZam { get; set; }
-        [MaxLength (50)]
+      
 
         public string ZipZam { get; set; }
         public string CountryZam { get; set; }
@@ -22,10 +20,12 @@ namespace moja_druzyna.Models​
         public string CityKor { get; set; }
         public string AdressKor { get; set; }
         public string StreatKor { get; set; }
-        public string PeselParent { get; set; }
-        public string PeselScout { get; set; }
+        [ForeignKey("fk_adress_parent")]
+        public string ParentPesel { get; set; }
+        [ForeignKey("fk_address_scout")]
+        public string ScoutPeselScout { get; set; }
 
-        public virtual Parent PeselParentNavigation { get; set; }
-        public virtual Scout PeselScoutNavigation { get; set; }
+        public virtual Parent Parent { get; set; }
+        public virtual Scout Scout { get; set; }
     }
 }

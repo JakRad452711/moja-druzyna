@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 #nullable disable
 
 namespace moja_druzyna.Models​
 {
     public partial class EventTeam
     {
-        public int IdEvent { get; set; }
-        public int IdTeam { get; set; }
-
-        public virtual Event IdEventNavigation { get; set; }
-        public virtual Team IdTeamNavigation { get; set; }
+        [ForeignKey("fk_eventteam_event")]
+        public int EventIdEvent { get; set; }
+        [ForeignKey("fk_eventteam_team")]
+        public int TeamIdTeam { get; set; }
+        public virtual Event Event { get; set; }
+        public virtual Team Team { get; set; }
     }
 }

@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 #nullable disable
 
@@ -10,10 +13,13 @@ namespace moja_druzyna.Models​
         public int Ammount { get; set; }
         public DateTime DateAcquirement { get; set; }
         public string Advance { get; set; }
-        public string Pesel { get; set; }
-        public int IdCollection { get; set; }
+        [ForeignKey("fk_scoutcollection_scout")]
+        [MaxLength(11)]
+        public string ScoutPeselScout { get; set; }
+        [ForeignKey("fk_scoutcollection_collection")]
+        public int CollectionIdCollection { get; set; }
 
-        public virtual Collection IdCollectionNavigation { get; set; }
-        public virtual Scout PeselNavigation { get; set; }
+        public virtual Collection Collection { get; set; }
+        public virtual Scout Scout { get; set; }
     }
 }

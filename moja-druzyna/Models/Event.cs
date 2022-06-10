@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
@@ -7,18 +9,13 @@ namespace moja_druzyna.Models​
 {
     public partial class Event
     {
-        public Event()
-        {
-            AttendanceLists = new HashSet<AttendanceList>();
-            Collections = new HashSet<Collection>();
-            EventTeams = new HashSet<EventTeam>();
-            ScoutEvents = new HashSet<ScoutEvent>();
-        }
-
+     
+        [Key]
         public int IdEvent { get; set; }
         public DateTime DateStartDateNotNullDateEnd { get; set; }
         public string HasCost { get; set; }
         public string Type { get; set; }
+        [MaxLength(500)]
         public string Description { get; set; }
         public int? Price { get; set; }
 

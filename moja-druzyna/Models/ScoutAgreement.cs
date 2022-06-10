@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
@@ -9,10 +11,13 @@ namespace moja_druzyna.Models​
     {
         public DateTime DateSign { get; set; }
         public DateTime? DataCancel { get; set; }
-        public string Pesel { get; set; }
-        public int IdAgreement { get; set; }
+        [ForeignKey("fk_scoutagreement_scout")]
+        [MaxLength(11)]
+        public string ScoutPeselScout { get; set; }
+        [ForeignKey("fk_scoutagreement_agreement")]
+        public int AgreementIdAgreement { get; set; }
 
-        public virtual Agreement IdAgreementNavigation { get; set; }
-        public virtual Scout PeselNavigation { get; set; }
+        public virtual Agreement Agreement { get; set; }
+        public virtual Scout Scout { get; set; }
     }
 }

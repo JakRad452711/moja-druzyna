@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-
+using System.ComponentModel.DataAnnotations.Schema;
 #nullable disable
 
 namespace moja_druzyna.Models​
@@ -13,8 +12,9 @@ namespace moja_druzyna.Models​
         public string Detachment { get; set; }
         public string Banner { get; set; }
         public string Host { get; set; }
-        public string Pesel { get; set; }
+        [ForeignKey("fk_DutyHistory_scout")]
+        public string ScoutPeselScout { get; set; }
 
-        public virtual Scout PeselNavigation { get; set; }
+        public virtual Scout Scout { get; set; }
     }
 }

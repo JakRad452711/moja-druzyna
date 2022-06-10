@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 #nullable disable
 
 namespace moja_druzyna.Models​
 {
     public partial class Team
     {
-        public Team()
-        {
-            AttendanceLists = new HashSet<AttendanceList>();
-            EventTeams = new HashSet<EventTeam>();
-            Hosts = new HashSet<Host>();
-        }
-
+    
+        [MaxLength(50)]
         public string Name { get; set; }
+        [Key]
         public int IdTeam { get; set; }
 
         public virtual ICollection<AttendanceList> AttendanceLists { get; set; }
