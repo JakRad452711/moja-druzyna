@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using moja_druzyna.Data;
 using moja_druzyna.Models;
+using moja_druzyna.ViewModels;
 using System.Diagnostics;
 
 namespace moja_druzyna.Controllers
@@ -10,6 +11,8 @@ namespace moja_druzyna.Controllers
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<DocumentsGeneratorsController> _logger;
+
+        private static AFormViewModel aFormViewModel = new AFormViewModel();
 
         public DocumentsGeneratorsController(ApplicationDbContext dbContext, ILogger<DocumentsGeneratorsController> logger)
         {
