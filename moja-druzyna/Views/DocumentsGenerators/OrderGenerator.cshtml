@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Edytor Rozkazów";
+}
+
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/views/documents-generators/DocumentsGenerators.css" asp-append-version="true" />
+<div id="big-box">
+<div id="content-title" class="text-center">
+    <div id="header-box" class="large-regular font-dark-green">
+        <div id="header-box-inside">
+            <div id="text-center">
+                <h1 class="display-4"> <img id="gear-picture" src="~/icons/design/gear-icon.svg" /> Edytor Rozkazów </h1> 
+            </div>
+            <div style="width:1px"><br /></div>
+        </div>
+    </div>
+
+</div>
+
+<div class="content text-left">
+    <div class="account-name font-dark-green">
+        Konto
+    </div>
+
+    <div class="account-content">
+        <div class="form-content">
+        <form id="login-form-id" action="/url" method="GET">
+            <p>Adres e-mail:</p>
+            
+            <input type="text">
+            
+            <p>Hasło:</p>
+            <input type="text">
+            <p>Hasło*:</p>
+            <input type="text">
+        </form>
+        </div>
+    </div>
+</div>
+
+<div class="content text-left">
+    <div class="account-name font-dark-green">
+        Aplikacja
+    </div>
+
+    <div class="account-content">
+        Tryb ciemny
+    </div>
+    <div class="account-content">
+        <!-- Rounded switch -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <label class="switch">
+          <input type="checkbox">
+          <span class="slider round"></span>
+        </label>
+    </div>
+</div>
+</div>
