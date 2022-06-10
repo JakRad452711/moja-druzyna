@@ -1,0 +1,15 @@
+﻿@import "~/css/styles.css";
+
+#gear-picture-main {
+    position: sticky;
+    width: 25px;
+    height: 25px;
+    margin-top: 0px;
+}
+
+.what-to-do {
+    position: fixed;
+    width: auto;
+    height: 25px;
+    margin-top: 0px;
+}
