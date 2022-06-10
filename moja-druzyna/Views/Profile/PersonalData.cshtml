@@ -50,10 +50,11 @@
                     else
                     { <a>@Model.SecondName</a>} <br />
                     @Html.DisplayFor(user => user.Surname) <br />
-                    @Html.DisplayFor(user => user.Pesel) <br />
+                    Płeć <br />
+                    @Html.DisplayFor(user => user.PeselScout) <br />
                     @Html.DisplayFor(user => user.DateOfBirth) <br />
                     @Html.DisplayFor(user => user.Nationality) <br />
-                    @Html.DisplayFor(user => user.ScoutId) <br />
+                    @Html.DisplayFor(user => user.MembershipNumber) <br />
                 </div>
             </div>
         </div>
@@ -78,15 +79,12 @@
                         <br />
                     </div>
                     <br />
-                    @Html.DisplayFor(user => user.Name) <br />
-                    @if (Model.SecondName == null)
-                    {<a>n/a</a> }
-                    else
-                    { <a>@Model.SecondName</a>} <br />
-                    @Html.DisplayFor(user => user.Surname) <br />
-                    @Html.DisplayFor(user => user.Pesel) <br />
-                    @Html.DisplayFor(user => user.DateOfBirth) <br />
-                    @Html.DisplayFor(user => user.Nationality) <br />
+                    Adres zamieszkania <br />
+                    Ulica <br />
+                    Numer domu/bloku <br />
+                    Miasto <br />
+                    Kod pocztowy <br />
+                    Kraj <br />
                 </div>
             </div>
         </div>
@@ -100,10 +98,9 @@
                     </div>
                     <br />
                     <br />
-                    Data wstąpienia do ZHP:<br />
                     NS:<br />
+                    Data wstąpienia do ZHP:<br />
                     Data odejścia z ZHP:<br />
-                    Numer krzyża harcerskiego:<br />
                 </div>
             </div>
             <div id="data" class="large-light font-muddy-black">
@@ -113,13 +110,11 @@
                     </div>
                     <br />
                     <br />
-                    @Html.DisplayFor(user => user.Name) <br />
-                    @if (Model.SecondName == null)
-                    {<a>n/a</a> }
-                    else
-                    { <a>@Model.SecondName</a>} <br />
-                    @Html.DisplayFor(user => user.Surname) <br />
-                    @Html.DisplayFor(user => user.Pesel) <br />
+                    @Html.DisplayFor(user => user.Ns) <br />
+                    @Html.DisplayFor(user => user.DateOfEntry) <br />
+                    @if (Model.DateOfLeaving == null) 
+                        { <span>n/a</span> } 
+                    else { Html.DisplayFor(user => user.DateOfLeaving); } <br />
                 </div>
             </div>
         </div>
@@ -154,7 +149,7 @@
                     else
                     { <a>@Model.SecondName</a>} <br />
                     @Html.DisplayFor(user => user.Surname) <br />
-                    @Html.DisplayFor(user => user.Pesel) <br />
+                    @Html.DisplayFor(user => user.PeselScout) <br />
                     @Html.DisplayFor(user => user.DateOfBirth) <br />
                     @Html.DisplayFor(user => user.Nationality) <br />
                 </div>
