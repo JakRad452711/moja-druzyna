@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using moja_druzyna.Data;
 using moja_druzyna.Models;
 using moja_druzyna.ViewModels;
+using System;
 using System.Diagnostics;
 
 namespace moja_druzyna.Controllers
@@ -12,7 +13,7 @@ namespace moja_druzyna.Controllers
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<DocumentsGeneratorsController> _logger;
 
-        private static AFormViewModel aFormViewModel = new AFormViewModel();
+        private static OrderFormViewModel orderFormViewModel = new OrderFormViewModel();
 
         public DocumentsGeneratorsController(ApplicationDbContext dbContext, ILogger<DocumentsGeneratorsController> logger)
         {
@@ -26,6 +27,24 @@ namespace moja_druzyna.Controllers
                 return Redirect("/Identity/Account/Login");
 
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult OrderForm()
+        {
+
+            return View(orderFormViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult OrderForm_Submit(OrderFormViewModel _orderFormViewModel)
+        {
+            orderFormViewModel = _orderFormViewModel;
+
+            throw new NotImplementedException();
+
+            return Redirect("OrderForm");
+
         }
 
 

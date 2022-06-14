@@ -46,8 +46,47 @@
 
 .account-content {
     z-index: 100;
+    margin-right: 0px;
     margin-left: calc(5vw - 15px);
     width: auto;
+}
+
+.account-content-temp {
+    z-index: 100;
+    margin-right: 0px;
+    /*margin-left: calc(5vw - 15px);*/
+    width: auto;
+}
+
+.account-content-left {
+    z-index: 100;
+    margin-right: 0px;
+    /*margin-left: calc(5vw - 15px);*/
+    width: 100%;
+    text-align: left;
+    float: left;
+}
+
+.account-content-right {
+    z-index: 100;
+    margin-right: 0px;
+    margin-left: 0px;
+    width: 25%;
+    text-align: right;
+    float: right;
+}
+
+.borderadded{
+    border: 1px solid grey;
+    padding-top: 2%;
+    padding-right: 2%;
+    padding: 2%;
+}
+
+#parentdiv:after {
+    content: " ";
+    display: block;
+    clear: both;
 }
 
 .form-content {
@@ -143,6 +182,53 @@
     flex-direction: column;
     align-items: center;
     width: auto;
+    overflow-y: hidden;
+
+}
+
+
+.center--small-text {
+    display: flex;
+    text-align: center;
+}
+
+
+
+.buttonedit {
+    background-color: inherit;
+    color: #000;
+    /*padding: 10px 15px;*/
+    padding: 7.5px 3.5px 7.5px 3.5px;
+    text-align: right;
+    display: inline-block;
+    margin: 5px 0px;
+    cursor: pointer;
+    outline: 1px solid grey;
+    border-radius: 10px;
+}
+
+.accept-decline-buttons {
+    place-content: center;
+    width: auto;
+    padding-bottom: 30px;
+}
+
+.accept-decline-button {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.extra-padding {
+    padding-top: 10px;
+}
+
+#center-section-content-box {
+    overflow-y: hidden;
+}
+
+#center-section-content-box {
+    overflow-y: scroll;
+    height: calc(100vh - 64px);
 }
 
 
@@ -209,3 +295,20 @@ input:checked + .slider:before {
     .slider.round:before {
         border-radius: 50%;
     }
+
+
+.checkboxsimple {
+    background-color: inherit;
+    color: #000;
+    padding: 10px 15px;
+    text-align: right;
+    display: inline-block;
+    margin: 5px 0px;
+    cursor: pointer;
+}
+
+#logo {
+    display: left;
+    text-align: left;
+}
+

@@ -10,22 +10,21 @@ namespace moja_druzyna.ViewModels
     {
         public OrderFormViewModel()
         {
-            OrderForm_Data = new List<OrderForm_Order>();
+            OrderForm_Order OrderForm_Data = new OrderForm_Order();
         }
 
-        public void AddScout(Scout scout)
+        public OrderForm_Order CreateOrderFromInput(List<String> data)
         {
-            OrderForm_Data.Add(new OrderForm_Order() { Id = scout.Pesel, Label = string.Format("{0} {1}\t({2})", scout.Name, scout.Surname, scout.Pesel), Prop1 = "", Prop2 = "" });
+            return (new OrderForm_Order() { Number = data[0], Date = data[1], Place = data[2] });
         }
 
-        public List<OrderForm_Order> OrderForm_Data { get; set; }
+        public OrderForm_Order OrderForm_Data { get; set; }
 
         public class OrderForm_Order
         {
-            public string Id { get; set; }
-            public string Label { get; set; }
-            public string Prop1 { get; set; }
-            public string Prop2 { get; set; }
+            public string Number { get; set; }
+            public string Date { get; set; }
+            public string Place { get; set; }
         }
     }
 }
