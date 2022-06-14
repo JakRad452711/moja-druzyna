@@ -81,12 +81,23 @@
     padding-top: 2%;
     padding-right: 2%;
     padding: 2%;
+    border-radius: 10px;
+}
+
+.smallborderadded {
+    border: 1px solid grey;
+    padding-top: 0.5%;
+    padding-right: 0.5%;
+    padding: 0.5%;
+    border-radius: 10px;
+    margin-bottom: 5px;
 }
 
 #parentdiv:after {
     content: " ";
     display: block;
     clear: both;
+    min-width: 1000px;
 }
 
 .form-content {
@@ -96,6 +107,14 @@
 
 #login-form-id {
     width: 100%;
+}
+
+#base-form-id {
+    width: auto;
+    height: auto;
+    text-align:justify;
+    display: flex;
+    padding-bottom: 10px;
 }
 
     #login-form-id > input {
@@ -209,8 +228,10 @@
 
 .accept-decline-buttons {
     place-content: center;
+    display:inherit;
     width: auto;
-    padding-bottom: 30px;
+    padding-bottom: 10px;
+    text-align:center;
 }
 
 .accept-decline-button {
@@ -223,12 +244,30 @@
 }
 
 #center-section-content-box {
-    overflow-y: hidden;
-}
-
-#center-section-content-box {
     overflow-y: scroll;
     height: calc(100vh - 64px);
+}
+
+#center-section-content {
+    height: max-content;
+}
+
+.field-and-name {
+    width: min-content;
+    height: initial;
+    margin: 0;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 10px;
+}
+
+.extend-to-border {
+    width: inherit;
+    width: 100%;
+}
+
+.extend-to-border > * {
+    width: inherit;
 }
 
 

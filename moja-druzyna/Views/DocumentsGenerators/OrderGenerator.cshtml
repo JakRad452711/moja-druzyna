@@ -14,136 +14,168 @@
                 <div style="width:1px"><br /></div>
             </div>
         </div>
-        <p> Wydaj rozkaz: </p>              
+        <p class="large-regular"> Wydaj rozkaz: </p>              
     </div>
 
     <div id="parentdiv" class="borderadded">
-        <div class="content text-left">
-            <div class="account-content-temp">
-                <form id="login-form-id" asp-action="OrderFormSubmit">            
-                    <p>Numer: <input type="text"> Data: <input type="text"> Miejscowość: <input type="text"> </p> 
-                </form>
+        <form id="base-form-id" asp-action="OrderFormSubmit">            
+            <div class="field-and-name">
+                Numer: 
+                <br />
+                <input type="text">
             </div>
-        </div>
+            <div class="field-and-name">
+                Data: 
+                <br />
+                <input type="text">
+             </div>
+             <div class="field-and-name extend-to-border">
+                Miejscowość: 
+                <br />
+                <input type="text">
+             </div>
+         </form>
 
 
         <div class="content text-left" style="height: auto">
             <div class="account-content-left">
                 <!-- Rounded switch -->
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-                <label class="checkboxsimple">
-                    <input type="checkbox" name="checkbox" value="text"> 1. Zwolnienia
-                </label>
-                <div class="account-content-right">
-                    <div class="buttonedit">
-                        wprowadź zmiany w sekcji
+                <div class="smallborderadded">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <label class="checkboxsimple">
+                        <input type="checkbox" name="checkbox" value="text"> 1. Zwolnienia
+                    </label>
+                    <div class="account-content-right">
+                        <div class="buttonedit">
+                            wprowadź zmiany w sekcji
+                        </div>
                     </div>
+                    <br />
                 </div>
-                <br />
 
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-                <label class="checkboxsimple">
-                    <input type="checkbox" name="checkbox" value="text"> 2. Mianowania
-                </label>
-                <div class="account-content-right">
-                    <div class="buttonedit">
-                        wprowadź zmiany w sekcji
+                <div class="smallborderadded">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <label class="checkboxsimple">
+                        <input type="checkbox" name="checkbox" value="text"> 2. Mianowania
+                    </label>
+                    <div class="account-content-right">
+                        <div class="buttonedit">
+                            wprowadź zmiany w sekcji
+                        </div>
                     </div>
+                    <br />
                 </div>
-                <br />
 
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-                <label class="checkboxsimple">
-                    <input type="checkbox" name="checkbox" value="text"> 3. Zamknięcia prób
-                </label>
-                <div class="account-content-right">
-                    <div class="buttonedit">
-                        wprowadź zmiany w sekcji
+                <div class="smallborderadded">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <label class="checkboxsimple">
+                        <input type="checkbox" name="checkbox" value="text"> 3. Zamknięcia prób
+                    </label>
+                    <div class="account-content-right">
+                        <div class="buttonedit">
+                            wprowadź zmiany w sekcji
+                        </div>
                     </div>
+                    <br />
                 </div>
-                <br />
 
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-                <label class="checkboxsimple">
-                    <input type="checkbox" name="checkbox" value="text"> 4. Otwarcia prób
-                </label>
-                <div class="account-content-right">
-                    <div class="buttonedit">
-                        wprowadź zmiany w sekcji
+                <div class="smallborderadded">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <label class="checkboxsimple">
+                        <input type="checkbox" name="checkbox" value="text"> 4. Otwarcia prób
+                    </label>
+                    <div class="account-content-right">
+                        <div class="buttonedit">
+                            wprowadź zmiany w sekcji
+                        </div>
                     </div>
+                    <br />
                 </div>
-                <br />
 
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-                <label class="checkboxsimple">
-                    <input type="checkbox" name="checkbox" value="text"> 5. Przyznanie punktów za stopnie i sprawności
-                </label>
-                <div class="account-content-right">
-                    <div class="buttonedit">
-                        wprowadź zmiany w sekcji
+                <div class="smallborderadded">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <label class="checkboxsimple">
+                        <input type="checkbox" name="checkbox" value="text"> 5. Przyznanie punktów za stopnie i sprawności
+                    </label>
+                    <div class="account-content-right">
+                        <div class="buttonedit">
+                            wprowadź zmiany w sekcji
+                        </div>
                     </div>
+                    <br />
                 </div>
-                <br />
 
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-                <label class="checkboxsimple">
-                    <input type="checkbox" name="checkbox" value="text"> 6. Podsumowanie gier
-                </label>
-                <div class="account-content-right">
-                    <div class="buttonedit">
-                        wprowadź zmiany w sekcji
+                <div class="smallborderadded">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <label class="checkboxsimple">
+                        <input type="checkbox" name="checkbox" value="text"> 6. Podsumowanie gier
+                    </label>
+                    <div class="account-content-right">
+                        <div class="buttonedit">
+                            wprowadź zmiany w sekcji
+                        </div>
                     </div>
+                    <br />
                 </div>
-                <br />
 
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-                <label class="checkboxsimple">
-                    <input type="checkbox" name="checkbox" value="text"> 7. Pochwały, wyróżnienia, nagany
-                </label>
-                <div class="account-content-right">
-                    <div class="buttonedit">
-                        wprowadź zmiany w sekcji
+                <div class="smallborderadded">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <label class="checkboxsimple">
+                        <input type="checkbox" name="checkbox" value="text"> 7. Pochwały, wyróżnienia, nagany
+                    </label>
+                    <div class="account-content-right">
+                        <div class="buttonedit">
+                            wprowadź zmiany w sekcji
+                        </div>
                     </div>
+                    <br />
                 </div>
-                <br />
         
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-                <label class="checkboxsimple">
-                    <input type="checkbox" name="checkbox" value="text"> 8. Skreślenia ze stanu
-                </label>
-                <div class="account-content-right">
-                    <div class="buttonedit">
-                        wprowadź zmiany w sekcji
+                <div class="smallborderadded">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <label class="checkboxsimple">
+                        <input type="checkbox" name="checkbox" value="text"> 8. Skreślenia ze stanu
+                    </label>
+                    <div class="account-content-right">
+                        <div class="buttonedit">
+                            wprowadź zmiany w sekcji
+                        </div>
                     </div>
+                    <br />
                 </div>
-                <br />
 
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-                <label class="checkboxsimple">
-                    <input type="checkbox" name="checkbox" value="text"> 9. Inne
-                </label>
-                <div class="account-content-right">
-                    <div class="buttonedit">
-                        wprowadź zmiany w sekcji
+                <div class="smallborderadded">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <label class="checkboxsimple">
+                        <input type="checkbox" name="checkbox" value="text"> 9. Inne
+                    </label>
+                    <div class="account-content-right">
+                        <div class="buttonedit">
+                            wprowadź zmiany w sekcji
+                        </div>
                     </div>
+                    <br />
                 </div>
-                <br />
             </div>
     
         </div>
+
+        <div id="content-title" class="text-center extra-padding">
+            <p> wydaj rozkaz po wprowadzeniu zmian do wybranych sekcji </p>              
+        </div>
+
+        <div class="center">
+        <div class="accept-decline-buttons">
+            <div class="buttonedit accept-decline-button">
+                wydaj rozkaz
+            </div>
+            <div class="buttonedit accept-decline-button">
+                porzuć
+            </div>
+        </div>
+        </div>
     </div>
 
-    <div id="content-title" class="text-center extra-padding">
-        <p> wydaj rozkaz po wprowadzeniu zmian do wybranych sekcji </p>              
-    </div>
-
-    <div class="accept-decline-buttons">
-        <div class="buttonedit accept-decline-button">
-            wydaj rozkaz
-        </div>
-        <div class="buttonedit accept-decline-button">
-            porzuć
-        </div>
-    </div>
+    
 
 </div>
