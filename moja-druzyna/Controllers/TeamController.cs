@@ -14,6 +14,9 @@ namespace moja_druzyna.Controllers
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<TeamController> _logger;
+
+        private static bool scoutWasAdded = false;
+
         public TeamController(ApplicationDbContext applicationDbContext, ILogger<TeamController> logger)
         {
             _dbContext = applicationDbContext;
@@ -35,6 +38,31 @@ namespace moja_druzyna.Controllers
             scoutsInfo = scoutsInfo.OrderBy(info => info.Title).ToList();
 
             return View(scoutsInfo);
+        }
+
+        public IActionResult AddScout()
+        {
+            ViewBag.scoutWasAdded = scoutWasAdded;
+            scoutWasAdded = false;
+
+            return View();
+        }
+        
+        [HttpPost]
+        public IActionResult AddScout(AddScoutViewModel addScoutViewModel)
+        {
+            if(ModelState.IsValid)
+            {
+                // poprawne dane zostały wprowadzone
+                scoutWasAdded = true;
+
+                return Redirect("addscout");
+            }
+
+            // wprowadzone dane nie były poprawne
+            scoutWasAdded = false;
+
+            return View();
         }
     }
 }

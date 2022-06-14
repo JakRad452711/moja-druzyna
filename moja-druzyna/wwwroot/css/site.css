@@ -1,8 +1,38 @@
 ﻿/* Our .css code is from here...  < - - - - - - - - - - - - - - - */
+/* element styles */
+
+.checkbox-size {
+    width: 16px;
+    height: 16px;
+}
+
+.button-padding {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.rank-icon-size-1 {
+    width: 53px;
+}
+
+.list-item-size {
+    width: 650px;
+    height: 48px;
+}
+.list-item-width {
+    width: 650px;
+}
+.list-item-height {
+    height: 48px;
+}
+
 /* general */
 
 .display-flex {
     display: flex;
+}
+.display-block {
+    display: block;
 }
 
 .size-fit-content {
@@ -25,6 +55,17 @@
 }
 .height100p {
     height: 100%;
+}
+
+.min-size-fit-content {
+    min-width: fit-content;
+    min-height: fit-content;
+}
+.min-width-fit-content {
+    min-width: fit-content;
+}
+.min-height-fit-content {
+    min-height: fit-content;
 }
 
 .no-border {
@@ -206,17 +247,6 @@
     padding-right: 32px;
 }
 
-.list-item-size {
-    width: 650px;
-    height: 48px;
-}
-.list-item-width {
-    width: 650px;
-}
-.list-item-height {
-    height: 48px;
-}
-
 .icon-size-24 {
     height: 24px;
     width: 24px;
@@ -230,14 +260,9 @@
     width: 40px;
 }
 
-.rank-icon-size-1 {
-    width: 53px;
-}
-
 .round-corners-5px {
     border-radius: 5px;
 }
-
 .round-corners-12px {
     border-radius: 12px;
 }
@@ -365,6 +390,22 @@
 
 .font-dark-green {
     color: #2F662E;
+}
+
+.font-danger-red {
+    color: #E92D2D;
+}
+
+/* other colors */
+
+.border-dark-green {
+    border-color: #2F662E;
+    border-width: 1px;
+}
+
+.border-danger-red {
+    border-color: #E92D2D;
+    border-width: 1px;
 }
 
 /* ...to here!                    < - - - - - - - - - - - - - - - */
