@@ -12,7 +12,7 @@
 }
 
 .rank-icon-size-1 {
-    width: 53px;
+    width: 48px;
 }
 
 .list-item-size {
@@ -44,6 +44,10 @@
 }
 .height-fit-content {
     height: fit-content;
+}
+
+.do-flex-wrap {
+    flex-wrap: wrap;
 }
 
 .size100p {

@@ -30,7 +30,7 @@
                 <span class="width-1a">godność</span>
                 <span class="width-1b text-center">stopień</span>
                 <span class="width-1c">zastęp</span>
-                <span class="width-1d mr-8px"></span>
+                <span class="width-1d mr-16px"></span>
             </div>
         </div>
         @foreach (var teamVM in Model)
@@ -49,8 +49,11 @@
                     <div class="width-1c mt-8px">
                         @teamVM.Host
                     </div>
-                    <div class="width-1d mt-8px mr-8px">
-                        <button id="delete-icon" name="deleteButton" asp-controller="team" asp-action="delete" value=@teamVM.Id class="no-border clear-white round-corners-5px">
+                    <div class="display-flex width-1d mt-8px mr-16px">
+                        <button id="manage-icon" name="scoutId" asp-controller="team" asp-action="editscout" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px">
+                            <img src="~/icons/managment/edit.svg" class="icon-size-24" />
+                        </button>
+                        <button id="manage-icon" name="scoutId" asp-controller="team" asp-action="removescout" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px">
                             <img src="~/icons/managment/delete.svg" class="icon-size-24" />
                         </button>
                     </div>

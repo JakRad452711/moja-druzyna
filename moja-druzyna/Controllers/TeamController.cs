@@ -53,16 +53,42 @@ namespace moja_druzyna.Controllers
         {
             if(ModelState.IsValid)
             {
-                // poprawne dane zostały wprowadzone
                 scoutWasAdded = true;
 
                 return Redirect("addscout");
             }
 
-            // wprowadzone dane nie były poprawne
             scoutWasAdded = false;
 
             return View();
+        }
+
+        public IActionResult EditScout(string scoutId)
+        {
+            Scout editedScout = _dbContext.Scouts
+                .Where(scout => scout.IdentityId == scoutId)
+                .First();
+
+            ViewBag.scoutWasEdited     = false;
+            ViewBag.scoutEditionFailed = false;
+
+            return View(editedScout);
+        }
+
+        [HttpPost]
+        public IActionResult EditScout(Scout scout)
+        {
+            if(ModelState.IsValid)
+            {
+                ViewBag.scoutWasEdited     = true;
+                ViewBag.scoutEditionFailed = false;
+                return View(scout);
+            }
+
+            ViewBag.scoutWasEdited     = false;
+            ViewBag.scoutEditionFailed = true;
+
+            return View(scout);
         }
     }
 }
