@@ -26,16 +26,14 @@
   </ItemGroup>
 
   <ItemGroup>
-<<<<<<< Updated upstream
+
     <Folder Include="wwwroot\views\home\" />
-=======
     <Reference Include="Spire.License">
       <HintPath>..\..\..\..\..\Program Files (x86)\e-iceblue\Spire.Pdf-Fe\Bin\NET5.0\Spire.License.dll</HintPath>
     </Reference>
     <Reference Include="Spire.Pdf">
       <HintPath>..\..\..\..\..\Program Files (x86)\e-iceblue\Spire.Pdf-Fe\Bin\NET5.0\Spire.Pdf.dll</HintPath>
     </Reference>
->>>>>>> Stashed changes
   </ItemGroup>
 
 </Project>
