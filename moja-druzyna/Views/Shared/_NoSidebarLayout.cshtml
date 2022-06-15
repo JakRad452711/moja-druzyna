@@ -5,21 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Moja Drużyna - @ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/views/shared/_NoSidebarLayout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/views/shared/_NoSidebarLayout.css" asp-append-version="true" />
 </head>
 <body>
-    <div class="screen">
+    <div id="screen">
         <header>
-            <nav class="upper-panel navbar-expand-sm">
+            <nav id="upper-panel" class="emerald-green navbar-expand-sm">
                 <img src="~/icons/layout/split-bar.png" style="position:absolute;width:2px;height:49px;left:256px;top:8px;" />
                 <div style="position:absolute;right:0px;top:8px;">
                     <partial name="_LoginPartial" />
                 </div>
             </nav>
         </header>
-        <div class="center-section-container">
-            <a id="go-back" class="nav-link text-dark" asp-controller="Home" asp-action="Index">
+        <div id="center-section-container" class="muddy-white">
+            <a id="go-back" class="nav-link text-dark" asp-controller="Profile" asp-action="PersonalData">
                 <img src="~/icons/navigation/nav-left.svg" style="position: absolute; width: 40px; height: 40px; left: 0px; top: 0px; " />
             </a>
             <div class="container">

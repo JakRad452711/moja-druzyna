@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using moja_druzyna.Data;
+using moja_druzyna.Models;
 
 namespace moja_druzyna
 {
@@ -41,7 +42,7 @@ namespace moja_druzyna
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Profile/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -57,7 +58,7 @@ namespace moja_druzyna
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Profile}/{action=PersonalData}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
