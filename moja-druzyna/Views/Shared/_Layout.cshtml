@@ -3,127 +3,143 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Moja Drużyna - @ViewData["Title"]</title>
+    <title>mojadrużyna - @ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/views/shared/_Layout.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/views/shared/_Layout.css" asp-append-version="true"/>
 </head>
 <body>
-    <div class="screen">
+    <div id="screen">
         <header>
-            <nav class="upper-panel navbar-expand-sm">
+            <nav id="upper-panel" class="emerald-green navbar-expand-sm">
                 <img src="~/icons/layout/split-bar.png" style="position:absolute;width:2px;height:49px;left:256px;top:8px;" />
                 <div style="position:absolute;right:0px;top:8px;">
                     <partial name="_LoginPartial" />
                 </div>
             </nav>
         </header>
-        <div class="center-section-container">
+        <div id="center-section-container" class="muddy-white">
             <input type="checkbox" id="is-sb-collapsed" />
             <label id="hamburger" for="is-sb-collapsed">
                 <img id="hamburger-icon" src="~/icons/navigation/nav-hamburger.svg" />
             </label>
-            <div class="left-panel">
+            <div id="left-panel">
             </div>
-            <div class="sidebar">
-                <div id="sidebar-header">
+            <div id="sidebar" class="clear-white">
+                <div id="sidebar-header" class="clear-white">
                 </div>
-                <div id="sidebar-content">
-                    <div class="navigations">
-                        <div id="sidebar-profile">
-                            <div id="sidebar-section-header">
-                                <img src="~/icons/main/person.png" style="width:24px;height:24px;margin-left:8px;margin-top:4px;" />
-                                <div style="margin:4px;">
-                                    Profil
+                <div id="sidebar-content" class="font-muddy-black medium-regular">
+                    <div id="navigations">
+                        <div id="sidebar-profile" class="muddy-white-2">
+                            <div id="sidebar-section-header" class="light-gray paragraph-regular">
+                                <img src="~/icons/main/person.png" id="navigations-icon" />
+                                <div id="sidebar-section-header-text">
+                                    <a class="text-dark" asp-controller="profile" asp-action="personaldata">
+                                        Profil
+                                    </a>
                                 </div>
                             </div>
-                            <div style="margin-left:16px;margin-top:8px;">
-                                Dane
+                            <div id="navigations-item-first">
+                                <a class="text-dark" asp-controller="profile" asp-action="personaldata">
+                                    Dane
+                                </a>
                             </div>
-                            <div style="margin-left:16px;margin-top:16px;">
-                                Historia służby
+                            <div id="navigations-item-next">
+                                <a class="text-dark" asp-controller="profile" asp-action="servicehistory">
+                                    Historia służby
+                                </a>
                             </div>
-                            <div style="margin-left:16px;margin-top:16px;">
-                                Stopnie
+                            <div id="navigations-item-next">
+                                <a class="text-dark" asp-controller="profile" asp-action="ranks">
+                                    Stopnie
+                                </a>
                             </div>
-                            <div style="margin-left:16px;margin-top:16px;">
-                                Osiągnięcia
+                            <div id="navigations-item-next">
+                                <a class="text-dark" asp-controller="profile" asp-action="achievments">
+                                    Osiągnięcia
+                                </a>
                             </div>
-                            <div style="margin-left:16px;margin-top:16px;">
-                                Role
+                            <div id="navigations-item-next">
+                                <a class="text-dark" asp-controller="profile" asp-action="roles">
+                                    Role
+                                </a>
                             </div>
-                            <div style="margin-left:16px;margin-top:16px;">
-                                Kursy szkoleniowe i uprawnienia
+                            <div id="navigations-item-next">
+                                <a class="text-dark" asp-controller="profile" asp-action="coursesandpermissions">
+                                    Kursy szkoleniowe i uprawnienia
+                                </a>
                             </div>
-                            <div style="margin-left:16px;margin-top:16px;">
-                                Zgody RODO
+                            <div id="navigations-item-next">
+                                <a class="text-dark" asp-controller="profile" asp-action="gdprconsents">
+                                    Zgody RODO
+                                </a>
                             </div>
                         </div>
-                        <div id="sidebar-reports">
-                            <div id="sidebar-section-header">
-                                <img src="~/icons/main/sticky-note.png" style="width:24px;height:24px;margin-left:8px;margin-top:4px;" />
-                                <div style="margin:4px;">
+                        <div id="sidebar-reports" class="muddy-white-2">
+                            <div id="sidebar-section-header" class="light-gray paragraph-regular">
+                                <img src="~/icons/main/sticky-note.png" id="navigations-icon" />
+                                <div id="sidebar-section-header-text">
                                     Raporty
                                 </div>
                             </div>
-                            <div style="margin-left:16px;margin-top:8px;">
+                            <div id="navigations-item-first">
                                 1
                             </div>
-                            <div style="margin-left:16px;margin-top:16px;">
+                            <div id="navigations-item-next">
                                 2
                             </div>
-                            <div style="margin-left:16px;margin-top:16px;">
+                            <div id="navigations-item-next">
                                 3
                             </div>
-                            <div style="margin-left:16px;margin-top:16px;">
+                            <div id="navigations-item-next">
                                 4
                             </div>
                         </div>
-                        <div id="sidebar-team">
-                            <div id="sidebar-section-header">
-                                <img src="~/icons/main/flag.png" style="width:24px;height:24px;margin-left:8px;margin-top:4px;" />
-                                <div style="margin:4px;">
+                        <div id="sidebar-team" class="muddy-white-2">
+                            <div id="sidebar-section-header" class="light-gray paragraph-regular">
+                                <img src="~/icons/main/flag.png" id="navigations-icon" />
+                                <div id="sidebar-section-header-text">
                                     Drużyna
                                 </div>
                             </div>
-                            <div style="margin-left:16px;margin-top:8px;">
+                            <div id="navigations-item-first">
                                 Moja drużyna
                             </div>
-                            <div style="margin-left:16px;margin-top:16px;">
+                            <div id="navigations-item-next">
                                 2
                             </div>
-                            <div style="margin-left:16px;margin-top:16px;">
+                            <div id="navigations-item-next">
                                 3
                             </div>
-                            <div style="margin-left:16px;margin-top:16px;">
+                            <div id="navigations-item-next">
                                 4
                             </div>
                         </div>
-                        <div id="sidebar-ranking">
-                            <div id="sidebar-section-header">
-                                <img src="~/icons/main/cup.png" style="width:24px;height:24px;margin-left:8px;margin-top:4px;" />
-                                <div style="margin:4px;">
+                        <div id="sidebar-ranking" class="muddy-white-2">
+                            <div id="sidebar-section-header" class="light-gray paragraph-regular">
+                                <img src="~/icons/main/cup.png" id="navigations-icon" />
+                                <div id="sidebar-section-header-text">
                                     Ranking
                                 </div>
                             </div>
-                            <div style="margin-left:16px;margin-top:8px;">
+                            <div id="navigations-item-first">
                                 Punktacje
                             </div>
-                            <div style="margin-left:16px;margin-top:16px;">
+                            <div id="navigations-item-next">
                                 Zasady
                             </div>
-                            <div style="margin-left:16px;margin-top:16px;">
+                            <div id="navigations-item-next">
                                 3
                             </div>
-                            <div style="margin-left:16px;margin-top:16px;">
+                            <div id="navigations-item-next">
                                 4
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="container">
-                <main role="main" class="pb-3">
+            <div id="center-section-content-box">
+                <main id="center-section-content" role="main" class="pb-3" style="">
                     @RenderBody()
                 </main>
             </div>
