@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using moja_druzyna.Data;
+using moja_druzyna.Models;
 
 namespace moja_druzyna
 {

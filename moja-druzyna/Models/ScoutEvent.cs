@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 #nullable disable
 
 namespace moja_druzyna.Models​
 {
-    public partial class ScoutTeam
+    public partial class ScoutEvent
     {
-        public string Role { get; set; }
-        [ForeignKey("fk_scoutteam_scout")]
+        [ForeignKey("fk_scoutevent_scout")]
+        [MaxLength(11)]
         public string ScoutPeselScout { get; set; }
-        [ForeignKey("fk_scoutteam_host")]
-        public int HostIdHost { get; set; }
+        [ForeignKey("fk_scoutevent_event")]
+        public int EventIdEvent { get; set; }
 
-        public virtual Host Host { get; set; }
+        public virtual Event Event { get; set; }
         public virtual Scout Scout { get; set; }
     }
 }

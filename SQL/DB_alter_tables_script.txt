@@ -1,0 +1,13 @@
+use MojaDruzyna
+-- Dodanie kolumny z haslem do harcerza i rodzica
+--ALTER TABLE scout
+--ADD [password] BINARY(64);
+--ALTER TABLE parent
+--ADD [password] BINARY (64);
+
+
+-- Dodanie kolumny z mailem do harcerza i rodzica
+--ALTER TABLE scout
+--ADD [email] VARCHAR (50)
+--ALTER TABLE parent
+--ADD [email] VARCHAR (50)
