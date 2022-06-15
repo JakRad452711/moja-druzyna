@@ -1,0 +1,25 @@
+﻿@model moja_druzyna.Models.ScoutTeam 
+
+@{
+    ViewData["Title"] = "historia służby";
+}
+
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/views/profile/PersonalData.css" asp-append-version="true" />
+<div class="text-center">
+    <h1 class="display-4">Historia służby</h1>
+    <div class="large-regular font-dark-green">
+            @Html.DisplayFor(interaction => interaction.TeamId) <br />
+        </div>
+    <div id="data-box-1">       
+        <div id="data-box-1a" class="large-light font-muddy-black">
+            Data wstąpienia:<br />
+            Data zakończenia członkostwa:<br />
+            Zastęp:<br />
+            Pełniona funkcja: <br />
+        </div>
+        <div id="data-box-1b" class="large-light font-muddy-black">
+            @Html.DisplayFor(interaction => interaction.TeamPosition)<br />
+        </div>
+    </div>
+</div>
