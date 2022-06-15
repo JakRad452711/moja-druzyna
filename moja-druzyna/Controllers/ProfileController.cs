@@ -50,7 +50,7 @@ namespace moja_druzyna.Controllers
 
             return View(interactions);
             */
-            ScoutTeam interactionData = _dbContext.ScoutTeams.First();
+            Scout interactionData = _dbContext.Scouts.First();
             GeneratorPdf generatorPdf = new GeneratorPdf();
             generatorPdf.CreateTestPdf();
 
