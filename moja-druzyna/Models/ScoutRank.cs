@@ -10,8 +10,9 @@ namespace moja_druzyna.Models​
     public partial class ScoutRank
     {
         public DateTime DateAcquirement { get; set; }
+        public int CurrentRank { get; set; }  
         [ForeignKey("fk_scoutrank_scout")]
-        [MaxLength(11)]
+        [RegularExpression("[0-9]{11}")]
         public string ScoutPeselScout { get; set; }
         [ForeignKey("fk_scoutrank_rank")]
         public string RankName { get; set; }

@@ -4,22 +4,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace moja_druzyna.Models​
 {
-    public partial class Adress
+    public partial class Address
     {
-        public string AddresZam { get; set; }
-        public string StreatZam { get; set; }
-        public string HouseZam { get; set; }
-      
+        public string AddressZam { get; set; }
+        public string StreetZam { get; set; }
+        public string NumberHouseZam { get; set; } // numer mieszkania, numer szeregówki, numer domu ( np 93/4, 102B, 27)
+
 
         public string ZipZam { get; set; }
         public string CountryZam { get; set; }
         public string CityZam { get; set; }
-        public string HouseKor { get; set; }
+        public string NumberHouseKor { get; set; } // numer mieszkania, numer szeregówki, numer domu ( np 93/4, 102B, 27)
         public string ZipKor { get; set; }
         public string CountryKor { get; set; }
         public string CityKor { get; set; }
-        public string AdressKor { get; set; }
-        public string StreatKor { get; set; }
+        public string AddressKor { get; set; }
+        public string StreetKor { get; set; }
         [ForeignKey("fk_adress_parent")]
         public string ParentPesel { get; set; }
         [ForeignKey("fk_address_scout")]

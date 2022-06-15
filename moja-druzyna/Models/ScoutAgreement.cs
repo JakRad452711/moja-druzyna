@@ -12,7 +12,7 @@ namespace moja_druzyna.Models​
         public DateTime DateSign { get; set; }
         public DateTime? DataCancel { get; set; }
         [ForeignKey("fk_scoutagreement_scout")]
-        [MaxLength(11)]
+        [RegularExpression("[0-9]{11}")]
         public string ScoutPeselScout { get; set; }
         [ForeignKey("fk_scoutagreement_agreement")]
         public int AgreementIdAgreement { get; set; }

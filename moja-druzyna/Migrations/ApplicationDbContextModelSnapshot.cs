@@ -238,18 +238,18 @@ namespace moja_druzyna.Migrations
                     b.ToTable("achievement");
                 });
 
-            modelBuilder.Entity("moja_druzyna.Models.Adress", b =>
+            modelBuilder.Entity("moja_druzyna.Models.Address", b =>
                 {
                     b.Property<string>("ParentPesel")
                         .HasColumnType("nvarchar(11)");
 
                     b.Property<string>("ScoutPeselScout")
-                        .HasColumnType("nvarchar(11)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AddresZam")
+                    b.Property<string>("AddressKor")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("AdressKor")
+                    b.Property<string>("AddressZam")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CityKor")
@@ -264,16 +264,16 @@ namespace moja_druzyna.Migrations
                     b.Property<string>("CountryZam")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("HouseKor")
+                    b.Property<string>("NumberHouseKor")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("HouseZam")
+                    b.Property<string>("NumberHouseZam")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("StreatKor")
+                    b.Property<string>("StreetKor")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("StreatZam")
+                    b.Property<string>("StreetZam")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ZipKor")
@@ -291,7 +291,7 @@ namespace moja_druzyna.Migrations
                     b.HasIndex("ScoutPeselScout")
                         .IsUnique();
 
-                    b.ToTable("adress");
+                    b.ToTable("address");
                 });
 
             modelBuilder.Entity("moja_druzyna.Models.Agreement", b =>
@@ -333,7 +333,7 @@ namespace moja_druzyna.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ScoutPeselScout")
-                        .HasColumnType("nvarchar(11)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("TeamIdTeam")
                         .HasColumnType("int");
@@ -380,7 +380,7 @@ namespace moja_druzyna.Migrations
             modelBuilder.Entity("moja_druzyna.Models.DutyHistory", b =>
                 {
                     b.Property<string>("ScoutPeselScout")
-                        .HasColumnType("nvarchar(11)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Team")
                         .HasColumnType("nvarchar(450)");
@@ -505,6 +505,28 @@ namespace moja_druzyna.Migrations
                     b.ToTable("parent");
                 });
 
+            modelBuilder.Entity("moja_druzyna.Models.Points", b =>
+                {
+                    b.Property<DateTime>("DateAcquirement")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OrderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ScoutPeselScout")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Ammount")
+                        .HasColumnType("int");
+
+                    b.HasKey("DateAcquirement", "OrderId", "ScoutPeselScout")
+                        .HasName("PK__points__FD53622128F556BD");
+
+                    b.HasIndex("ScoutPeselScout");
+
+                    b.ToTable("Points");
+                });
+
             modelBuilder.Entity("moja_druzyna.Models.Rank", b =>
                 {
                     b.Property<string>("Name")
@@ -518,8 +540,7 @@ namespace moja_druzyna.Migrations
             modelBuilder.Entity("moja_druzyna.Models.Scout", b =>
                 {
                     b.Property<string>("PeselScout")
-                        .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CrossNumber")
                         .HasColumnType("nvarchar(max)");
@@ -540,6 +561,7 @@ namespace moja_druzyna.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -561,6 +583,7 @@ namespace moja_druzyna.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Surname")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -576,8 +599,7 @@ namespace moja_druzyna.Migrations
             modelBuilder.Entity("moja_druzyna.Models.ScoutAchievement", b =>
                 {
                     b.Property<string>("ScoutPeselScout")
-                        .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AchievementIdAchievement")
                         .HasColumnType("int");
@@ -599,8 +621,7 @@ namespace moja_druzyna.Migrations
             modelBuilder.Entity("moja_druzyna.Models.ScoutAgreement", b =>
                 {
                     b.Property<string>("ScoutPeselScout")
-                        .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AgreementIdAgreement")
                         .HasColumnType("int");
@@ -622,8 +643,7 @@ namespace moja_druzyna.Migrations
             modelBuilder.Entity("moja_druzyna.Models.ScoutCollection", b =>
                 {
                     b.Property<string>("ScoutPeselScout")
-                        .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("CollectionIdCollection")
                         .HasColumnType("int");
@@ -648,8 +668,7 @@ namespace moja_druzyna.Migrations
             modelBuilder.Entity("moja_druzyna.Models.ScoutCourse", b =>
                 {
                     b.Property<string>("ScoutPeselScout")
-                        .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("TrainingCourseIdCourse")
                         .HasColumnType("int");
@@ -668,8 +687,7 @@ namespace moja_druzyna.Migrations
             modelBuilder.Entity("moja_druzyna.Models.ScoutEvent", b =>
                 {
                     b.Property<string>("ScoutPeselScout")
-                        .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("EventIdEvent")
                         .HasColumnType("int");
@@ -682,14 +700,35 @@ namespace moja_druzyna.Migrations
                     b.ToTable("scout_event");
                 });
 
+            modelBuilder.Entity("moja_druzyna.Models.ScoutHost", b =>
+                {
+                    b.Property<string>("ScoutPeselScout")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("HostIdHost")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ScoutPeselScout", "HostIdHost")
+                        .HasName("PK__scout_host__84F25C26A6B4D35B");
+
+                    b.HasIndex("HostIdHost");
+
+                    b.ToTable("scout_host");
+                });
+
             modelBuilder.Entity("moja_druzyna.Models.ScoutRank", b =>
                 {
                     b.Property<string>("ScoutPeselScout")
-                        .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RankName")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("CurrentRank")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateAcquirement")
                         .HasColumnType("datetime2");
@@ -705,18 +744,18 @@ namespace moja_druzyna.Migrations
             modelBuilder.Entity("moja_druzyna.Models.ScoutTeam", b =>
                 {
                     b.Property<string>("ScoutPeselScout")
-                        .HasColumnType("nvarchar(11)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("HostIdHost")
+                    b.Property<int>("TeamIdTeam")
                         .HasColumnType("int");
 
                     b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ScoutPeselScout", "HostIdHost")
-                        .HasName("PK__scout_te__84F25C26A6B4D35B");
+                    b.HasKey("ScoutPeselScout", "TeamIdTeam")
+                        .HasName("PK__scout_team__84F25C26A6B4D35B");
 
-                    b.HasIndex("HostIdHost");
+                    b.HasIndex("TeamIdTeam");
 
                     b.ToTable("scout_team");
                 });
@@ -808,17 +847,17 @@ namespace moja_druzyna.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("moja_druzyna.Models.Adress", b =>
+            modelBuilder.Entity("moja_druzyna.Models.Address", b =>
                 {
                     b.HasOne("moja_druzyna.Models.Parent", "Parent")
                         .WithOne("Adresses")
-                        .HasForeignKey("moja_druzyna.Models.Adress", "ParentPesel")
+                        .HasForeignKey("moja_druzyna.Models.Address", "ParentPesel")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("moja_druzyna.Models.Scout", "Scout")
                         .WithOne("Adress")
-                        .HasForeignKey("moja_druzyna.Models.Adress", "ScoutPeselScout")
+                        .HasForeignKey("moja_druzyna.Models.Address", "ScoutPeselScout")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -911,6 +950,17 @@ namespace moja_druzyna.Migrations
                         .HasForeignKey("IdentityId");
 
                     b.Navigation("Identity");
+                });
+
+            modelBuilder.Entity("moja_druzyna.Models.Points", b =>
+                {
+                    b.HasOne("moja_druzyna.Models.Scout", "Scout")
+                        .WithMany("Points")
+                        .HasForeignKey("ScoutPeselScout")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Scout");
                 });
 
             modelBuilder.Entity("moja_druzyna.Models.Scout", b =>
@@ -1023,6 +1073,25 @@ namespace moja_druzyna.Migrations
                     b.Navigation("Scout");
                 });
 
+            modelBuilder.Entity("moja_druzyna.Models.ScoutHost", b =>
+                {
+                    b.HasOne("moja_druzyna.Models.Host", "Host")
+                        .WithMany("ScoutHost")
+                        .HasForeignKey("HostIdHost")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("moja_druzyna.Models.Scout", "Scout")
+                        .WithMany("ScoutHost")
+                        .HasForeignKey("ScoutPeselScout")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Host");
+
+                    b.Navigation("Scout");
+                });
+
             modelBuilder.Entity("moja_druzyna.Models.ScoutRank", b =>
                 {
                     b.HasOne("moja_druzyna.Models.Rank", "Rank")
@@ -1044,21 +1113,21 @@ namespace moja_druzyna.Migrations
 
             modelBuilder.Entity("moja_druzyna.Models.ScoutTeam", b =>
                 {
-                    b.HasOne("moja_druzyna.Models.Host", "Host")
-                        .WithMany("ScoutTeams")
-                        .HasForeignKey("HostIdHost")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("moja_druzyna.Models.Scout", "Scout")
-                        .WithMany("ScoutTeams")
+                        .WithMany("ScoutTeam")
                         .HasForeignKey("ScoutPeselScout")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Host");
+                    b.HasOne("moja_druzyna.Models.Team", "Team")
+                        .WithMany("ScoutTeam")
+                        .HasForeignKey("TeamIdTeam")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Scout");
+
+                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("moja_druzyna.Models.Achievement", b =>
@@ -1091,7 +1160,7 @@ namespace moja_druzyna.Migrations
                 {
                     b.Navigation("AttendanceLists");
 
-                    b.Navigation("ScoutTeams");
+                    b.Navigation("ScoutHost");
                 });
 
             modelBuilder.Entity("moja_druzyna.Models.Parent", b =>
@@ -1114,6 +1183,8 @@ namespace moja_druzyna.Migrations
 
                     b.Navigation("DutyHistory");
 
+                    b.Navigation("Points");
+
                     b.Navigation("ScoutAchievement");
 
                     b.Navigation("ScoutAgreements");
@@ -1124,9 +1195,11 @@ namespace moja_druzyna.Migrations
 
                     b.Navigation("ScoutEvents");
 
+                    b.Navigation("ScoutHost");
+
                     b.Navigation("ScoutRanks");
 
-                    b.Navigation("ScoutTeams");
+                    b.Navigation("ScoutTeam");
                 });
 
             modelBuilder.Entity("moja_druzyna.Models.Team", b =>
@@ -1136,6 +1209,8 @@ namespace moja_druzyna.Migrations
                     b.Navigation("EventTeams");
 
                     b.Navigation("Hosts");
+
+                    b.Navigation("ScoutTeam");
                 });
 
             modelBuilder.Entity("moja_druzyna.Models.TrainingCourse", b =>

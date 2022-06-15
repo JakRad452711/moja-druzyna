@@ -17,5 +17,6 @@ namespace moja_druzyna.Models​
         public virtual ICollection<AttendanceList> AttendanceLists { get; set; }
         public virtual ICollection<EventTeam> EventTeams { get; set; }
         public virtual ICollection<Host> Hosts { get; set; }
+        public virtual ICollection<ScoutTeam> ScoutTeam { get; set; }
     }
 }

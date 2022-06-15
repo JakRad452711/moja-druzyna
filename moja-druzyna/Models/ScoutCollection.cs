@@ -14,7 +14,7 @@ namespace moja_druzyna.Models​
         public DateTime DateAcquirement { get; set; }
         public string Advance { get; set; }
         [ForeignKey("fk_scoutcollection_scout")]
-        [MaxLength(11)]
+        [RegularExpression("[0-9]{11}")]
         public string ScoutPeselScout { get; set; }
         [ForeignKey("fk_scoutcollection_collection")]
         public int CollectionIdCollection { get; set; }

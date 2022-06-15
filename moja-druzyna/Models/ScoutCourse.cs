@@ -11,7 +11,7 @@ namespace moja_druzyna.Models​
     {
         public DateTime DateAcquirement { get; set; }
         [ForeignKey("fk_scoutcourse_scout")]
-        [MaxLength(11)]
+        [RegularExpression("[0-9]{11}")]
         public string ScoutPeselScout { get; set; }
         [ForeignKey("fk_scoutcourse_course")]
         public int TrainingCourseIdCourse { get; set; }
