@@ -10,7 +10,7 @@ namespace moja_druzyna.Models​
     public partial class ScoutAchievement
     {
         public DateTime Date { get; set; }
-        [MaxLength(11)]
+        [RegularExpression("[0-9]{11}")]
         [ForeignKey("fk_scoutachievement_scout")]
         public string ScoutPeselScout { get; set; }
         [ForeignKey("fk_scoutachievement_achievement")]
