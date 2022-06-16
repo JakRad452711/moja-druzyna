@@ -24,7 +24,7 @@ namespace moja_druzyna.Models​
         public string IdentityId { get; set; }
 
         public IdentityUser Identity { get; set; }
-        public virtual Adress Adresses { get; set; }
+        public virtual Address Adresses { get; set; }
         public virtual ICollection<Scout> Scouts { get; set; }
     }
 }

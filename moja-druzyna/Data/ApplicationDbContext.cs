@@ -13,7 +13,7 @@ namespace moja_druzyna.Data
         }
 
         public virtual DbSet<Achievement> Achievements { get; set; }
-        public virtual DbSet<Adress> Adresses { get; set; }
+        public virtual DbSet<Address> Adresses { get; set; }
         public virtual DbSet<Agreement> Agreements { get; set; }
         public virtual DbSet<AttendanceList> AttendanceLists { get; set; }
         public virtual DbSet<Collection> Collections { get; set; }
@@ -30,9 +30,11 @@ namespace moja_druzyna.Data
         public virtual DbSet<ScoutCourse> ScoutCourses { get; set; }
         public virtual DbSet<ScoutEvent> ScoutEvents { get; set; }
         public virtual DbSet<ScoutRank> ScoutRanks { get; set; }
-        public virtual DbSet<ScoutTeam> ScoutTeams { get; set; }
+        public virtual DbSet<ScoutHost> ScoutHost { get; set; }
+        public virtual DbSet<ScoutTeam> ScoutTeam { get; set; }
         public virtual DbSet<Team> Teams { get; set; }
         public virtual DbSet<TrainingCourse> TrainingCourses { get; set; }
+        public virtual DbSet <Points> Points { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -57,11 +59,11 @@ namespace moja_druzyna.Data
 
             });
 
-            modelBuilder.Entity<Adress>(entity =>
+            modelBuilder.Entity<Address>(entity =>
             {
 
 
-                entity.ToTable("adress");
+                entity.ToTable("address");
 
                 entity.HasKey(e => new { e.ParentPesel, e.ScoutPeselScout })
                 .HasName("PK_adresss_quicksolve");
@@ -139,6 +141,16 @@ namespace moja_druzyna.Data
 
 
             });
+            modelBuilder.Entity<Points>(entity =>
+            {
+
+                entity.ToTable("Points");
+
+                entity.HasKey(e => new { e.DateAcquirement,e.OrderId,e.ScoutPeselScout })
+               .HasName("PK__points__FD53622128F556BD");
+
+
+            });
 
             modelBuilder.Entity<Rank>(entity =>
             {
@@ -213,10 +225,19 @@ namespace moja_druzyna.Data
 
                 });
 
-                modelBuilder.Entity<ScoutTeam>(entity =>
+                modelBuilder.Entity<ScoutHost>(entity =>
                 {
                     entity.HasKey(e => new { e.ScoutPeselScout, e.HostIdHost })
-                        .HasName("PK__scout_te__84F25C26A6B4D35B");
+                        .HasName("PK__scout_host__84F25C26A6B4D35B");
+
+                    entity.ToTable("scout_host");
+
+
+                });
+                modelBuilder.Entity<ScoutTeam>(entity =>
+                {
+                    entity.HasKey(e => new { e.ScoutPeselScout, e.TeamIdTeam })
+                        .HasName("PK__scout_team__84F25C26A6B4D35B");
 
                     entity.ToTable("scout_team");
 

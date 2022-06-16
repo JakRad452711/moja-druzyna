@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
@@ -9,11 +8,12 @@ namespace moja_druzyna.Models​
 {
     public partial class Event
     {
-     
         [Key]
         public int IdEvent { get; set; }
         public DateTime DateStartDateNotNullDateEnd { get; set; }
+        [MaxLength(50)]
         public string HasCost { get; set; }
+        [MaxLength(50)]
         public string Type { get; set; }
         [MaxLength(500)]
         public string Description { get; set; }

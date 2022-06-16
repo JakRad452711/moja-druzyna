@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
@@ -9,9 +7,9 @@ namespace moja_druzyna.Models​
 {
     public partial class Achievement
     {
-     
-
+        [MaxLength(50)]
         public string Type { get; set; }
+        [MaxLength(500)]
         public string Description { get; set; }
         [Key]
         public int IdAchievement { get; set; }
