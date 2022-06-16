@@ -8,7 +8,11 @@ namespace moja_druzyna.Models​
 {
     public partial class Parent
     {
-        
+        public Parent()
+        {
+            this.Scouts = new List<Scout>();
+        }
+
         [Key]
         [MaxLength(11)]
         public string Pesel { get; set; }

@@ -8,6 +8,14 @@ namespace moja_druzyna.Models​
 {
     public partial class Event
     {
+        public Event()
+        {
+            this.AttendanceLists = new List<AttendanceList>();
+            this.Collections     = new List<Collection>();
+            this.EventTeams      = new List<EventTeam>();
+            this.ScoutEvents     = new List<ScoutEvent>();
+        }
+
         [Key]
         public int IdEvent { get; set; }
         public DateTime DateStartDateNotNullDateEnd { get; set; }

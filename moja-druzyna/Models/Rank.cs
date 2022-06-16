@@ -6,6 +6,11 @@ namespace moja_druzyna.Models​
 {
     public partial class Rank
     {
+        public Rank()
+        {
+            this.ScoutRanks = new List<ScoutRank>();
+        }
+
         [Key]
         public string Name { get; set; }
 

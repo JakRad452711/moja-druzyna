@@ -10,6 +10,18 @@ namespace moja_druzyna.Models​
 {
     public partial class Scout
     {
+        public Scout()
+        {
+            this.ScoutAgreements  = new List<ScoutAgreement>();
+            this.ScoutCollections = new List<ScoutCollection>();
+            this.ScoutCourses     = new List<ScoutCourse>();
+            this.ScoutRanks       = new List<ScoutRank>();
+            this.ScoutHost        = new List<ScoutHost>();
+            this.ScoutTeam        = new List<ScoutTeam>();
+            this.AttendanceList   = new List<AttendanceList>();
+            this.Points           = new List<Points>();
+        }
+
         [Key]
         [Required(ErrorMessage = "ta rubryka musi zostać wypełniona")]
         [RegularExpression("[0-9]{11}", ErrorMessage = "niepoprawny numer PESEL został wprowadzony")]

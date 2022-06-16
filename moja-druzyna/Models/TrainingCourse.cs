@@ -6,6 +6,10 @@ namespace moja_druzyna.Models​
 {
     public partial class TrainingCourse
     {
+        public TrainingCourse()
+        {
+            this.ScoutCourses = new List<ScoutCourse>();
+        }
 
         [Key]
         public int IdCourse { get; set; }

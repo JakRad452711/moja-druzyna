@@ -6,6 +6,14 @@ namespace moja_druzyna.Models​
 {
     public partial class Team
     {
+        public Team()
+        {
+            this.AttendanceLists = new List<AttendanceList>();
+            this.EventTeams      = new List<EventTeam>();
+            this.Hosts           = new List<Host>();
+            this.ScoutTeam       = new List<ScoutTeam>();
+        }
+        
         [MaxLength(50)]
         public string Name { get; set; }
         [Key]
