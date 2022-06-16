@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace moja_druzyna.Models​
@@ -16,6 +14,6 @@ namespace moja_druzyna.Models​
 
         public virtual Team Team { get; set; }
         public virtual Scout Scout { get; set; }
-        
+
     }
 }

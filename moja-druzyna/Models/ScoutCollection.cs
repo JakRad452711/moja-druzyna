@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,6 +11,7 @@ namespace moja_druzyna.Models​
     {
         public int Ammount { get; set; }
         public DateTime DateAcquirement { get; set; }
+        [MaxLength(100)]
         public string Advance { get; set; }
         [ForeignKey("fk_scoutcollection_scout")]
         [RegularExpression("[0-9]{11}")]

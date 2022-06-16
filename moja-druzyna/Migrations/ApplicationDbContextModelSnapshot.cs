@@ -228,10 +228,12 @@ namespace moja_druzyna.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("IdAchievement");
 
@@ -244,43 +246,55 @@ namespace moja_druzyna.Migrations
                         .HasColumnType("nvarchar(11)");
 
                     b.Property<string>("ScoutPeselScout")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<string>("AddressKor")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("AddressZam")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("CityKor")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("CityZam")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("CountryKor")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("CountryZam")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("NumberHouseKor")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("NumberHouseZam")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("StreetKor")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(70)
+                        .HasColumnType("nvarchar(70)");
 
                     b.Property<string>("StreetZam")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(70)
+                        .HasColumnType("nvarchar(70)");
 
                     b.Property<string>("ZipKor")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("ZipZam")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("ParentPesel", "ScoutPeselScout")
                         .HasName("PK_adresss_quicksolve");
@@ -333,7 +347,7 @@ namespace moja_druzyna.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ScoutPeselScout")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<int?>("TeamIdTeam")
                         .HasColumnType("int");
@@ -368,7 +382,8 @@ namespace moja_druzyna.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("IdCollection");
 
@@ -380,25 +395,29 @@ namespace moja_druzyna.Migrations
             modelBuilder.Entity("moja_druzyna.Models.DutyHistory", b =>
                 {
                     b.Property<string>("ScoutPeselScout")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<string>("Team")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("Host")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("DateStart")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Banner")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<DateTime?>("DateEnd")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Detachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.HasKey("ScoutPeselScout", "Team", "Host", "DateStart", "Banner");
 
@@ -423,13 +442,15 @@ namespace moja_druzyna.Migrations
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("HasCost")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int?>("Price")
                         .HasColumnType("int");
 
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("IdEvent");
 
@@ -458,6 +479,9 @@ namespace moja_druzyna.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("IsDefaultHost")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasMaxLength(50)
@@ -511,10 +535,11 @@ namespace moja_druzyna.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("OrderId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ScoutPeselScout")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<int>("Ammount")
                         .HasColumnType("int");
@@ -540,10 +565,8 @@ namespace moja_druzyna.Migrations
             modelBuilder.Entity("moja_druzyna.Models.Scout", b =>
                 {
                     b.Property<string>("PeselScout")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CrossNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
@@ -558,7 +581,8 @@ namespace moja_druzyna.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("MembershipNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -566,11 +590,11 @@ namespace moja_druzyna.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Nationality")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Ns")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("Ns")
+                        .HasColumnType("bit");
 
                     b.Property<string>("ParentParentPesel")
                         .HasColumnType("nvarchar(max)");
@@ -599,7 +623,7 @@ namespace moja_druzyna.Migrations
             modelBuilder.Entity("moja_druzyna.Models.ScoutAchievement", b =>
                 {
                     b.Property<string>("ScoutPeselScout")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<int>("AchievementIdAchievement")
                         .HasColumnType("int");
@@ -621,7 +645,7 @@ namespace moja_druzyna.Migrations
             modelBuilder.Entity("moja_druzyna.Models.ScoutAgreement", b =>
                 {
                     b.Property<string>("ScoutPeselScout")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<int>("AgreementIdAgreement")
                         .HasColumnType("int");
@@ -643,13 +667,14 @@ namespace moja_druzyna.Migrations
             modelBuilder.Entity("moja_druzyna.Models.ScoutCollection", b =>
                 {
                     b.Property<string>("ScoutPeselScout")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<int>("CollectionIdCollection")
                         .HasColumnType("int");
 
                     b.Property<string>("Advance")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Ammount")
                         .HasColumnType("int");
@@ -668,7 +693,7 @@ namespace moja_druzyna.Migrations
             modelBuilder.Entity("moja_druzyna.Models.ScoutCourse", b =>
                 {
                     b.Property<string>("ScoutPeselScout")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<int>("TrainingCourseIdCourse")
                         .HasColumnType("int");
@@ -687,7 +712,7 @@ namespace moja_druzyna.Migrations
             modelBuilder.Entity("moja_druzyna.Models.ScoutEvent", b =>
                 {
                     b.Property<string>("ScoutPeselScout")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<int>("EventIdEvent")
                         .HasColumnType("int");
@@ -703,13 +728,14 @@ namespace moja_druzyna.Migrations
             modelBuilder.Entity("moja_druzyna.Models.ScoutHost", b =>
                 {
                     b.Property<string>("ScoutPeselScout")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<int>("HostIdHost")
                         .HasColumnType("int");
 
                     b.Property<string>("Role")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("ScoutPeselScout", "HostIdHost")
                         .HasName("PK__scout_host__84F25C26A6B4D35B");
@@ -722,7 +748,7 @@ namespace moja_druzyna.Migrations
             modelBuilder.Entity("moja_druzyna.Models.ScoutRank", b =>
                 {
                     b.Property<string>("ScoutPeselScout")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<string>("RankName")
                         .HasColumnType("nvarchar(450)");
@@ -744,7 +770,7 @@ namespace moja_druzyna.Migrations
             modelBuilder.Entity("moja_druzyna.Models.ScoutTeam", b =>
                 {
                     b.Property<string>("ScoutPeselScout")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<int>("TeamIdTeam")
                         .HasColumnType("int");
@@ -1124,8 +1150,6 @@ namespace moja_druzyna.Migrations
                         .HasForeignKey("TeamIdTeam")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Host");
 
                     b.Navigation("Scout");
 

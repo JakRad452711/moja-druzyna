@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 #nullable disable
 
@@ -8,6 +6,7 @@ namespace moja_druzyna.Models​
 {
     public partial class ScoutHost
     {
+        [MaxLength(50)]
         public string Role { get; set; }
         [ForeignKey("fk_scouthost_scout")]
         [RegularExpression("[0-9]{11}")]
