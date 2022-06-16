@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace moja_druzyna.Migrations
 {
-    public partial class test1 : Migration
+    public partial class AddModel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,8 +13,8 @@ namespace moja_druzyna.Migrations
                 {
                     IdAchievement = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -81,8 +81,8 @@ namespace moja_druzyna.Migrations
                     IdEvent = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DateStartDateNotNullDateEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    HasCost = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HasCost = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     Price = table.Column<int>(type: "int", nullable: true)
                 },
@@ -264,7 +264,7 @@ namespace moja_druzyna.Migrations
                     IdCollection = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Quarter = table.Column<int>(type: "int", nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     IdEvent = table.Column<int>(type: "int", nullable: true),
                     EventIdEvent = table.Column<int>(type: "int", nullable: true)
                 },
@@ -310,7 +310,8 @@ namespace moja_druzyna.Migrations
                     IdHost = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    TeamIdTeam = table.Column<int>(type: "int", nullable: false)
+                    TeamIdTeam = table.Column<int>(type: "int", nullable: false),
+                    IsDefaultHost = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -328,16 +329,15 @@ namespace moja_druzyna.Migrations
                 columns: table => new
                 {
                     PeselScout = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     SecondName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Surname = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Surname = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Nationality = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    MembershipNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Nationality = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    MembershipNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     DateOfEntry = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Ns = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Ns = table.Column<bool>(type: "bit", nullable: false),
                     DateOfLeaving = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CrossNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ParentParentPesel = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdentityId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ParentPesel = table.Column<string>(type: "nvarchar(11)", nullable: true)
@@ -360,35 +360,35 @@ namespace moja_druzyna.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "adress",
+                name: "address",
                 columns: table => new
                 {
                     ParentPesel = table.Column<string>(type: "nvarchar(11)", nullable: false),
                     ScoutPeselScout = table.Column<string>(type: "nvarchar(11)", nullable: false),
-                    AddresZam = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StreatZam = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    HouseZam = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ZipZam = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CountryZam = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CityZam = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    HouseKor = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ZipKor = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CountryKor = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CityKor = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AdressKor = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StreatKor = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    AddressZam = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    StreetZam = table.Column<string>(type: "nvarchar(70)", maxLength: 70, nullable: true),
+                    NumberHouseZam = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    ZipZam = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    CountryZam = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    CityZam = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    NumberHouseKor = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    ZipKor = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    CountryKor = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    CityKor = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    AddressKor = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    StreetKor = table.Column<string>(type: "nvarchar(70)", maxLength: 70, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_adresss_quicksolve", x => new { x.ParentPesel, x.ScoutPeselScout });
                     table.ForeignKey(
-                        name: "FK_adress_parent_ParentPesel",
+                        name: "FK_address_parent_ParentPesel",
                         column: x => x.ParentPesel,
                         principalTable: "parent",
                         principalColumn: "Pesel",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_adress_scout_ScoutPeselScout",
+                        name: "FK_address_scout_ScoutPeselScout",
                         column: x => x.ScoutPeselScout,
                         principalTable: "scout",
                         principalColumn: "PeselScout",
@@ -442,12 +442,12 @@ namespace moja_druzyna.Migrations
                 columns: table => new
                 {
                     DateStart = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Team = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Banner = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Host = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Team = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Banner = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Host = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     ScoutPeselScout = table.Column<string>(type: "nvarchar(11)", nullable: false),
                     DateEnd = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Detachment = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Detachment = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -461,10 +461,30 @@ namespace moja_druzyna.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Points",
+                columns: table => new
+                {
+                    DateAcquirement = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ScoutPeselScout = table.Column<string>(type: "nvarchar(11)", nullable: false),
+                    OrderId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Ammount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__points__FD53622128F556BD", x => new { x.DateAcquirement, x.OrderId, x.ScoutPeselScout });
+                    table.ForeignKey(
+                        name: "FK_Points_scout_ScoutPeselScout",
+                        column: x => x.ScoutPeselScout,
+                        principalTable: "scout",
+                        principalColumn: "PeselScout",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "scout_achievement",
                 columns: table => new
                 {
-                    ScoutPeselScout = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    ScoutPeselScout = table.Column<string>(type: "nvarchar(11)", nullable: false),
                     AchievementIdAchievement = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -489,7 +509,7 @@ namespace moja_druzyna.Migrations
                 name: "scout_agreement",
                 columns: table => new
                 {
-                    ScoutPeselScout = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    ScoutPeselScout = table.Column<string>(type: "nvarchar(11)", nullable: false),
                     AgreementIdAgreement = table.Column<int>(type: "int", nullable: false),
                     DateSign = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DataCancel = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -515,11 +535,11 @@ namespace moja_druzyna.Migrations
                 name: "scout_collection",
                 columns: table => new
                 {
-                    ScoutPeselScout = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    ScoutPeselScout = table.Column<string>(type: "nvarchar(11)", nullable: false),
                     CollectionIdCollection = table.Column<int>(type: "int", nullable: false),
                     Ammount = table.Column<int>(type: "int", nullable: false),
                     DateAcquirement = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Advance = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Advance = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -542,7 +562,7 @@ namespace moja_druzyna.Migrations
                 name: "scout_course",
                 columns: table => new
                 {
-                    ScoutPeselScout = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    ScoutPeselScout = table.Column<string>(type: "nvarchar(11)", nullable: false),
                     TrainingCourseIdCourse = table.Column<int>(type: "int", nullable: false),
                     DateAcquirement = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -567,7 +587,7 @@ namespace moja_druzyna.Migrations
                 name: "scout_event",
                 columns: table => new
                 {
-                    ScoutPeselScout = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    ScoutPeselScout = table.Column<string>(type: "nvarchar(11)", nullable: false),
                     EventIdEvent = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -588,12 +608,38 @@ namespace moja_druzyna.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "scout_host",
+                columns: table => new
+                {
+                    ScoutPeselScout = table.Column<string>(type: "nvarchar(11)", nullable: false),
+                    HostIdHost = table.Column<int>(type: "int", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__scout_host__84F25C26A6B4D35B", x => new { x.ScoutPeselScout, x.HostIdHost });
+                    table.ForeignKey(
+                        name: "FK_scout_host_host_HostIdHost",
+                        column: x => x.HostIdHost,
+                        principalTable: "host",
+                        principalColumn: "IdHost",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_scout_host_scout_ScoutPeselScout",
+                        column: x => x.ScoutPeselScout,
+                        principalTable: "scout",
+                        principalColumn: "PeselScout",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "scout_rank",
                 columns: table => new
                 {
-                    ScoutPeselScout = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    ScoutPeselScout = table.Column<string>(type: "nvarchar(11)", nullable: false),
                     RankName = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    DateAcquirement = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    DateAcquirement = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CurrentRank = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -617,35 +663,35 @@ namespace moja_druzyna.Migrations
                 columns: table => new
                 {
                     ScoutPeselScout = table.Column<string>(type: "nvarchar(11)", nullable: false),
-                    HostIdHost = table.Column<int>(type: "int", nullable: false),
+                    TeamIdTeam = table.Column<int>(type: "int", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__scout_te__84F25C26A6B4D35B", x => new { x.ScoutPeselScout, x.HostIdHost });
-                    table.ForeignKey(
-                        name: "FK_scout_team_host_HostIdHost",
-                        column: x => x.HostIdHost,
-                        principalTable: "host",
-                        principalColumn: "IdHost",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK__scout_team__84F25C26A6B4D35B", x => new { x.ScoutPeselScout, x.TeamIdTeam });
                     table.ForeignKey(
                         name: "FK_scout_team_scout_ScoutPeselScout",
                         column: x => x.ScoutPeselScout,
                         principalTable: "scout",
                         principalColumn: "PeselScout",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_scout_team_Teams_TeamIdTeam",
+                        column: x => x.TeamIdTeam,
+                        principalTable: "Teams",
+                        principalColumn: "IdTeam",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_adress_ParentPesel",
-                table: "adress",
+                name: "IX_address_ParentPesel",
+                table: "address",
                 column: "ParentPesel",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_adress_ScoutPeselScout",
-                table: "adress",
+                name: "IX_address_ScoutPeselScout",
+                table: "address",
                 column: "ScoutPeselScout",
                 unique: true);
 
@@ -735,6 +781,11 @@ namespace moja_druzyna.Migrations
                 column: "IdentityId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Points_ScoutPeselScout",
+                table: "Points",
+                column: "ScoutPeselScout");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_scout_IdentityId",
                 table: "scout",
                 column: "IdentityId");
@@ -776,20 +827,25 @@ namespace moja_druzyna.Migrations
                 column: "EventIdEvent");
 
             migrationBuilder.CreateIndex(
+                name: "IX_scout_host_HostIdHost",
+                table: "scout_host",
+                column: "HostIdHost");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_scout_rank_RankName",
                 table: "scout_rank",
                 column: "RankName");
 
             migrationBuilder.CreateIndex(
-                name: "IX_scout_team_HostIdHost",
+                name: "IX_scout_team_TeamIdTeam",
                 table: "scout_team",
-                column: "HostIdHost");
+                column: "TeamIdTeam");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "adress");
+                name: "address");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -816,6 +872,9 @@ namespace moja_druzyna.Migrations
                 name: "event_team");
 
             migrationBuilder.DropTable(
+                name: "Points");
+
+            migrationBuilder.DropTable(
                 name: "scout_achievement");
 
             migrationBuilder.DropTable(
@@ -829,6 +888,9 @@ namespace moja_druzyna.Migrations
 
             migrationBuilder.DropTable(
                 name: "scout_event");
+
+            migrationBuilder.DropTable(
+                name: "scout_host");
 
             migrationBuilder.DropTable(
                 name: "scout_rank");
@@ -852,10 +914,10 @@ namespace moja_druzyna.Migrations
                 name: "TrainingCourses");
 
             migrationBuilder.DropTable(
-                name: "rank");
+                name: "host");
 
             migrationBuilder.DropTable(
-                name: "host");
+                name: "rank");
 
             migrationBuilder.DropTable(
                 name: "scout");

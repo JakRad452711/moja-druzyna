@@ -2,20 +2,21 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-#nullable disable
 
-namespace moja_druzyna.Models​
+namespace moja_druzyna.Models
 {
-    public partial class ScoutCourse
+    public class Points
     {
         public DateTime DateAcquirement { get; set; }
-        [ForeignKey("fk_scoutcourse_scout")]
+
+        [ForeignKey("fk_scoutrank_scout")]
         [RegularExpression("[0-9]{11}")]
         public string ScoutPeselScout { get; set; }
-        [ForeignKey("fk_scoutcourse_course")]
-        public int TrainingCourseIdCourse { get; set; }
+        public int Ammount { get; set; }
+        [MaxLength(50)]
+        public string OrderId { get; set; }
 
-        public virtual TrainingCourse TrainingCourse { get; set; }
+
         public virtual Scout Scout { get; set; }
     }
 }

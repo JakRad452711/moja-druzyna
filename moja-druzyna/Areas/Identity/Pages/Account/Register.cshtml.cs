@@ -119,7 +119,7 @@ namespace moja_druzyna.Areas.Identity.Pages.Account
                         Surname             = Input.Surname,  
                         Nationality         = Input.Nationality,
                         MembershipNumber    = Input.MembershipNumber,
-                        Ns                  = Input.Ns.ToString()
+                        Ns                  = Input.Ns
                     };
 
                     _applicationDbContext.Scouts.Add(scout);

@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 #nullable disable
 
 namespace moja_druzyna.Models​
 {
     public partial class Collection
     {
-        
         [Key]
         public int IdCollection { get; set; }
         public int? Quarter { get; set; }
+        [MaxLength(50)]
         public string Type { get; set; }
         public int? IdEvent { get; set; }
 
