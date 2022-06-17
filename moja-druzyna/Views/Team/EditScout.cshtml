@@ -23,7 +23,7 @@
             @if (ViewBag.scoutWasEdited == true)
             {
                 <div class="font-dark-green mb-8px">
-                    edycja osoby powiodła się <br/>
+                    edycja osoby powiodła się <br />
                     <button asp-action="team" class="round-corners-5px button-padding no-border mt-4px">wróć</button>
                 </div>
             }
@@ -36,17 +36,7 @@
             <div class="large-light mb-16px">
                 dane
             </div>
-            <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
-                <div class="form-group mr-8px">
-                    <label asp-for="PeselScout" class="input-box-width text-left">PESEL</label> <br />
-                    <input asp-for="PeselScout" class="input-box-width" /><br />
-                    <span asp-validation-for="PeselScout" class="input-box-width text-left text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="MembershipNumber" class="input-box-width text-left">numer członkowski</label> <br />
-                    <input asp-for="MembershipNumber" class="input-box-width" />
-                </div>
-            </div>
+            <input asp-for="PeselScout" class="input-box-width" hidden /><br />
             <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
                 <div class="form-group mr-8px">
                     <label asp-for="Name" class="input-box-width text-left">imię</label> <br />
@@ -74,6 +64,12 @@
                     <label asp-for="DateOfEntry" class="input-box-width text-left">data wstąpienia do zhp</label> <br />
                     <input asp-for="DateOfEntry" class="input-box-width" />
                 </div>
+                <div class="form-group">
+                    <label asp-for="MembershipNumber" class="input-box-width text-left">numer członkowski</label> <br />
+                    <input asp-for="MembershipNumber" class="input-box-width" />
+                </div>
+            </div>
+            <div class="display-flex size-fit-content pt-4px pl-8px pr-8px">
                 <div class="form-group text-left float-left">
                     <label asp-for="Ns" class="input-box-width mt-8px ">NS</label> <br />
                     <input asp-for="Ns" type="checkbox" class="checkbox-size" /> <br /><br />

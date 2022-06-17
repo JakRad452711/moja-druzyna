@@ -12,14 +12,14 @@ namespace moja_druzyna.Models​
     {
         public Scout()
         {
-            this.ScoutAgreements  = new List<ScoutAgreement>();
+            this.ScoutAgreements = new List<ScoutAgreement>();
             this.ScoutCollections = new List<ScoutCollection>();
-            this.ScoutCourses     = new List<ScoutCourse>();
-            this.ScoutRanks       = new List<ScoutRank>();
-            this.ScoutHost        = new List<ScoutHost>();
-            this.ScoutTeam        = new List<ScoutTeam>();
-            this.AttendanceList   = new List<AttendanceList>();
-            this.Points           = new List<Points>();
+            this.ScoutCourses = new List<ScoutCourse>();
+            this.ScoutRanks = new List<ScoutRank>();
+            this.ScoutHost = new List<ScoutHost>();
+            this.ScoutTeam = new List<ScoutTeam>();
+            this.AttendanceList = new List<AttendanceList>();
+            this.Points = new List<Points>();
         }
 
         [Key]
@@ -35,12 +35,12 @@ namespace moja_druzyna.Models​
         [MaxLength(50)]
         [Required(ErrorMessage = "ta rubryka musi zostać wypełniona")]
         public string Surname { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         [MaxLength(100)]
         public string Nationality { get; set; }
         [MaxLength(50)]
         public string MembershipNumber { get; set; }
-        public DateTime DateOfEntry { get; set; }
+        public DateTime? DateOfEntry { get; set; }
         public bool Ns { get; set; }
         public DateTime? DateOfLeaving { get; set; }
         [ForeignKey("fk_scout_parent")]
