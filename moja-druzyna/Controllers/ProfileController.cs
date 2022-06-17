@@ -29,7 +29,7 @@ namespace moja_druzyna.Controllers
             if (!User.Identity.IsAuthenticated)
                 return Redirect("/Identity/Account/Login");
 
-            Scout userData = _dbContext.Scouts.First();
+            Scout userData = _dbContext.Scouts.Find(sessionAccesser.UserPesel);
 
             return View(userData);
         }

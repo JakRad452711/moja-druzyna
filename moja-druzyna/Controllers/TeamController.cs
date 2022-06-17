@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using moja_druzyna.Data;
@@ -14,16 +15,18 @@ namespace moja_druzyna.Controllers
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<TeamController> _logger;
+        UserManager<IdentityUser> _userManager;
 
         private readonly SessionAccesser sessionAccesser;
         private readonly ModelManager modelManager;
 
         private static bool scoutWasAdded = false;
 
-        public TeamController(ApplicationDbContext applicationDbContext, ILogger<TeamController> logger, IHttpContextAccessor httpContextAccessor)
+        public TeamController(ApplicationDbContext applicationDbContext, ILogger<TeamController> logger, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager)
         {
             _dbContext = applicationDbContext;
             _logger = logger;
+            _userManager = userManager;
 
             sessionAccesser = new SessionAccesser(applicationDbContext, httpContextAccessor);
             modelManager    = new ModelManager(applicationDbContext);
@@ -39,8 +42,9 @@ namespace moja_druzyna.Controllers
             {
                 string id = scout.IdentityId;
                 string title = string.Format("{0} {1}", scout.Surname, scout.Name);
+                string pesel = scout.PeselScout;
                 string host = "nazwa zastępu";
-                scoutsInfo.Add(new TeamViewModel() { Id = id, Title = title, Host = host });
+                scoutsInfo.Add(new TeamViewModel() { Id = id, Title = title, Host = host, Pesel = pesel });
             }
 
             scoutsInfo = scoutsInfo.OrderBy(info => info.Title).ToList();
@@ -72,6 +76,12 @@ namespace moja_druzyna.Controllers
                     Ns               = addScoutViewModel.Ns
                 };
 
+                var user = new IdentityUser { UserName = addedScout.PeselScout, Email = null };
+                _userManager.CreateAsync(user, "");
+
+                addedScout.Identity = user;
+                addedScout.IdentityId = user.Id;
+
                 modelManager.CreateScoutAccount(sessionAccesser.CurrentTeamId, addedScout);
 
                 scoutWasAdded = true;
@@ -88,6 +98,10 @@ namespace moja_druzyna.Controllers
         {
             Scout editedScout = _dbContext.Scouts
                 .Where(scout => scout.IdentityId == scoutId)
+                .First();
+
+            editedScout.Adress = _dbContext.Adresses
+                .Where(address => address.ScoutPeselScout == editedScout.PeselScout)
                 .First();
 
             ViewBag.scoutWasEdited = false;

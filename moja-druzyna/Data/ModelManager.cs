@@ -1,5 +1,6 @@
 ﻿using moja_druzyna.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace moja_druzyna.Data
@@ -25,9 +26,29 @@ namespace moja_druzyna.Data
 
             Team team = _dbContext.Teams.Find(teamId);
             ScoutTeam newScoutTeam = new() { Role = "scout", Scout = scout, ScoutPeselScout = scout.PeselScout, Team = team, TeamIdTeam = team.IdTeam };
+            Parent parent = scout.Parent;
+            Address address = scout.Adress;
+
+            if(parent == null)
+            {
+                List<Scout> scouts = new List<Scout>();
+                scouts.Add(scout);
+
+                parent = new Parent() { Pesel = scout.PeselScout, Scouts = scouts };
+            }
+
+            if (address == null)
+            {
+                address = new Address() { Scout = scout, ScoutPeselScout = scout.PeselScout, Parent = parent, ParentPesel = parent.Pesel };
+            }
+            
+
+            scout.Adress = address;
 
             _dbContext.Scouts.Add(scout);
             _dbContext.ScoutTeam.Add(newScoutTeam);
+            _dbContext.Adresses.Add(address);
+            _dbContext.Parents.Add(parent);
             _dbContext.SaveChanges();
         }
 
@@ -49,12 +70,32 @@ namespace moja_druzyna.Data
                 Team = newTeam
             };
 
+            Parent parent = scoutCaptain.Parent;
+            Address address = scoutCaptain.Adress;
+
+            if (parent == null)
+            {
+                List<Scout> scouts = new List<Scout>();
+                scouts.Add(scoutCaptain);
+
+                parent = new Parent() { Pesel = scoutCaptain.PeselScout, Scouts = scouts };
+            }
+
+            if (address == null)
+            {
+                address = new Address() { Scout = scoutCaptain, ScoutPeselScout = scoutCaptain.PeselScout, Parent = parent, ParentPesel = parent.Pesel };
+            }
+
+            scoutCaptain.Adress = address;
+
             newTeam.ScoutTeam.Add(scoutTeam);
             scoutCaptain.ScoutTeam.Add(scoutTeam);
 
             _dbContext.Scouts.Add(scoutCaptain);
             _dbContext.Teams.Add(newTeam);
             _dbContext.ScoutTeam.Add(scoutTeam);
+            _dbContext.Adresses.Add(address);
+            _dbContext.Parents.Add(parent);
             _dbContext.SaveChanges();
         }
 
@@ -79,36 +120,54 @@ namespace moja_druzyna.Data
                 oldScout.DateOfEntry = newScout.DateOfEntry;
             if (newScout.DateOfLeaving != null)
                 oldScout.DateOfLeaving = newScout.DateOfLeaving;
-            if (newScout.ParentParentPesel != null)
-                oldScout.ParentParentPesel = newScout.ParentParentPesel;
+
             if (newScout.Adress != null)
             {
+                Address address = _dbContext.Adresses.Where(_address => _address.ScoutPeselScout == newScout.PeselScout).First();
+
                 if (newScout.Adress.AddressKor != null)
-                    oldScout.Adress.AddressKor = newScout.Adress.AddressKor;
+                    address.AddressKor = newScout.Adress.AddressKor;
                 if (newScout.Adress.CityKor != null)
-                    oldScout.Adress.CityKor = newScout.Adress.CityKor;
+                    address.CityKor = newScout.Adress.CityKor;
                 if (newScout.Adress.CountryKor != null)
-                    oldScout.Adress.CountryKor = newScout.Adress.CountryKor;
+                    address.CountryKor = newScout.Adress.CountryKor;
                 if (newScout.Adress.NumberHouseKor != null)
-                    oldScout.Adress.NumberHouseKor = newScout.Adress.NumberHouseKor;
+                    address.NumberHouseKor = newScout.Adress.NumberHouseKor;
                 if (newScout.Adress.StreetKor != null)
-                    oldScout.Adress.StreetKor = newScout.Adress.StreetKor;
+                    address.StreetKor = newScout.Adress.StreetKor;
                 if (newScout.Adress.ZipKor != null)
-                    oldScout.Adress.ZipKor = newScout.Adress.ZipKor;
+                    address.ZipKor = newScout.Adress.ZipKor;
                 if (newScout.Adress.AddressZam != null)
-                    oldScout.Adress.AddressZam = newScout.Adress.AddressZam;
+                    address.AddressZam = newScout.Adress.AddressZam;
                 if (newScout.Adress.CityZam != null)
-                    oldScout.Adress.CityZam = newScout.Adress.CityZam;
+                    address.CityZam = newScout.Adress.CityZam;
                 if (newScout.Adress.CountryZam != null)
-                    oldScout.Adress.CountryZam = newScout.Adress.CountryZam;
+                    address.CountryZam = newScout.Adress.CountryZam;
                 if (newScout.Adress.NumberHouseZam != null)
-                    oldScout.Adress.NumberHouseZam = newScout.Adress.NumberHouseZam;
+                    address.NumberHouseZam = newScout.Adress.NumberHouseZam;
                 if (newScout.Adress.StreetZam != null)
-                    oldScout.Adress.StreetZam = newScout.Adress.StreetZam;
+                    address.StreetZam = newScout.Adress.StreetZam;
                 if (newScout.Adress.ZipZam != null)
-                    oldScout.Adress.ZipZam = newScout.Adress.ZipZam;
+                    address.ZipZam = newScout.Adress.ZipZam;
+
+                _dbContext.Adresses.Update(address);
             }
 
+            if (newScout.Parent != null)
+            {
+                Parent parent = _dbContext.Parents.Where(_parent => _parent.Pesel == newScout.ParentParentPesel).First();
+
+                if (newScout.Parent.Adresses != null)
+                    parent.Adresses = newScout.Parent.Adresses;
+                if (newScout.Parent.Scouts != null)
+                    parent.Scouts = newScout.Parent.Scouts;
+                if (newScout.Parent.Name != null)
+                    parent.Name = newScout.Parent.Name;
+                if (newScout.Parent.Surname != null)
+                    parent.Name = newScout.Parent.Surname;
+
+                _dbContext.Parents.Update(parent);
+            }
 
             _dbContext.Scouts.Update(oldScout);
             _dbContext.SaveChanges();
