@@ -172,5 +172,54 @@ namespace moja_druzyna.Data
             _dbContext.Scouts.Update(oldScout);
             _dbContext.SaveChanges();
         }
+
+        public List<Host> GetListOfHostsFromATeam(int teamId)
+        {
+            List<Host> hostsInTheTeam = _dbContext.Hosts
+                .Where(host => host.TeamIdTeam == teamId)
+                .ToList();
+
+            return hostsInTheTeam;
+        }
+
+        public List<Scout> GetScoutsFromAHost(int hostId)
+        {
+            List<string> peselsOfScoutsInTheHost = _dbContext.ScoutHost
+                .Where(scoutHost => scoutHost.HostIdHost == hostId)
+                .Select(scoutHost => scoutHost.ScoutPeselScout)
+                .ToList();
+            List<Scout> scoutsFromTheHost = _dbContext.Scouts
+                .Where(scout => peselsOfScoutsInTheHost
+                .Contains(scout.PeselScout))
+                .ToList();
+
+            return scoutsFromTheHost;
+        }
+
+        public List<Scout> GetScoutsFromATeamThatAreNotInAnyHostFromTheTeam(int teamId)
+        {
+            List<Host> hostsInTheTeam = _dbContext.Hosts
+                .Where(host => host.TeamIdTeam == teamId)
+                .ToList();
+            List<int> hostIdsInTheTeam = hostsInTheTeam.Select(host => host.IdHost).ToList();
+
+            List<Scout> scoutsInTheTeam = _dbContext.ScoutTeam
+                .Where(scoutTeam => scoutTeam.TeamIdTeam == teamId && scoutTeam.Role == "scout")
+                .Select(_scoutTeam => _scoutTeam.Scout)
+                .ToList();
+            List<string> scoutPeselsInTheTeam = scoutsInTheTeam.Select(scout => scout.PeselScout)
+                .ToList();
+
+            List<string> peselsOfScoutsThatAreInAHostInTheTeam = _dbContext.ScoutHost
+                .Where(scoutHost => scoutPeselsInTheTeam.Contains(scoutHost.ScoutPeselScout) && hostIdsInTheTeam.Contains(scoutHost.HostIdHost))
+                .Select(scoutHost => scoutHost.ScoutPeselScout)
+                .ToList();
+
+            List<Scout> scoutsThatAreNotInAnyHostFromTheTeam = scoutsInTheTeam
+                .Where(scout => !peselsOfScoutsThatAreInAHostInTheTeam.Contains(scout.PeselScout))
+                .ToList();
+
+            return scoutsThatAreNotInAnyHostFromTheTeam;
+        }
     }
 }

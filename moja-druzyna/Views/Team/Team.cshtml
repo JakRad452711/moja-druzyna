@@ -17,7 +17,23 @@
             </div>
         </div>
         <div class="list-item-width medium-light font-muddy-black mb-32px">
-            Chorągiew Wielkopolska im. Powstańców Wielkopolskich 1918/1919 Hufiec Poznań Jeżyce im. Stefana Czarneckiego
+            @ViewBag.TeamName
+        </div>
+        <div class="display-flex justify-content-center">
+            <div class="clear-white big-shadow size-fit-content medium-light display-block mb-32px">
+                <div class="large-light mb-8px">
+                    zmień nazwę drużyny
+                </div>
+                <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
+                    <div class="form-group">
+                        <label class="input-box-width text-left">nazwa drużyny</label> <br />
+                        <input name="newName" class="input-box-width" /><br />
+                    </div>
+                </div>
+                <div class="display-flex pb-8px pt-2px justify-content-center width-100p">
+                    <button asp-action="teamchangename" class="round-corners-5px font-muddy-black button-padding">zmień</button>
+                </div>
+            </div>
         </div>
         <div class="list-item-width height-fit-content mb-16px">
             <button asp-controller="team" asp-action="addscout" class="medium-light p-8px pt-2px pb-2px no-border round-corners-5px">

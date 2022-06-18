@@ -14,7 +14,7 @@ namespace moja_druzyna.Models​
             this.ScoutTeam       = new List<ScoutTeam>();
         }
         
-        [MaxLength(50)]
+        [MaxLength(150)]
         public string Name { get; set; }
         [Key]
         public int IdTeam { get; set; }

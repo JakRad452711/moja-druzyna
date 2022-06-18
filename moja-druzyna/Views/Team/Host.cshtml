@@ -1,0 +1,95 @@
+﻿@model moja_druzyna.ViewModels.Team.HostViewModel
+
+@{
+    ViewData["Title"] = "zastęp - " + ViewBag.HostName;
+}
+
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/views/team/Host.css" asp-append-version="true" />
+<div class="text-center justify-content-center display-flex" style="min-width:650px">
+    <form asp-action="host">
+        <div class="list-item-width display-flex justify-content-center mb-32px">
+            <div class="mr-8px mt-2px">
+                <img src="~/icons/main/green/flag.svg" class="icon-size-40" />
+            </div>
+            <div class="font-dark-green header1-light">
+                @ViewBag.HostName
+            </div>
+        </div>
+        <div class="list-item-width medium-light font-muddy-black mb-32px">
+            @ViewBag.TeamName <br />
+        </div>
+        <div class="display-flex p-8px justify-content-center width-100p medium-light mb-16px">
+            <button asp-action="hosts" class="round-corners-5px font-muddy-black no-border button-padding">wróć do zastępów</button>
+        </div>
+        @if (ViewBag.DropDownList_Scouts.Count > 0)
+        {
+            <div class="display-flex justify-content-center">
+                <div class="clear-white big-shadow size-fit-content medium-light display-block mb-32px">
+                    <div class="large-light mb-16px">
+                        dodaj osobę
+                    </div>
+                    <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
+                        <div class="form-group">
+                            <label asp-for="AddedScoutPesel" class="input-box-width text-left">nazwa zastępu</label> <br />
+                            <select asp-for="AddedScoutPesel" class="input-box-width" asp-items="@ViewBag.DropDownList_Scouts"></select>
+                        </div>
+                    </div>
+                    <div class="display-flex p-8px justify-content-center width-100p">
+                        <button type="submit" class="round-corners-5px font-muddy-black button-padding">dodaj</button>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="display-flex justify-content-center">
+                <div class="clear-white small-shadow size-fit-content medium-light display-block mb-32px" style="width: 160px">
+                    <div class="b-4px">
+                        nie ma żadnych harcerzy do dodania
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="display-flex list-item-width text-left medium-bold mb-4px">
+            <div class="display-flex justify-content-between width100p ml-64px">
+                <span class="width-1a">godność</span>
+                <span class="width-1b text-center">stopień</span>
+                <span class="width-1c">zastępowy</span>
+                <span class="width-1d mr-16px"></span>
+            </div>
+        </div>
+        @foreach (var scout in Model.Scouts)
+        {
+            <div class="display-flex list-item-size clear-white small-shadow round-corners-12px large-light mb-4px">
+                <div class="mt-4px ml-8px">
+                    <img id="profile-picture" src="~/icons/design/profile picture.svg" class="icon-size-40 mr-16px" />
+                </div>
+                <div class="display-flex justify-content-between width100p text-left">
+                    <div class="width-1a">
+                        <div class="mt-8px">@scout.Title </div>
+                    </div>
+                    <div class="width-1b mt-8px">
+                        <img src="~/icons/design/ranks/no-accents/rank-5.svg" class="rank-icon-size-1" />
+                    </div>
+                    <div class="width-1c mt-8px">
+                        @if (scout.IsHostCaptain)
+                        {
+                            <img src="~/icons/main/green/flag.svg" class="icon-size-24" />
+                        }
+                    </div>
+                    <div class="display-flex width-1d mt-8px mr-16px">
+                        <button id="manage-icon" name="scoutId" asp-controller="team" asp-action="editscout" value=@scout.IdentityId class="no-border size-fit-content clear-white round-corners-5px">
+                            <img src="~/icons/managment/edit.svg" class="icon-size-24" />
+                        </button>
+                        <button id="manage-icon" name="scoutId" asp-controller="team" asp-action="removescoutfromhost" value=@scout.IdentityId class="no-border size-fit-content clear-white round-corners-5px">
+                            <img src="~/icons/managment/remove.svg" class="icon-size-24" />
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+        <div style="height: 60px">
+        </div>
+    </form>
+</div>

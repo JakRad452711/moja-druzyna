@@ -15,6 +15,7 @@ namespace moja_druzyna.Models​
         public string ScoutPeselScout { get; set; }
         [ForeignKey("fk_scoutrank_rank")]
         public string RankName { get; set; }
+        public bool IsCurrent { get; set; }
 
         public virtual Rank Rank { get; set; }
         public virtual Scout Scout { get; set; }

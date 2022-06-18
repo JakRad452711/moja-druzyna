@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using moja_druzyna.Data;
 
 namespace moja_druzyna.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220617190107_IncreaseMaxTeamNameLength")]
+    partial class IncreaseMaxTeamNameLength
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -758,9 +760,6 @@ namespace moja_druzyna.Migrations
 
                     b.Property<DateTime>("DateAcquirement")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsCurrent")
-                        .HasColumnType("bit");
 
                     b.HasKey("ScoutPeselScout", "RankName")
                         .HasName("PK__scout_ra__F838FC8F4D9C216B");

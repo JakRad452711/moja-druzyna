@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using moja_druzyna.Data;
 
 namespace moja_druzyna.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220617191702_AddIsDeletedFieldToScout")]
+    partial class AddIsDeletedFieldToScout
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -580,6 +582,9 @@ namespace moja_druzyna.Migrations
                     b.Property<string>("IdentityId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("MembershipNumber")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -758,9 +763,6 @@ namespace moja_druzyna.Migrations
 
                     b.Property<DateTime>("DateAcquirement")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsCurrent")
-                        .HasColumnType("bit");
 
                     b.HasKey("ScoutPeselScout", "RankName")
                         .HasName("PK__scout_ra__F838FC8F4D9C216B");

@@ -90,6 +90,66 @@ namespace moja_druzyna.Data.Session
             }
         }
 
+        public int CurrentHostId
+        {
+            get
+            {
+                ISessionTeamContext sessionTeamContext = JsonConvert
+                    .DeserializeObject<SessionTeamContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionTeamContextName));
+
+                return sessionTeamContext.CurrentHostId;
+            }
+            set
+            {
+                ISessionTeamContext sessionTeamContext = JsonConvert
+                    .DeserializeObject<SessionTeamContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionTeamContextName));
+
+                sessionTeamContext.CurrentHostId = value;
+
+                _httpContextAccessor.HttpContext.Session.SetString(sessionTeamContextName, JsonConvert.SerializeObject(sessionTeamContext));
+            }
+        }
+
+        public string CurrentTeamName
+        {
+            get
+            {
+                ISessionTeamContext sessionTeamContext = JsonConvert
+                    .DeserializeObject<SessionTeamContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionTeamContextName));
+
+                return sessionTeamContext.CurrentTeamName;
+            }
+            set
+            {
+                ISessionTeamContext sessionTeamContext = JsonConvert
+                    .DeserializeObject<SessionTeamContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionTeamContextName));
+
+                sessionTeamContext.CurrentTeamName = value;
+
+                _httpContextAccessor.HttpContext.Session.SetString(sessionTeamContextName, JsonConvert.SerializeObject(sessionTeamContext));
+            }
+        }
+
+        public string CurrentHostName
+        {
+            get
+            {
+                ISessionTeamContext sessionTeamContext = JsonConvert
+                    .DeserializeObject<SessionTeamContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionTeamContextName));
+
+                return sessionTeamContext.CurrentHostName;
+            }
+            set
+            {
+                ISessionTeamContext sessionTeamContext = JsonConvert
+                    .DeserializeObject<SessionTeamContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionTeamContextName));
+
+                sessionTeamContext.CurrentHostName = value;
+
+                _httpContextAccessor.HttpContext.Session.SetString(sessionTeamContextName, JsonConvert.SerializeObject(sessionTeamContext));
+            }
+        }
+
         public void InitializeSessionUserContext(IHttpContextAccessor httpContextAccessor)
         {
             if (httpContextAccessor.HttpContext.Session.GetString(sessionUserContextName) != null)
@@ -114,10 +174,14 @@ namespace moja_druzyna.Data.Session
 
             string _CurrentUserId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             int _CurrentTeamId = _dbContext.ScoutTeam.First(scoutTeam => scoutTeam.Scout.IdentityId == _CurrentUserId).TeamIdTeam;
+            string _CurrentTeamName = _dbContext.Teams.Find(_CurrentTeamId).Name;
 
             ISessionTeamContext sessionTeamContext = new SessionTeamContext()
             {
-                CurrentTeamId = _CurrentTeamId
+                CurrentTeamId = _CurrentTeamId,
+                CurrentHostId = -1,
+                CurrentTeamName = _CurrentTeamName,
+                CurrentHostName = null
             };
 
             httpContextAccessor.HttpContext.Session.SetString(sessionTeamContextName, JsonConvert.SerializeObject(sessionTeamContext));

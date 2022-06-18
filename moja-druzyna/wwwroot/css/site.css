@@ -251,6 +251,10 @@
     padding-right: 32px;
 }
 
+.icon-size-16 {
+    height: 16px;
+    width: 16px;
+}
 .icon-size-24 {
     height: 24px;
     width: 24px;
