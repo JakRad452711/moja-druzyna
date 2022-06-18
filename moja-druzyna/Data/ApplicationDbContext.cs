@@ -21,6 +21,8 @@ namespace moja_druzyna.Data
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<EventTeam> EventTeams { get; set; }
         public virtual DbSet<Host> Hosts { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<OrderInfo> OrderInfos { get; set; }
         public virtual DbSet<Parent> Parents { get; set; }
         public virtual DbSet<Rank> Ranks { get; set; }
         public virtual DbSet<Scout> Scouts { get; set; }
