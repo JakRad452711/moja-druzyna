@@ -15,7 +15,7 @@ namespace moja_druzyna.ViewModels
 
         public void AddScout(Scout scout)
         {
-            AForm_Scouts.Add(new AForm_Scout() { Id = scout.Pesel, Label = string.Format("{0} {1}\t({2})", scout.Name, scout.Surname, scout.Pesel), Prop1 = "", Prop2 = "" });
+            AForm_Scouts.Add(new AForm_Scout() { Id = scout.PeselScout, Label = string.Format("{0} {1}\t({2})", scout.Name, scout.Surname, scout.PeselScout), Prop1 = "", Prop2 = "" });
         }
 
         public List<AForm_Scout> AForm_Scouts { get; set; }

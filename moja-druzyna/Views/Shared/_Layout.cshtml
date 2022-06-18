@@ -32,7 +32,7 @@
                     <div id="navigations">
                         <div id="sidebar-profile" class="muddy-white-2">
                             <div id="sidebar-section-header" class="light-gray paragraph-regular">
-                                <img src="~/icons/main/person.png" id="navigations-icon" />
+                                <img src="~/icons/main/person.svg" id="navigations-icon" />
                                 <div id="sidebar-section-header-text">
                                     <a class="text-dark" asp-controller="profile" asp-action="personaldata">
                                         Profil
@@ -77,7 +77,7 @@
                         </div>
                         <div id="sidebar-reports" class="muddy-white-2">
                             <div id="sidebar-section-header" class="light-gray paragraph-regular">
-                                <img src="~/icons/main/sticky-note.png" id="navigations-icon" />
+                                <img src="~/icons/main/sticky note.svg" id="navigations-icon" />
                                 <div id="sidebar-section-header-text">
                                     Raporty
                                 </div>
@@ -101,16 +101,22 @@
                         </div>
                         <div id="sidebar-team" class="muddy-white-2">
                             <div id="sidebar-section-header" class="light-gray paragraph-regular">
-                                <img src="~/icons/main/flag.png" id="navigations-icon" />
+                                <img src="~/icons/main/flag.svg" id="navigations-icon" />
                                 <div id="sidebar-section-header-text">
-                                    Drużyna
+                                    <a class="text-dark" asp-controller="team" asp-action="team">
+                                        Drużyna
+                                    </a>
                                 </div>
                             </div>
                             <div id="navigations-item-first">
-                                Moja drużyna
+                                <a class="text-dark" asp-controller="team" asp-action="team">
+                                    Moja drużyna
+                                </a>
                             </div>
                             <div id="navigations-item-next">
-                                2
+                                <a class="text-dark" asp-controller="team" asp-action="hosts">
+                                    Moje zastępy
+                                </a>
                             </div>
                             <div id="navigations-item-next">
                                 3
@@ -121,7 +127,7 @@
                         </div>
                         <div id="sidebar-ranking" class="muddy-white-2">
                             <div id="sidebar-section-header" class="light-gray paragraph-regular">
-                                <img src="~/icons/main/cup.png" id="navigations-icon" />
+                                <img src="~/icons/main/cup.svg" id="navigations-icon" />
                                 <div id="sidebar-section-header-text">
                                     Ranking
                                 </div>

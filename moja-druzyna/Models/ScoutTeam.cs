@@ -1,14 +1,19 @@
-﻿#nullable disable
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace moja_druzyna.Models
+namespace moja_druzyna.Models​
 {
-    public partial class ScoutTeam
+    public class ScoutTeam
     {
-        public int? TeamId { get; set; }
-        public string Pesel { get; set; }
-        public string TeamPosition { get; set; }
+        public string Role { get; set; }
+        [ForeignKey("fk_scoutteam_scout")]
+        [RegularExpression("[0-9]{11}")]
+        public string ScoutPeselScout { get; set; }
+        [ForeignKey("fk_scoutteam_team")]
+        public int TeamIdTeam { get; set; }
 
-        public virtual Scout PeselNavigation { get; set; }
         public virtual Team Team { get; set; }
+        public virtual Scout Scout { get; set; }
+
     }
 }

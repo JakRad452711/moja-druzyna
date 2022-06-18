@@ -1,19 +1,40 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using moja_druzyna.Models;
 
 namespace moja_druzyna.Data
 {
-    public partial class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
 
+        public virtual DbSet<Achievement> Achievements { get; set; }
+        public virtual DbSet<Address> Adresses { get; set; }
+        public virtual DbSet<Agreement> Agreements { get; set; }
+        public virtual DbSet<AttendanceList> AttendanceLists { get; set; }
+        public virtual DbSet<Collection> Collections { get; set; }
+        public virtual DbSet<DutyHistory> DutyHistories { get; set; }
+        public virtual DbSet<Event> Events { get; set; }
+        public virtual DbSet<EventTeam> EventTeams { get; set; }
+        public virtual DbSet<Host> Hosts { get; set; }
+        public virtual DbSet<Parent> Parents { get; set; }
+        public virtual DbSet<Rank> Ranks { get; set; }
         public virtual DbSet<Scout> Scouts { get; set; }
-        public virtual DbSet<ScoutTeam> ScoutTeams { get; set; }
+        public virtual DbSet<ScoutAchievement> ScoutAchievements { get; set; }
+        public virtual DbSet<ScoutAgreement> ScoutAgreements { get; set; }
+        public virtual DbSet<ScoutCollection> ScoutCollections { get; set; }
+        public virtual DbSet<ScoutCourse> ScoutCourses { get; set; }
+        public virtual DbSet<ScoutEvent> ScoutEvents { get; set; }
+        public virtual DbSet<ScoutRank> ScoutRanks { get; set; }
+        public virtual DbSet<ScoutHost> ScoutHost { get; set; }
+        public virtual DbSet<ScoutTeam> ScoutTeam { get; set; }
         public virtual DbSet<Team> Teams { get; set; }
+        public virtual DbSet<TrainingCourse> TrainingCourses { get; set; }
+        public virtual DbSet <Points> Points { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -30,100 +51,213 @@ namespace moja_druzyna.Data
 
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
+            modelBuilder.Entity<Achievement>(entity =>
+            {
+         
+                entity.ToTable("achievement");
+
+
+            });
+
+            modelBuilder.Entity<Address>(entity =>
+            {
+
+
+                entity.ToTable("address");
+
+                entity.HasKey(e => new { e.ParentPesel, e.ScoutPeselScout })
+                .HasName("PK_adresss_quicksolve");
+
+
+
+            });
+
+            modelBuilder.Entity<Agreement>(entity =>
+            {
+       
+
+                entity.ToTable("agreement");
+
+            });
+
+            modelBuilder.Entity<AttendanceList>(entity =>
+            {
+               
+                entity.ToTable("attendance_list");
+
+
+            });
+
+            modelBuilder.Entity<Collection>(entity =>
+            {
+         
+
+                entity.ToTable("collection");
+
+
+            });
+
+            modelBuilder.Entity<DutyHistory>(entity =>
+            {
+                entity.HasKey(e => new { e.ScoutPeselScout, e.Team, e.Host, e.DateStart, e.Banner });
+
+                entity.ToTable("duty_history");
+
+
+            });
+
+            modelBuilder.Entity<Event>(entity =>
+            {
+               
+
+                entity.ToTable("event");
+
+
+            });
+
+            modelBuilder.Entity<EventTeam>(entity =>
+            {
+                entity.HasKey(e => new { e.EventIdEvent, e.TeamIdTeam })
+                    .HasName("PK__event_te__FD53622128F556BD");
+
+                entity.ToTable("event_team");
+
+
+            });
+
+            modelBuilder.Entity<Host>(entity =>
+            {
+               
+
+                entity.ToTable("host");
+
+
+            });
+
+            modelBuilder.Entity<Parent>(entity =>
+            {
+
+                entity.ToTable("parent");
+
+
+            });
+            modelBuilder.Entity<Points>(entity =>
+            {
+
+                entity.ToTable("Points");
+
+                entity.HasKey(e => new { e.DateAcquirement,e.OrderId,e.ScoutPeselScout })
+               .HasName("PK__points__FD53622128F556BD");
+
+
+            });
+
+            modelBuilder.Entity<Rank>(entity =>
+            {
+               
+
+                entity.ToTable("rank");
+
+            });
+
             modelBuilder.Entity<Scout>(entity =>
             {
-                entity.HasKey(e => e.Pesel)
-                    .HasName("PK__scout__4F16EE7E02333EE9");
+                
 
                 entity.ToTable("scout");
 
-                entity.Property(e => e.Pesel)
-                    .HasMaxLength(11)
-                    .IsUnicode(false)
-                    .HasColumnName("PESEL");
-
-                entity.Property(e => e.DateOfBirth)
-                    .IsRequired()
-                    .HasMaxLength(12)
-                    .IsUnicode(false)
-                    .HasColumnName("date_of_birth");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("name");
-
-                entity.Property(e => e.Nationality)
-                    .IsRequired()
-                    .HasMaxLength(30)
-                    .IsUnicode(false)
-                    .HasColumnName("nationality");
-
-                entity.Property(e => e.ScoutId)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnName("scout_id");
-
-                entity.Property(e => e.SecondName)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("second_name");
-
-                entity.Property(e => e.Surname)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("surname");
             });
 
-            modelBuilder.Entity<ScoutTeam>(entity =>
+            modelBuilder.Entity<ScoutAchievement>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.ScoutPeselScout, e.AchievementIdAchievement })
+                    .HasName("PK__scout_achievement__14C192AA7E8B153B");
 
-                entity.ToTable("scout_team");
+                entity.ToTable("scout_achievement");
 
-                entity.Property(e => e.Pesel)
-                    .HasMaxLength(11)
-                    .IsUnicode(false)
-                    .HasColumnName("PESEL");
-
-                entity.Property(e => e.TeamId).HasColumnName("team_id");
-
-                entity.Property(e => e.TeamPosition)
-                    .HasMaxLength(30)
-                    .IsUnicode(false)
-                    .HasColumnName("team_position");
-
-                entity.HasOne(d => d.PeselNavigation)
-                    .WithMany()
-                    .HasForeignKey(d => d.Pesel)
-                    .HasConstraintName("FK__scout_tea__team___267ABA7A");
-
-                entity.HasOne(d => d.Team)
-                    .WithMany()
-                    .HasForeignKey(d => d.TeamId)
-                    .HasConstraintName("FK__scout_tea__team___276EDEB3");
             });
 
-            modelBuilder.Entity<Team>(entity =>
+            modelBuilder.Entity<ScoutAgreement>(entity =>
             {
-                entity.ToTable("team");
+                entity.HasKey(e => new { e.ScoutPeselScout, e.AgreementIdAgreement })
+                    .HasName("PK__scout_ag__14C192AA7E8B153B");
 
-                entity.Property(e => e.TeamId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("team_id");
+                entity.ToTable("scout_agreement");
 
-                entity.Property(e => e.TeamName)
-                    .HasMaxLength(500)
-                    .IsUnicode(false)
-                    .HasColumnName("team_name");
             });
 
-            OnModelCreatingPartial(modelBuilder);
+            modelBuilder.Entity<ScoutCollection>(entity =>
+            {
+                entity.HasKey(e => new { e.ScoutPeselScout, e.CollectionIdCollection })
+                    .HasName("PK__scout_co__EDEC6AB95EAAD616");
+
+                entity.ToTable("scout_collection");
+
+
+            });
+
+            modelBuilder.Entity<ScoutCourse>(entity =>
+            {
+                entity.HasKey(e => new { e.ScoutPeselScout, e.TrainingCourseIdCourse })
+                    .HasName("PK__scout_co__F0AEC3E099E17797");
+
+                entity.ToTable("scout_course");
+
+
+
+                modelBuilder.Entity<ScoutEvent>(entity =>
+                {
+                    entity.HasKey(e => new { e.ScoutPeselScout, e.EventIdEvent })
+                        .HasName("PK__scout_ev__A6050A5886C962DC");
+
+                    entity.ToTable("scout_event");
+
+
+                });
+
+                modelBuilder.Entity<ScoutRank>(entity =>
+                {
+                    entity.HasKey(e => new { e.ScoutPeselScout, e.RankName })
+                        .HasName("PK__scout_ra__F838FC8F4D9C216B");
+
+                    entity.ToTable("scout_rank");
+
+
+                });
+
+                modelBuilder.Entity<ScoutHost>(entity =>
+                {
+                    entity.HasKey(e => new { e.ScoutPeselScout, e.HostIdHost })
+                        .HasName("PK__scout_host__84F25C26A6B4D35B");
+
+                    entity.ToTable("scout_host");
+
+
+                });
+                modelBuilder.Entity<ScoutTeam>(entity =>
+                {
+                    entity.HasKey(e => new { e.ScoutPeselScout, e.TeamIdTeam })
+                        .HasName("PK__scout_team__84F25C26A6B4D35B");
+
+                    entity.ToTable("scout_team");
+
+
+                });
+
+                modelBuilder.Entity<Team>(entity =>
+                {
+                    
+
+                });
+
+                modelBuilder.Entity<TrainingCourse>(entity =>
+                {
+                   
+
+
+
+                });
+            });
         }
-
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

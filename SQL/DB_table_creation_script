@@ -1,0 +1,255 @@
+--DROP DATABASE IF EXISTS MojaDruzyna;
+--CREATE DATABASE MojaDruzyna;
+
+USE MojaDruzyna;
+
+DROP TABLE IF EXISTS scout_achievement ;
+DROP TABLE IF EXISTS scout_agreement ;
+DROP TABLE IF EXISTS scout_collection ;
+DROP TABLE IF EXISTS scout_course ;
+DROP TABLE IF EXISTS scout_event ;
+DROP TABLE IF EXISTS scout_rank ;
+DROP TABLE IF EXISTS scout_team ;
+DROP TABLE IF EXISTS event_team ;
+DROP TABLE IF EXISTS duty_history ;
+DROP TABLE IF EXISTS agreement ;
+DROP TABLE IF EXISTS adress;
+DROP TABLE IF EXISTS history_of_service ;
+DROP TABLE IF EXISTS attendance_list ;
+DROP TABLE IF EXISTS training_course ;
+DROP TABLE IF EXISTS achievement ;
+DROP TABLE IF EXISTS legal_agreement ;
+DROP TABLE IF EXISTS [collection] ;
+DROP TABLE IF EXISTS [event] ;
+DROP TABLE IF EXISTS [rank] ;
+DROP TABLE IF EXISTS scout ;
+DROP TABLE IF EXISTS parent ;
+DROP TABLE IF EXISTS host ;
+DROP TABLE IF EXISTS team ;
+
+CREATE TABLE [achievement]
+(
+  [type] VARCHAR(50) NOT NULL,
+  [description] VARCHAR(500) NOT NULL,
+  [id_achievement] INT NOT NULL,
+  PRIMARY KEY (id_achievement)
+);
+
+CREATE TABLE [agreement]
+(
+  [id_agreement] INT NOT NULL,
+  [name] VARCHAR(50) NOT NULL,
+  [description] VARCHAR(500) NOT NULL,
+  PRIMARY KEY (id_agreement)
+);
+
+CREATE TABLE [training_course]
+(
+  [id_course] INT NOT NULL,
+  [name] VARCHAR(50) NOT NULL,
+  [description] VARCHAR(500) NOT NULL,
+  PRIMARY KEY (id_course)
+);
+
+CREATE TABLE [event]
+(
+  [id_event] INT NOT NULL,
+  [date_start DATE NOT NULL,
+  [date_end] DATE NOT NULL,
+  [has_cost] VARCHAR(1) NOT NULL,
+  [type] VARCHAR(50) NOT NULL,
+  [description] VARCHAR(500) NOT NULL,
+  [price] INT ,
+  PRIMARY KEY (id_event)
+);
+
+CREATE TABLE [parent]
+(
+  [PESEL] VARCHAR(12) NOT NULL,
+  [name] VARCHAR(50) NOT NULL,
+  [second_name] VARCHAR(50) ,
+  [surname] VARCHAR(50) NOT NULL,
+  [email] VARCHAR(50) NOT NULL,
+  [password] BINARY(64) NOT NULL,
+  PRIMARY KEY (PESEL)
+);
+
+CREATE TABLE [rank]
+(
+  [name] VARCHAR(50) NOT NULL,
+  PRIMARY KEY ([name])
+);
+
+CREATE TABLE [team]
+(
+  [name] VARCHAR(50) NOT NULL,
+  [id_team] INT NOT NULL,
+  PRIMARY KEY (id_team)
+);
+
+CREATE TABLE [event_team]
+(
+  id_event INT NOT NULL,
+  id_team INT NOT NULL,
+  PRIMARY KEY (id_event, id_team),
+  FOREIGN KEY (id_event) REFERENCES event(id_event),
+  FOREIGN KEY (id_team) REFERENCES team(id_team)
+);
+
+CREATE TABLE [scout]
+(
+  [PESEL_scout] VARCHAR(12) NOT NULL,
+  [name] VARCHAR(50) NOT NULL,
+  [second_name] VARCHAR(50) ,
+  [surname] VARCHAR(50) NOT NULL,
+  [date_of_birth] DATE NOT NULL,
+  [nationality] VARCHAR(50) NOT NULL,
+  [membership_number] VARCHAR(50) NOT NULL,
+  [date_of_entry] DATE NOT NULL,
+  [NS] VARCHAR(1) NOT NULL,
+  [date_of_leaving] DATE ,
+  [cross_number] VARCHAR(50) ,
+  [PESEL_parent] VARCHAR(12),
+  [email] VARCHAR(50) NOT NULL,
+  [password] BINARY(64) NOT NULL,
+  PRIMARY KEY (PESEL_scout),
+  FOREIGN KEY ([PESEL_parent]) REFERENCES parent(PESEL)
+);
+
+CREATE TABLE [host]
+(
+  [id_host] INT NOT NULL,
+  [name] VARCHAR(50) NOT NULL,
+  [id_team] INT NOT NULL,
+  PRIMARY KEY (id_host),
+  FOREIGN KEY (id_team) REFERENCES team(id_team)
+);
+
+CREATE TABLE [attendance_list]
+(
+  [date_of_list] DATE NOT NULL,
+  [id_list] INT NOT NULL,
+  [id_event] INT,
+  [id_host] INT,
+  [id_team] INT,
+  PRIMARY KEY ([id_list]),
+  FOREIGN KEY ([id_event]) REFERENCES [event]([id_event]),
+  FOREIGN KEY ([id_host]) REFERENCES host([id_host]),
+  FOREIGN KEY ([id_team]) REFERENCES team([id_team])
+);
+
+CREATE TABLE [collection]
+(
+  [id_collection] INT NOT NULL,
+  [quarter] INT ,
+  [type] VARCHAR(50) NOT NULL,
+  [id_event] INT,
+  PRIMARY KEY ([id_collection]),
+  FOREIGN KEY ([id_event]) REFERENCES [event]([id_event])
+);
+
+CREATE TABLE [adress]
+(
+  [addres_zam] VARCHAR(250) NOT NULL,
+  streat_zam VARCHAR(50) ,
+  house_zam VARCHAR(50) ,
+  zip_zam VARCHAR(50) ,
+  country_zam VARCHAR(50) ,
+  city_zam VARCHAR(50) ,
+  house_kor VARCHAR(50) ,
+  zip_kor VARCHAR(50) ,
+  country_kor VARCHAR(50),
+  city_kor VARCHAR(50) ,
+  adress_kor  VARCHAR(50) NOT NULL ,
+  streat_kor VARCHAR(50) ,
+  PESEL_parent VARCHAR(12) ,
+  PESEL_scout VARCHAR(12) ,
+  PRIMARY KEY (PESEL_scout, PESEL_parent),
+  FOREIGN KEY (PESEL_scout) REFERENCES scout(PESEL_scout),
+  FOREIGN KEY (PESEL_parent) REFERENCES parent(PESEL)
+);
+
+CREATE TABLE [duty_history]
+(
+  [date_start] DATE NOT NULL,
+  [date_end] DATE ,
+  [team] VARCHAR(50) ,
+  [detachment] VARCHAR(50) ,
+  [banner] VARCHAR(50) ,
+  [host] VARCHAR(50) ,
+  PESEL VARCHAR(12) ,
+  PRIMARY KEY (PESEL),
+  FOREIGN KEY (PESEL) REFERENCES scout(PESEL_scout)
+);
+
+CREATE TABLE scout_agreement
+(
+  date_sign DATE NOT NULL,
+  data_cancel DATE ,
+  PESEL VARCHAR(12) NOT NULL,
+  id_agreement INT NOT NULL,
+  PRIMARY KEY (PESEL, id_agreement),
+  FOREIGN KEY (PESEL) REFERENCES scout(PESEL_scout),
+  FOREIGN KEY (id_agreement) REFERENCES agreement(id_agreement)
+);
+
+CREATE TABLE scout_achievement
+(
+  [date] DATE NOT NULL,
+  PESEL VARCHAR(12) NOT NULL,
+  id_achievement INT NOT NULL,
+  PRIMARY KEY (PESEL),
+  FOREIGN KEY (PESEL) REFERENCES scout(PESEL_scout),
+  FOREIGN KEY (id_achievement) REFERENCES achievement(id_achievement)
+);
+
+CREATE TABLE scout_course
+(
+  date_acquirement DATE NOT NULL,
+  PESEL VARCHAR(12) NOT NULL,
+  id_course INT NOT NULL,
+  PRIMARY KEY (PESEL, id_course),
+  FOREIGN KEY (PESEL) REFERENCES scout(PESEL_scout),
+  FOREIGN KEY (id_course) REFERENCES training_course(id_course)
+);
+
+CREATE TABLE scout_team
+(
+  [role] VARCHAR(50) NOT NULL,
+  PESEL VARCHAR(12) NOT NULL,
+  id_host INT NOT NULL,
+  PRIMARY KEY (PESEL, id_host),
+  FOREIGN KEY (PESEL) REFERENCES scout(PESEL_scout),
+  FOREIGN KEY (id_host) REFERENCES host(id_host)
+);
+
+CREATE TABLE scout_collection
+(
+  ammount INT NOT NULL,
+  date_acquirement DATE NOT NULL,
+	advance VARCHAR(1) ,
+  PESEL VARCHAR(12) NOT NULL,
+  id_collection INT NOT NULL,
+  PRIMARY KEY (PESEL, id_collection),
+  FOREIGN KEY (PESEL) REFERENCES scout(PESEL_scout),
+  FOREIGN KEY (id_collection) REFERENCES collection(id_collection)
+);
+
+CREATE TABLE scout_event
+(
+  PESEL VARCHAR(12) NOT NULL,
+  id_event INT NOT NULL,
+  PRIMARY KEY (PESEL, id_event),
+  FOREIGN KEY (PESEL) REFERENCES scout(PESEL_scout),
+  FOREIGN KEY (id_event) REFERENCES [event](id_event)
+);
+
+CREATE TABLE [scout_rank]
+(
+  date_acquirement DATE NOT NULL,
+  PESEL VARCHAR(12) NOT NULL,
+  [name] VARCHAR(50) NOT NULL,
+  PRIMARY KEY (PESEL, [name]),
+  FOREIGN KEY (PESEL) REFERENCES scout(PESEL_scout),
+  FOREIGN KEY ([name]) REFERENCES [rank]([name])
+);

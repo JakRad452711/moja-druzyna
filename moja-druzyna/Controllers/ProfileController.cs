@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using moja_druzyna.Data;
+using moja_druzyna.Data.Session;
 using moja_druzyna.Models;
 using moja_druzyna.ViewModels;
 using System;
@@ -16,12 +18,16 @@ namespace moja_druzyna.Controllers
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<ProfileController> _logger;
 
+        private readonly SessionAccesser sessionAccesser;
+
         private static AFormViewModel aFormViewModel = new AFormViewModel();
 
-        public ProfileController(ApplicationDbContext dbContext, ILogger<ProfileController> logger)
+        public ProfileController(ApplicationDbContext dbContext, ILogger<ProfileController> logger, IHttpContextAccessor httpContextAccessor)
         {
             _dbContext = dbContext;
             _logger = logger;
+
+            sessionAccesser = new SessionAccesser(dbContext, httpContextAccessor);
         }
 
         public IActionResult PersonalData()
@@ -29,7 +35,7 @@ namespace moja_druzyna.Controllers
             if (!User.Identity.IsAuthenticated)
                 return Redirect("/Identity/Account/Login");
 
-            Scout userData = _dbContext.Scouts.First();
+            Scout userData = _dbContext.Scouts.Find(sessionAccesser.UserPesel);
 
             return View(userData);
         }
@@ -93,12 +99,12 @@ namespace moja_druzyna.Controllers
         [HttpGet]
         public IActionResult AForm()
         {
-            List<Scout> unselectedScouts = _dbContext.Scouts.Where(scout => !aFormViewModel.AForm_Scouts.Select(scout => scout.Id).ToList().Contains(scout.Pesel)).ToList<Scout>();
+            List<Scout> unselectedScouts = _dbContext.Scouts.Where(scout => !aFormViewModel.AForm_Scouts.Select(scout => scout.Id).ToList().Contains(scout.PeselScout)).ToList<Scout>();
 
             List<SelectListItem> dropDownList_Scouts = new List<SelectListItem>();
 
             foreach (var scout in unselectedScouts)
-                dropDownList_Scouts.Add(new SelectListItem { Value = scout.Pesel, Text = string.Format("{0} {1}\t({2})", scout.Name, scout.Surname, scout.Pesel) });
+                dropDownList_Scouts.Add(new SelectListItem { Value = scout.PeselScout, Text = string.Format("{0} {1}\t({2})", scout.Name, scout.Surname, scout.PeselScout) });
 
             ViewBag.DropDownList_Scouts = dropDownList_Scouts;
             ViewBag.Scouts = aFormViewModel.AForm_Scouts;
