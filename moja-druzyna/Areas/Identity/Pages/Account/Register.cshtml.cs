@@ -100,12 +100,16 @@ namespace moja_druzyna.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            ModelManager modelManager = new ModelManager(_applicationDbContext);
+
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            if (ModelState.IsValid)
+
+            if (ModelState.IsValid && modelManager.ScoutPrimaryKeyIsAvailable(Input.Pesel))
             {
                 var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
@@ -122,8 +126,7 @@ namespace moja_druzyna.Areas.Identity.Pages.Account
                         Ns                  = Input.Ns
                     };
 
-                    _applicationDbContext.Scouts.Add(scout);
-                    _applicationDbContext.SaveChanges();
+                    modelManager.CreateScoutCaptainWithTeam(scout);
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

@@ -568,10 +568,10 @@ namespace moja_druzyna.Migrations
                         .HasMaxLength(11)
                         .HasColumnType("nvarchar(11)");
 
-                    b.Property<DateTime>("DateOfBirth")
+                    b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateOfEntry")
+                    b.Property<DateTime?>("DateOfEntry")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateOfLeaving")
@@ -759,6 +759,9 @@ namespace moja_druzyna.Migrations
                     b.Property<DateTime>("DateAcquirement")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsCurrent")
+                        .HasColumnType("bit");
+
                     b.HasKey("ScoutPeselScout", "RankName")
                         .HasName("PK__scout_ra__F838FC8F4D9C216B");
 
@@ -794,8 +797,8 @@ namespace moja_druzyna.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.HasKey("IdTeam");
 

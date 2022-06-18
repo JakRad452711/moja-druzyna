@@ -7,6 +7,11 @@ namespace moja_druzyna.Models​
 {
     public partial class Achievement
     {
+        public Achievement()
+        {
+            ScoutAchievements = new List<ScoutAchievement>();
+        }
+
         [MaxLength(50)]
         public string Type { get; set; }
         [MaxLength(500)]

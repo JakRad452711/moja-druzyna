@@ -6,6 +6,11 @@ namespace moja_druzyna.Models​
 {
     public partial class Collection
     {
+        public Collection()
+        {
+            ScoutCollections = new List<ScoutCollection>();
+        }
+
         [Key]
         public int IdCollection { get; set; }
         public int? Quarter { get; set; }

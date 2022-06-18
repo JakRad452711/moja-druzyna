@@ -7,6 +7,12 @@ namespace moja_druzyna.Models​
 {
     public partial class Host
     {
+        public Host()
+        {
+            this.AttendanceLists = new List<AttendanceList>();
+            this.ScoutHost       = new List<ScoutHost>();
+        }
+
         [Key]
         public int IdHost { get; set; }
         [MaxLength(50)]

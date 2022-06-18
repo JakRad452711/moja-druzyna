@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using moja_druzyna.Data;
+using moja_druzyna.Data.Session;
 using moja_druzyna.Models;
 using System.Diagnostics;
 using System.Linq;
@@ -12,10 +14,14 @@ namespace moja_druzyna.Controllers
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<ProfileController> _logger;
 
-        public ProfileController(ApplicationDbContext dbContext, ILogger<ProfileController> logger)
+        private readonly SessionAccesser sessionAccesser;
+
+        public ProfileController(ApplicationDbContext dbContext, ILogger<ProfileController> logger, IHttpContextAccessor httpContextAccessor)
         {
             _dbContext = dbContext;
             _logger = logger;
+
+            sessionAccesser = new SessionAccesser(dbContext, httpContextAccessor);
         }
 
         public IActionResult PersonalData()
@@ -23,7 +29,7 @@ namespace moja_druzyna.Controllers
             if (!User.Identity.IsAuthenticated)
                 return Redirect("/Identity/Account/Login");
 
-            Scout userData = _dbContext.Scouts.First();
+            Scout userData = _dbContext.Scouts.Find(sessionAccesser.UserPesel);
 
             return View(userData);
         }
