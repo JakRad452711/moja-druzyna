@@ -112,6 +112,7 @@ namespace moja_druzyna.Controllers
             return View(aFormViewModel);
         }
 
+        /*
         [HttpPost]
         public IActionResult AForm_Submit(AFormViewModel _aFormViewModel)
         {
@@ -121,6 +122,7 @@ namespace moja_druzyna.Controllers
 
             return Redirect("AForm");
         }
+        */
 
         [HttpPost]
         public IActionResult AForm_AddScout(AFormViewModel _aFormViewModel, string scoutId)

@@ -18,24 +18,30 @@
     </div>
 
     <div id="parentdiv" class="borderadded">
-        <form id="base-form-id" asp-action="OrderFormSubmit">            
+        <form id="base-form-id" asp-action="OrderFormSubmit">
             <div class="field-and-name">
-                Numer: 
+                Numer:
                 <br />
                 <input type="text">
             </div>
             <div class="field-and-name">
-                Data: 
+                Data:
                 <br />
                 <input type="text">
-             </div>
-             <div class="field-and-name extend-to-border">
-                Miejscowość: 
+            </div>
+            <div class="field-and-name extend-to-border">
+                Miejscowość:
                 <br />
                 <input type="text">
-             </div>
-         </form>
-
+            </div>
+        </form>
+        <a asp-action="layoffs" formmethod="get">zwolnienia</a>
+        <a asp-action="appointments" formmethod="get">mianowania</a>
+        <a asp-action="trialclosings">zamknięcia prób</a>
+        <a asp-action="trialopenings">otwarcia prób</a>
+        <a asp-action="reprimendsandpraises">pochwały</a>
+        <a asp-action="exclusions">skreślenia ze stanu</a>
+        <a asp-action="other">inne</a>
 
         <div class="content text-left" style="height: auto">
             <div class="account-content-left">
@@ -130,7 +136,7 @@
                     </div>
                     <br />
                 </div>
-        
+
                 <div class="smallborderadded">
                     <meta name="viewport" content="width=device-width, initial-scale=1">
                     <label class="checkboxsimple">
@@ -157,22 +163,22 @@
                     <br />
                 </div>
             </div>
-    
+
         </div>
 
         <div id="content-title" class="text-center extra-padding">
-            <p> wydaj rozkaz po wprowadzeniu zmian do wybranych sekcji </p>              
+            <p> wydaj rozkaz po wprowadzeniu zmian do wybranych sekcji </p>
         </div>
 
         <div class="center">
-        <div class="accept-decline-buttons">
-            <div class="buttonedit accept-decline-button">
-                wydaj rozkaz
+            <div class="accept-decline-buttons">
+                <div class="buttonedit accept-decline-button">
+                    wydaj rozkaz
+                </div>
+                <div class="buttonedit accept-decline-button">
+                    porzuć
+                </div>
             </div>
-            <div class="buttonedit accept-decline-button">
-                porzuć
-            </div>
-        </div>
         </div>
     </div>
 

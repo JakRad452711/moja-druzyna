@@ -12,6 +12,7 @@ namespace moja_druzyna.Data.Session
 
         private readonly string sessionUserContextName = "UserContext";
         private readonly string sessionTeamContextName = "TeamContext";
+        private readonly string sessionFormOrderContextName = "FormOrderContext";
         
         public SessionAccesser(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor)
         {
@@ -28,6 +29,7 @@ namespace moja_druzyna.Data.Session
         {
             InitializeSessionUserContext(httpContextAccessor);
             InitializeSessionTeamContext(httpContextAccessor);
+            InitializeSessionFormOrderContext(httpContextAccessor);
         }
 
         public string UserId
@@ -150,6 +152,23 @@ namespace moja_druzyna.Data.Session
             }
         }
 
+        public SessionFormOrderContext FormOrder
+        {
+            get
+            {
+                SessionFormOrderContext sessionFormOrderContext = JsonConvert
+                    .DeserializeObject<SessionFormOrderContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionFormOrderContextName));
+
+                return sessionFormOrderContext;
+            }
+            set
+            {
+                SessionFormOrderContext sessionFormOrderContext = value;
+
+                _httpContextAccessor.HttpContext.Session.SetString(sessionFormOrderContextName, JsonConvert.SerializeObject(sessionFormOrderContext));
+            }
+        }
+
         public void InitializeSessionUserContext(IHttpContextAccessor httpContextAccessor)
         {
             if (httpContextAccessor.HttpContext.Session.GetString(sessionUserContextName) != null)
@@ -185,6 +204,14 @@ namespace moja_druzyna.Data.Session
             };
 
             httpContextAccessor.HttpContext.Session.SetString(sessionTeamContextName, JsonConvert.SerializeObject(sessionTeamContext));
+        }
+
+        public void InitializeSessionFormOrderContext(IHttpContextAccessor httpContextAccessor)
+        {
+            if (httpContextAccessor.HttpContext.Session.GetString(sessionFormOrderContextName) != null)
+                return;
+
+            httpContextAccessor.HttpContext.Session.SetString(sessionFormOrderContextName, JsonConvert.SerializeObject(new SessionFormOrderContext()));
         }
     }
 }
