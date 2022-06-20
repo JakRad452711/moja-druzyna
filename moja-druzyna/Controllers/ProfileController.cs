@@ -6,6 +6,9 @@ using moja_druzyna.Data.Session;
 using moja_druzyna.Models;
 using System.Diagnostics;
 using System.Linq;
+using System.Collections.Generic;
+using System;
+using moja_druzyna.src;
 
 namespace moja_druzyna.Controllers
 {
@@ -38,6 +41,22 @@ namespace moja_druzyna.Controllers
         {
             if (!User.Identity.IsAuthenticated)
                 return Redirect("/Identity/Account/Login");
+
+            List<string> data = new List<string>();
+            data.Add("22222222222");
+            data.Add("98061485535");
+            data.Add("03313088369");
+            data.Add("01111111111");
+            data.Add("123456");
+            data.Add("XD123");
+            data.Add("abcdefghijk");
+            data.Add("96050205656");
+
+            Test_Pesel test1 = new Test_Pesel();
+            foreach (string test in data)
+            {
+                _logger.LogInformation(test1.testPesel(test));
+            }
 
             return View();
         }
