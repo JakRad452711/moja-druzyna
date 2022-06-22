@@ -9,16 +9,19 @@ namespace moja_druzyna.src
     {
         public void CreateTestPdf()
         {
+            Random generator = new Random();
+            int mark = generator.Next();
+            
             PdfDocument doc = new PdfDocument();
 
             PdfPageBase page = doc.Pages.Add();
 
-            page.Canvas.DrawString("Hello World",
+            page.Canvas.DrawString($"Hello World, {mark}",
                 new PdfFont(PdfFontFamily.Helvetica, 13f),
                 new PdfSolidBrush(Color.Black),
                 new PointF(50, 50));
 
-            doc.SaveToFile("Output.pdf");
+            doc.SaveToFile($"Output{mark}.pdf");
         }
 
         public void GenerateOrder(Order order)
@@ -39,17 +42,23 @@ namespace moja_druzyna.src
             page.Canvas.DrawString($"{order.Location}, {order.Date}",
                 new PdfFont(PdfFontFamily.Helvetica, 13f),
                 new PdfSolidBrush(Color.Black),
-                new PointF(250, 50));
+                new PointF(300, 50));
 
             page.Canvas.DrawString($"Rozkaz {order.Number}",
                 new PdfFont(PdfFontFamily.Helvetica, 13f),
                 new PdfSolidBrush(Color.Black),
-                new PointF(180, 80));
+                new PointF(200, 80));
 
             posY = 100;
 
             if (order.releasings != null)
             {
+                page.Canvas.DrawString($"{mainCounter}.Zwolnienia",
+                    new PdfFont(PdfFontFamily.Helvetica, 13f),
+                    new PdfSolidBrush(Color.Black),
+                    new PointF(50, posY));
+
+                posY = posY + 20;
                 foreach (Releasing release in order.releasings)
                 {
                     page.Canvas.DrawString($"{mainCounter}.{secondaryCounter}.Zwalniam dh. {release.nameScout} {release.surnameScout} z funkcji {release.Function}.",
@@ -66,6 +75,12 @@ namespace moja_druzyna.src
 
             if (order.appointments != null)
             {
+                page.Canvas.DrawString($"{mainCounter}.Mianowania",
+                    new PdfFont(PdfFontFamily.Helvetica, 13f),
+                    new PdfSolidBrush(Color.Black),
+                    new PointF(50, posY));
+
+                posY = posY + 20;
                 foreach (Appointment app in order.appointments)
                 {
                     page.Canvas.DrawString($"{mainCounter}.{secondaryCounter}.Mianuję dh. {app.nameScout} {app.surnameScout} na funkcję {app.Function}.",
@@ -79,6 +94,8 @@ namespace moja_druzyna.src
                 mainCounter = mainCounter + 1;
                 secondaryCounter = 1;
             }
+
+            doc.SaveToFile($"{order.Number}.pdf");
 
         }
     }

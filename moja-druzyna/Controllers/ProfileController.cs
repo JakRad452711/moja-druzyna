@@ -52,7 +52,7 @@ namespace moja_druzyna.Controllers
             */
             Scout interactionData = _dbContext.Scouts.First();
             GeneratorPdf generatorPdf = new GeneratorPdf();
-            generatorPdf.CreateTestPdf();
+            //generatorPdf.CreateTestPdf();
             Releasing r1 = new Releasing(interactionData, "zastępowy", "Wilki");
             Releasing r2 = new Releasing(interactionData, "kronikarz", "kadra");
             Appointment a1 = new Appointment(interactionData, "przyboczny", "kadra");
@@ -63,7 +63,7 @@ namespace moja_druzyna.Controllers
             rel.Add(r2);
             app.Add(a1);
             app.Add(a2);
-            Order order = new Order("L1/2022", "88 PDHS Dragon", "22.06.2022", "Poznań", rel, app);
+            Order order = new Order("L1-2022", "88 PDHS Dragon", "22.06.2022", "Poznań", rel, app);
             generatorPdf.GenerateOrder(order);
             return View(interactionData);
         }
