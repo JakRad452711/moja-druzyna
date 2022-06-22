@@ -10,8 +10,16 @@ namespace moja_druzyna.src
         private string location;
         public List<Releasing> releasings;
         public List<Appointment> appointments;
+        public List<ClosingTrial> closings;
+        public List<OpenTrial> opens;
+        public List<Game> games;
+        public List<Extraordinary> extras;
+        public List<Deletion> deletions;
+        public List<string> others;
 
-        public Order(string number, string team, string date, string location, List<Releasing> releasings, List<Appointment> appointments)
+        public Order(string number, string team, string date, string location, 
+            List<Releasing> releasings, List<Appointment> appointments, List<ClosingTrial> closings, List<OpenTrial> opens,
+            List<Game> games, List<Extraordinary> extras, List<Deletion> deletions, List<string> others)
         {
             this.number = number;
             this.team = team;
@@ -19,6 +27,12 @@ namespace moja_druzyna.src
             this.location = location;
             this.releasings = releasings;
             this.appointments = appointments;
+            this.closings = closings;  
+            this.opens = opens;
+            this.games = games;
+            this.extras = extras;
+            this.deletions = deletions;
+            this.others = others;
         }
 
         public string Number
