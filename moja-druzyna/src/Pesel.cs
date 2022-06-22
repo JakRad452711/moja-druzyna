@@ -136,9 +136,11 @@ namespace moja_druzyna.src
             return valid;
         }
 
-        public string getBirthday()
+        public DateTime getBirthday()
         {
-            string birthday = $"{getDay()}.{getMonth()}.{getYear()}";
+            DateTime birthday = new DateTime();
+            birthday = new DateTime(getYear(), getMonth(), getDay());
+            //string birthday = $"{getDay()}.{getMonth()}.{getYear()}";
             return birthday;
         }
 

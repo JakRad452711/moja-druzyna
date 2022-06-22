@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using moja_druzyna.Data;
 using moja_druzyna.Models;
+using moja_druzyna.src;
 
 namespace moja_druzyna.Areas.Identity.Pages.Account
 {
@@ -105,7 +106,7 @@ namespace moja_druzyna.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-            if (ModelState.IsValid && modelManager.ScoutPrimaryKeyIsAvailable(Input.Pesel))
+            if (ModelState.IsValid && modelManager.ScoutPrimaryKeyIsAvailable(Input.Pesel) && new Pesel(Input.Pesel).isValid())
             {
                 var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -113,17 +114,18 @@ namespace moja_druzyna.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-                    
-                    Scout scout = new Scout() { 
-                        Identity            = user,
-                        IdentityId          = user.Id,
-                        PeselScout          = Input.Pesel, 
-                        Name                = Input.Name, 
-                        SecondName          = Input.SecondName, 
-                        Surname             = Input.Surname,  
-                        Nationality         = Input.Nationality,
-                        MembershipNumber    = Input.MembershipNumber,
-                        Ns                  = Input.Ns
+
+                    Scout scout = new Scout() {
+                        Identity = user,
+                        IdentityId = user.Id,
+                        PeselScout = Input.Pesel,
+                        Name = Input.Name,
+                        SecondName = Input.SecondName,
+                        Surname = Input.Surname,
+                        Nationality = Input.Nationality,
+                        MembershipNumber = Input.MembershipNumber,
+                        Ns = Input.Ns,
+                        DateOfBirth = new Pesel(Input.Pesel).getBirthday()
                     };
 
                     modelManager.CreateScoutCaptainWithTeam(scout);

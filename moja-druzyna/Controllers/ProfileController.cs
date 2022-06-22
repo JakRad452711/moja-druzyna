@@ -50,7 +50,6 @@ namespace moja_druzyna.Controllers
             data.Add("123456");
             data.Add("XD123");
             data.Add("abcdefghijk");
-            data.Add("96050205656");
 
             Test_Pesel test1 = new Test_Pesel();
             foreach (string test in data)

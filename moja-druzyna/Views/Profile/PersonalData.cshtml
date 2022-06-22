@@ -1,4 +1,5 @@
-﻿@model moja_druzyna.Models.Scout
+﻿@using moja_druzyna.src
+@model moja_druzyna.Models.Scout
 
 @{
     ViewData["Title"] = "dane";
@@ -50,7 +51,14 @@
                     else
                     { <a>@Model.SecondName</a>} <br />
                     @Html.DisplayFor(user => user.Surname) <br />
-                    Płeć <br />
+                    @if (new Pesel(Model.PeselScout).isMale())
+                    {
+                        <a>Mężczyzna</a>
+                    } else
+                    {
+                        <a>Kobieta</a>
+                    }
+                    <br />
                     @Html.DisplayFor(user => user.PeselScout) <br />
                     @Html.DisplayFor(user => user.DateOfBirth) <br />
                     @Html.DisplayFor(user => user.Nationality) <br />
