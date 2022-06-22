@@ -20,5 +20,66 @@ namespace moja_druzyna.src
 
             doc.SaveToFile("Output.pdf");
         }
+
+        public void GenerateOrder(Order order)
+        {
+            PdfDocument doc = new PdfDocument();
+            PdfPageBase page = doc.Pages.Add();
+
+            int posX;
+            int posY;
+            int mainCounter = 1;
+            int secondaryCounter = 1;
+
+            page.Canvas.DrawString($"ZHP, {order.Team}",
+                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                new PdfSolidBrush(Color.Black),
+                new PointF(50, 50));
+
+            page.Canvas.DrawString($"{order.Location}, {order.Date}",
+                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                new PdfSolidBrush(Color.Black),
+                new PointF(250, 50));
+
+            page.Canvas.DrawString($"Rozkaz {order.Number}",
+                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                new PdfSolidBrush(Color.Black),
+                new PointF(180, 80));
+
+            posY = 100;
+
+            if (order.releasings != null)
+            {
+                foreach (Releasing release in order.releasings)
+                {
+                    page.Canvas.DrawString($"{mainCounter}.{secondaryCounter}.Zwalniam dh. {release.nameScout} {release.surnameScout} z funkcji {release.Function}.",
+                        new PdfFont(PdfFontFamily.Helvetica, 13f),
+                        new PdfSolidBrush(Color.Black),
+                        new PointF(50, posY));
+
+                    secondaryCounter = secondaryCounter + 1;
+                    posY = posY + 20;
+                }
+                mainCounter = mainCounter + 1;
+                secondaryCounter = 1;
+            }
+
+            if (order.appointments != null)
+            {
+                foreach (Appointment app in order.appointments)
+                {
+                    page.Canvas.DrawString($"{mainCounter}.{secondaryCounter}.Mianuję dh. {app.nameScout} {app.surnameScout} na funkcję {app.Function}.",
+                        new PdfFont(PdfFontFamily.Helvetica, 13f),
+                        new PdfSolidBrush(Color.Black),
+                        new PointF(50, posY));
+
+                    secondaryCounter = secondaryCounter + 1;
+                    posY = posY + 20;
+                }
+                mainCounter = mainCounter + 1;
+                secondaryCounter = 1;
+            }
+
+        }
     }
 }
