@@ -2,6 +2,8 @@
 using Spire.Pdf;
 using Spire.Pdf.Graphics;
 using System.Drawing;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace moja_druzyna.src
 {
@@ -42,13 +44,14 @@ namespace moja_druzyna.src
             page.Canvas.DrawString($"{order.Location}, {order.Date}",
                 new PdfFont(PdfFontFamily.Helvetica, 13f),
                 new PdfSolidBrush(Color.Black),
-                new PointF(300, 50));
+                new PointF(380 - (order.Location.Length*6), 50));
 
             page.Canvas.DrawString($"Rozkaz {order.Number}",
                 new PdfFont(PdfFontFamily.Helvetica, 13f),
                 new PdfSolidBrush(Color.Black),
                 new PointF(200, 80));
 
+            posX = 50;
             posY = 100;
 
             if (order.releasings != null)
@@ -61,12 +64,38 @@ namespace moja_druzyna.src
                 posY = posY + 20;
                 foreach (Releasing release in order.releasings)
                 {
-                    page.Canvas.DrawString($"{mainCounter}.{secondaryCounter}.Zwalniam dh. {release.nameScout} {release.surnameScout} z funkcji {release.Function}.",
-                        new PdfFont(PdfFontFamily.Helvetica, 13f),
-                        new PdfSolidBrush(Color.Black),
-                        new PointF(50, posY));
+                    if (posY > 700)
+                    {
+                        page = doc.Pages.Add();
+                        posY = 50;
+                        posX = 50;
+                    }
+                    string text = $"{mainCounter}.{secondaryCounter}.Bardzo dlugi testowy ciag znakow zeby sprawdzic, czy dobrze lamie sie linia. Zwalniam dh. {release.nameScout} {release.surnameScout} z funkcji {release.Function}.";
+                    List<string> words = new List<string>();
+                    words = text.Split(' ').ToList();
+                    foreach (string word in words)
+                    {
+                        if(posX < 480 - (word.Length*6))
+                        {
+                            page.Canvas.DrawString(word,
+                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                new PdfSolidBrush(Color.Black),
+                                new PointF(posX, posY));
+                            posX = posX + 7*(word.Length + 1);
+                        } else
+                        {
+                            posX = 50;
+                            posY = posY + 20;
+                            page.Canvas.DrawString(word,
+                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                new PdfSolidBrush(Color.Black),
+                                new PointF(posX, posY));
+                            posX = posX + 7 * (word.Length + 1);
+                        }
+                    }
 
                     secondaryCounter = secondaryCounter + 1;
+                    posX = 50;
                     posY = posY + 20;
                 }
                 mainCounter = mainCounter + 1;
@@ -83,12 +112,39 @@ namespace moja_druzyna.src
                 posY = posY + 20;
                 foreach (Appointment app in order.appointments)
                 {
-                    page.Canvas.DrawString($"{mainCounter}.{secondaryCounter}.Mianuje dh. {app.nameScout} {app.surnameScout} na funkcje {app.Function}.",
-                        new PdfFont(PdfFontFamily.Helvetica, 13f),
-                        new PdfSolidBrush(Color.Black),
-                        new PointF(50, posY));
+                    if (posY > 700)
+                    {
+                        page = doc.Pages.Add();
+                        posY = 50;
+                        posX = 50;
+                    }
+                    string text = $"{mainCounter}.{secondaryCounter}.Mianuje dh. {app.nameScout} {app.surnameScout} na funkcje {app.Function}.";
+                    List<string> words = new List<string>();
+                    words = text.Split(' ').ToList();
+                    foreach (string word in words)
+                    {
+                        if (posX < 480 - (word.Length * 6))
+                        {
+                            page.Canvas.DrawString(word,
+                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                new PdfSolidBrush(Color.Black),
+                                new PointF(posX, posY));
+                            posX = posX + 7 * (word.Length + 1);
+                        }
+                        else
+                        {
+                            posX = 50;
+                            posY = posY + 20;
+                            page.Canvas.DrawString(word,
+                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                new PdfSolidBrush(Color.Black),
+                                new PointF(posX, posY));
+                            posX = posX + 7 * (word.Length + 1);
+                        }
+                    }
 
                     secondaryCounter = secondaryCounter + 1;
+                    posX = 50;
                     posY = posY + 20;
                 }
                 mainCounter = mainCounter + 1;
@@ -105,12 +161,33 @@ namespace moja_druzyna.src
                 posY = posY + 20;
                 foreach (ClosingTrial c in order.closings)
                 {
-                    page.Canvas.DrawString($"{mainCounter}.{secondaryCounter}.Zamykam probe i przyznaje {c.trialType} {c.trialName} dh. {c.person.Name} {c.person.Surname}",
-                        new PdfFont(PdfFontFamily.Helvetica, 13f),
-                        new PdfSolidBrush(Color.Black),
-                        new PointF(50, posY));
+                    string text = $"{mainCounter}.{secondaryCounter}.Zamykam probe i przyznaje {c.trialType} {c.trialName} dh. {c.person.Name} {c.person.Surname}";
+                    List<string> words = new List<string>();
+                    words = text.Split(' ').ToList();
+                    foreach (string word in words)
+                    {
+                        if (posX < 480 - (word.Length * 6))
+                        {
+                            page.Canvas.DrawString(word,
+                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                new PdfSolidBrush(Color.Black),
+                                new PointF(posX, posY));
+                            posX = posX + 7 * (word.Length + 1);
+                        }
+                        else
+                        {
+                            posX = 50;
+                            posY = posY + 20;
+                            page.Canvas.DrawString(word,
+                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                new PdfSolidBrush(Color.Black),
+                                new PointF(posX, posY));
+                            posX = posX + 7 * (word.Length + 1);
+                        }
+                    }
 
                     secondaryCounter = secondaryCounter + 1;
+                    posX = 50;
                     posY = posY + 20;
                 }
                 mainCounter = mainCounter + 1;
@@ -127,12 +204,39 @@ namespace moja_druzyna.src
                 posY = posY + 20;
                 foreach (OpenTrial o in order.opens)
                 {
-                    page.Canvas.DrawString($"{mainCounter}.{secondaryCounter}.Otwieram probe na {o.trialType} {o.trialName} dh. {o.person.Name} {o.person.Surname}",
-                        new PdfFont(PdfFontFamily.Helvetica, 13f),
-                        new PdfSolidBrush(Color.Black),
-                        new PointF(50, posY));
+                    if (posY > 700)
+                    {
+                        page = doc.Pages.Add();
+                        posY = 50;
+                        posX = 50;
+                    }
+                    string text = $"{mainCounter}.{secondaryCounter}.Otwieram probe na {o.trialType} {o.trialName} dh. {o.person.Name} {o.person.Surname}";
+                    List<string> words = new List<string>();
+                    words = text.Split(' ').ToList();
+                    foreach (string word in words)
+                    {
+                        if (posX < 480 - (word.Length * 6))
+                        {
+                            page.Canvas.DrawString(word,
+                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                new PdfSolidBrush(Color.Black),
+                                new PointF(posX, posY));
+                            posX = posX + 7 * (word.Length + 1);
+                        }
+                        else
+                        {
+                            posX = 50;
+                            posY = posY + 20;
+                            page.Canvas.DrawString(word,
+                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                new PdfSolidBrush(Color.Black),
+                                new PointF(posX, posY));
+                            posX = posX + 7 * (word.Length + 1);
+                        }
+                    }
 
                     secondaryCounter = secondaryCounter + 1;
+                    posX = 50;
                     posY = posY + 20;
                 }
                 mainCounter = mainCounter + 1;
@@ -149,26 +253,52 @@ namespace moja_druzyna.src
                 posY = posY + 20;
                 foreach (ClosingTrial c in order.closings)
                 {
+                    if (posY > 700)
+                    {
+                        page = doc.Pages.Add();
+                        posY = 50;
+                        posX = 50;
+                    }
                     string text;
                     int points;
                     if(c.trialType == "sprawność"){
                         points = 25;
-                        text = $"{mainCounter}.{secondaryCounter}.Za zdobycie {c.trialType} {c.trialName} przyznaje dh. {c.person.Name} {c.person.Surname} {points} punktow.";
+                        text = $"{mainCounter}.{secondaryCounter}.Za zdobycie {c.trialType} {c.trialName} przyznaje dh. {c.person.Name} {c.person.Surname} {points} punktow do wspolzawodnictwa.";
                     } else if(c.trialType == "krzyż")
                     {
                         points = 50;
-                        text = $"{mainCounter}.{secondaryCounter}.Za zrealizowania proby harcerskiej przyznaje dh. {c.person.Name} {c.person.Surname} {points} punktow.";
+                        text = $"{mainCounter}.{secondaryCounter}.Za zrealizowania proby harcerskiej przyznaje dh. {c.person.Name} {c.person.Surname} {points} punktow do wspolzawodnictwa.";
                     } else 
                     {
                         points = 100;
-                        text = $"{mainCounter}.{secondaryCounter}.Za zdobycie {c.trialType} {c.trialName} przyznaje dh. {c.person.Name} {c.person.Surname} {points} punktow.";
+                        text = $"{mainCounter}.{secondaryCounter}.Za zdobycie {c.trialType} {c.trialName} przyznaje dh. {c.person.Name} {c.person.Surname} {points} punktow do wspolzawodnictwa.";
                     }
-                    page.Canvas.DrawString(text,
-                        new PdfFont(PdfFontFamily.Helvetica, 13f),
-                        new PdfSolidBrush(Color.Black),
-                        new PointF(50, posY));
+                    List<string> words = new List<string>();
+                    words = text.Split(' ').ToList();
+                    foreach (string word in words)
+                    {
+                        if (posX < 480 - (word.Length * 6))
+                        {
+                            page.Canvas.DrawString(word,
+                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                new PdfSolidBrush(Color.Black),
+                                new PointF(posX, posY));
+                            posX = posX + 7 * (word.Length + 1);
+                        }
+                        else
+                        {
+                            posX = 50;
+                            posY = posY + 20;
+                            page.Canvas.DrawString(word,
+                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                new PdfSolidBrush(Color.Black),
+                                new PointF(posX, posY));
+                            posX = posX + 7 * (word.Length + 1);
+                        }
+                    }
 
                     secondaryCounter = secondaryCounter + 1;
+                    posX = 50;
                     posY = posY + 20;
                 }
                 mainCounter = mainCounter + 1;
@@ -185,12 +315,39 @@ namespace moja_druzyna.src
                 posY = posY + 20;
                 foreach (Game g in order.games)
                 {
-                    page.Canvas.DrawString($"{mainCounter}.{secondaryCounter}.Za wyniki w grze {g.gameName} przyznaje dh. {g.person.Name} {g.person.Surname} {g.points} punktow.",
-                        new PdfFont(PdfFontFamily.Helvetica, 13f),
-                        new PdfSolidBrush(Color.Black),
-                        new PointF(50, posY));
+                    if (posY > 700)
+                    {
+                        page = doc.Pages.Add();
+                        posY = 50;
+                        posX = 50;
+                    }
+                    string text = $"{mainCounter}.{secondaryCounter}.Za wyniki w grze {g.gameName} przyznaje dh. {g.person.Name} {g.person.Surname} {g.points} punktow do wspolzawodnictwa.";
+                    List<string> words = new List<string>();
+                    words = text.Split(' ').ToList();
+                    foreach (string word in words)
+                    {
+                        if (posX < 480 - (word.Length * 6))
+                        {
+                            page.Canvas.DrawString(word,
+                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                new PdfSolidBrush(Color.Black),
+                                new PointF(posX, posY));
+                            posX = posX + 7 * (word.Length + 1);
+                        }
+                        else
+                        {
+                            posX = 50;
+                            posY = posY + 20;
+                            page.Canvas.DrawString(word,
+                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                new PdfSolidBrush(Color.Black),
+                                new PointF(posX, posY));
+                            posX = posX + 7 * (word.Length + 1);
+                        }
+                    }
 
                     secondaryCounter = secondaryCounter + 1;
+                    posX = 50;
                     posY = posY + 20;
                 }
                 mainCounter = mainCounter + 1;
@@ -207,12 +364,39 @@ namespace moja_druzyna.src
                 posY = posY + 20;
                 foreach (Extraordinary e in order.extras)
                 {
-                    page.Canvas.DrawString($"{mainCounter}.{secondaryCounter}.Udzielam dh. {e.person.Name} {e.person.Surname} {e.type} za {e.justification}",
-                        new PdfFont(PdfFontFamily.Helvetica, 13f),
-                        new PdfSolidBrush(Color.Black),
-                        new PointF(50, posY));
+                    if (posY > 700)
+                    {
+                        page = doc.Pages.Add();
+                        posY = 50;
+                        posX = 50;
+                    }
+                    string text = $"{mainCounter}.{secondaryCounter}.Udzielam dh. {e.person.Name} {e.person.Surname} {e.type} za {e.justification}";
+                    List<string> words = new List<string>();
+                    words = text.Split(' ').ToList();
+                    foreach (string word in words)
+                    {
+                        if (posX < 480 - (word.Length * 6))
+                        {
+                            page.Canvas.DrawString(word,
+                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                new PdfSolidBrush(Color.Black),
+                                new PointF(posX, posY));
+                            posX = posX + 7 * (word.Length + 1);
+                        }
+                        else
+                        {
+                            posX = 50;
+                            posY = posY + 20;
+                            page.Canvas.DrawString(word,
+                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                new PdfSolidBrush(Color.Black),
+                                new PointF(posX, posY));
+                            posX = posX + 7 * (word.Length + 1);
+                        }
+                    }
 
                     secondaryCounter = secondaryCounter + 1;
+                    posX = 50;
                     posY = posY + 20;
                 }
                 mainCounter = mainCounter + 1;
@@ -229,12 +413,39 @@ namespace moja_druzyna.src
                 posY = posY + 20;
                 foreach (Deletion d in order.deletions)
                 {
-                    page.Canvas.DrawString($"{mainCounter}.{secondaryCounter}.Z powodu {d.justification} skreslam dh. {d.person.Name} {d.person.Surname} z listy czlonkow druzyny.",
-                        new PdfFont(PdfFontFamily.Helvetica, 13f),
-                        new PdfSolidBrush(Color.Black),
-                        new PointF(50, posY));
+                    if (posY > 700)
+                    {
+                        page = doc.Pages.Add();
+                        posY = 50;
+                        posX = 50;
+                    }
+                    string text = $"{mainCounter}.{secondaryCounter}.Z powodu {d.justification} skreslam dh. {d.person.Name} {d.person.Surname} z listy czlonkow druzyny.";
+                    List<string> words = new List<string>();
+                    words = text.Split(' ').ToList();
+                    foreach (string word in words)
+                    {
+                        if (posX < 480 - (word.Length * 6))
+                        {
+                            page.Canvas.DrawString(word,
+                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                new PdfSolidBrush(Color.Black),
+                                new PointF(posX, posY));
+                            posX = posX + 7 * (word.Length + 1);
+                        }
+                        else
+                        {
+                            posX = 50;
+                            posY = posY + 20;
+                            page.Canvas.DrawString(word,
+                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                new PdfSolidBrush(Color.Black),
+                                new PointF(posX, posY));
+                            posX = posX + 7 * (word.Length + 1);
+                        }
+                    }
 
                     secondaryCounter = secondaryCounter + 1;
+                    posX = 50;
                     posY = posY + 20;
                 }
                 mainCounter = mainCounter + 1;
@@ -251,22 +462,58 @@ namespace moja_druzyna.src
                 posY = posY + 20;
                 foreach (string s in order.others)
                 {
-                    page.Canvas.DrawString($"{mainCounter}.{secondaryCounter}.{s}",
-                        new PdfFont(PdfFontFamily.Helvetica, 13f),
-                        new PdfSolidBrush(Color.Black),
-                        new PointF(50, posY));
+                    if (posY > 700)
+                    {
+                        page = doc.Pages.Add();
+                        posY = 50;
+                        posX = 50;
+                    }
+                    string text = $"{mainCounter}.{secondaryCounter}.{s}";
+                    List<string> words = new List<string>();
+                    words = text.Split(' ').ToList();
+                    foreach (string word in words)
+                    {
+                        if (posX < 480 - (word.Length * 6))
+                        {
+                            page.Canvas.DrawString(word,
+                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                new PdfSolidBrush(Color.Black),
+                                new PointF(posX, posY));
+                            posX = posX + 7 * (word.Length + 1);
+                        }
+                        else
+                        {
+                            posX = 50;
+                            posY = posY + 20;
+                            page.Canvas.DrawString(word,
+                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                new PdfSolidBrush(Color.Black),
+                                new PointF(posX, posY));
+                            posX = posX + 7 * (word.Length + 1);
+                        }
+                    }
 
                     secondaryCounter = secondaryCounter + 1;
+                    posX = 50;
                     posY = posY + 20;
                 }
                 mainCounter = mainCounter + 1;
                 secondaryCounter = 1;
             }
 
+            if (posY > 650)
+            {
+                page = doc.Pages.Add();
+                posY = 50;
+            }
             page.Canvas.DrawString($"Czuwaj!",
                     new PdfFont(PdfFontFamily.Helvetica, 13f),
                     new PdfSolidBrush(Color.Black),
                     new PointF(350, posY+50));
+            page.Canvas.DrawString($"Druzynowy {order.Team}",
+                    new PdfFont(PdfFontFamily.Helvetica, 13f),
+                    new PdfSolidBrush(Color.Black),
+                    new PointF(300, posY + 70));
 
             doc.SaveToFile($"{order.Number}.pdf");
 
