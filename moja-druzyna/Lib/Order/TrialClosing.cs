@@ -14,10 +14,11 @@ namespace moja_druzyna.Lib.Order
         public string ScoutName { get; set; }
         public string ScoutSurname { get; set; }
         public string TrialType { get; set; }
+        public string TrialName { get; set; }
         public string Rank { get; set; }
         public string Ability { get; set; }
 
-        public bool UpdateDb(ApplicationDbContext dbContext, int teamId, bool execute)
+        public bool UpdateDb(ApplicationDbContext dbContext, int teamId, bool execute, ILogger logger)
         {
             bool scoutExistsInTheTeam = dbContext.ScoutTeam
                 .Where(scoutTeam => scoutTeam.ScoutPeselScout == ScoutPesel && scoutTeam.TeamIdTeam == teamId)
@@ -25,38 +26,34 @@ namespace moja_druzyna.Lib.Order
             bool rankExists = dbContext.Ranks
                 .Where(rank => rank.Name == Rank)
                 .Count() != 0;
-            bool scoutHasTheRank = dbContext.ScoutRanks
-                .Where(scoutRank => scoutRank.RankName == Rank && scoutRank.ScoutPeselScout == ScoutPesel && scoutRank.IsCurrent)
-                .Count() != 0;
             bool scoutHadTheRank = dbContext.ScoutRanks
-                .Where(scoutRank => scoutRank.RankName == Rank && scoutRank.ScoutPeselScout == ScoutPesel && !scoutRank.IsCurrent)
+                .Where(scoutRank => scoutRank.RankName == Rank && scoutRank.ScoutPeselScout == ScoutPesel)
                 .Count() != 0;
             bool abilityExists = dbContext.Achievements
                 .Where(achievement => achievement.IdAchievement == int.Parse(Ability))
                 .Count() != 0;
-            bool scoutHasTheAbility = dbContext.ScoutAchievements
-                .Where(scoutAchievement => scoutAchievement.AchievementIdAchievement == int.Parse(Ability) && scoutAchievement.ScoutPeselScout == ScoutPesel)
-                .Count() != 0;
+            bool scoutHasTheAbility = rankExists && dbContext.ScoutAchievements
+                .Where(scoutAchievement => scoutAchievement.ScoutPeselScout == ScoutPesel && scoutAchievement.AchievementIdAchievement == int.Parse(Ability))
+                .Any();
 
-            if (!execute || !scoutExistsInTheTeam || ((!rankExists || scoutHasTheRank) && TrialType == "rank") || ((!abilityExists || scoutHasTheAbility) && TrialType == "ability"))
+            if (!execute || !scoutExistsInTheTeam || (!rankExists && TrialType == "rank") || ((!abilityExists || scoutHasTheAbility) && TrialType == "ability"))
                 return false;
 
             Scout scout = dbContext.Scouts.Find(ScoutPesel);
 
             if (TrialType == "rank" && scoutHadTheRank)
             {
-                Rank rank = dbContext.Ranks.Find(Rank);
-                ScoutRank scoutRankCurrent = dbContext.ScoutRanks
-                    .Where(scoutRank => scoutRank.RankName == Rank && scoutRank.ScoutPeselScout == ScoutPesel)
-                    .First();
+                List<ScoutRank> scoutRanksCurrent = dbContext.ScoutRanks
+                    .Where(scoutRank => scoutRank.ScoutPeselScout == ScoutPesel)
+                    .ToList();
                 ScoutRank scoutRankNew = dbContext.ScoutRanks
                     .Where(scoutRank => scoutRank.RankName == Rank && scoutRank.ScoutPeselScout == ScoutPesel)
                     .First();
 
-                scoutRankCurrent.IsCurrent = false;
+                scoutRanksCurrent.ForEach(scoutRank => scoutRank.IsCurrent = false);
                 scoutRankNew.IsCurrent = true;
 
-                dbContext.ScoutRanks.Update(scoutRankCurrent);
+                dbContext.ScoutRanks.UpdateRange(scoutRanksCurrent);
                 dbContext.ScoutRanks.Update(scoutRankNew);
                 dbContext.SaveChanges();
 
@@ -66,7 +63,7 @@ namespace moja_druzyna.Lib.Order
             {
                 Rank rank = dbContext.Ranks.Find(Rank);
                 List<ScoutRank> scoutRanks = dbContext.ScoutRanks
-                    .Where(scoutRank => scoutRank.RankName == Rank && scoutRank.ScoutPeselScout == ScoutPesel)
+                    .Where(scoutRank => scoutRank.ScoutPeselScout == ScoutPesel)
                     .ToList();
                 ScoutRank scoutRank = new ScoutRank()
                 {

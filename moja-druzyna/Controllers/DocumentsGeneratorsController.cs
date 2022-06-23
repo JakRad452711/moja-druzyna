@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using moja_druzyna.Data;
 using moja_druzyna.Data.Session;
 using moja_druzyna.Lib.Order;
+using moja_druzyna.Lib.PdfGeneration;
 using moja_druzyna.Models;
 using moja_druzyna.ViewModels;
 using moja_druzyna.ViewModels.DocumentsGenerators;
@@ -102,14 +103,6 @@ namespace moja_druzyna.Controllers
             return View();
         }
 
-        [HttpGet]
-        [Authorize(Roles = "captain")]
-        public IActionResult OrderForm()
-        {
-
-            return View(orderFormViewModel);
-        }
-
         [Authorize(Roles = "captain")]
         public async Task<IActionResult> OrderForm_Submit()
         {   
@@ -137,7 +130,7 @@ namespace moja_druzyna.Controllers
 
             foreach (TrialClosing trialClosing in trialClosings == null ? new() : trialClosings)
             {
-                trialClosing.UpdateDb(_dbContext, sessionAccesser.CurrentTeamId, true);
+                trialClosing.UpdateDb(_dbContext, sessionAccesser.CurrentTeamId, true, _logger);
             }
 
             foreach (Exclusion exclusion in exclusions == null ? new() : exclusions)
@@ -164,8 +157,8 @@ namespace moja_druzyna.Controllers
             FormOrder formOrder = new FormOrder()
             {
                 CreationDate = sessionAccesser.FormOrder.CreationDate,
-                CreationPlace = sessionAccesser.FormOrder.CreationPlace,
-                Name = sessionAccesser.FormOrder.Name,
+                Location = sessionAccesser.FormOrder.CreationPlace,
+                OrderNumber = sessionAccesser.FormOrder.Name,
                 TrialClosings = sessionAccesser.FormOrder.TrialClosingsSaved,
                 Appointments = sessionAccesser.FormOrder.AppointmentsSaved,
                 Exclusions = sessionAccesser.FormOrder.ExclusionsSaved,
@@ -183,14 +176,256 @@ namespace moja_druzyna.Controllers
                 Order = order,
                 Scout = _dbContext.Scouts.Find(sessionAccesser.UserPesel),
                 ScoutPeselScout = sessionAccesser.UserPesel,
-                Name = formOrder.Name,
+                Name = formOrder.OrderNumber,
                 Team = _dbContext.Teams.Find(sessionAccesser.CurrentTeamId),
+                Location = sessionAccesser.FormOrder.CreationPlace,
                 CreationDate = DateTime.Now
             };
 
             _dbContext.Orders.Add(order);
             _dbContext.OrderInfos.Add(orderInfo);
             _dbContext.SaveChanges();
+
+            return Redirect("orders");
+        }
+
+        [HttpPost]
+        public IActionResult GenerateOrderPdf(int orderId)
+        {
+            OrderInfo orderInfo = _dbContext.OrderInfos.Find(orderId);
+            Order order = _dbContext.Orders.Find(orderInfo.OrderId);
+
+            FormOrder formOrder = JsonConvert.DeserializeObject<FormOrder>(order.Contents);
+            
+            formOrder.CreationDate = orderInfo.CreationDate;
+            formOrder.Location = orderInfo.Location;
+            formOrder.OrderNumber = orderInfo.Name;
+            formOrder.TeamName = _dbContext.Teams.Find(orderInfo.TeamIdTeam).Name;
+
+            List<Layoff> layoffs = formOrder.Layoffs == null ? new() : formOrder.Layoffs;
+            List<Appointment> appointments = formOrder.Appointments == null ? new() : formOrder.Appointments;
+            List<TrialClosing> trialClosings = formOrder.TrialClosings == null ? new() : formOrder.TrialClosings;
+            List<TrialOpening> trialOpenings = formOrder.TrialOpenings == null ? new() : formOrder.TrialOpenings;
+            List<ReprimendsAndPraises> reprimendsAndPraises = formOrder.ReprimendsAndPraises == null ? new() : formOrder.ReprimendsAndPraises;
+            List<Exclusion> exclusions = formOrder.Exclusions == null ? new() : formOrder.Exclusions;
+            
+            foreach(Layoff layoff in layoffs)
+            {
+                if (layoff.Role == "captain")
+                    layoff.RoleName = "Druzynowy";
+                if (layoff.Role == "vice captain")
+                    layoff.RoleName = "Przyboczny";
+                if (layoff.Role == "host captain")
+                    layoff.RoleName = "Zastepowy";
+                if (layoff.Role == "ensign")
+                    layoff.RoleName = "Chorazy druzyny";
+                if (layoff.Role == "quatermaster")
+                    layoff.RoleName = "Kwatermistrz";
+                if (layoff.Role == "chronicler")
+                    layoff.RoleName = "Kronikarz";
+            }
+
+            formOrder.Layoffs = layoffs;
+
+            foreach (Appointment appointment in appointments)
+            {
+                if (appointment.Role == "captain")
+                    appointment.RoleName = "Drużynowy";
+                if (appointment.Role == "vice captain")
+                    appointment.RoleName = "Przyboczny";
+                if (appointment.Role == "host captain")
+                    appointment.RoleName = "Zastępowy";
+                if (appointment.Role == "ensign")
+                    appointment.RoleName = "Chorazy druzyny";
+                if (appointment.Role == "quatermaster")
+                    appointment.RoleName = "Kwatermistrz";
+                if (appointment.Role == "chronicler")
+                    appointment.RoleName = "Kronikarz";
+            }
+
+            formOrder.Appointments = appointments;
+
+            foreach(TrialClosing trialClosing in trialClosings)
+            {
+                if(trialClosing.TrialType == "scout cross")
+                {
+                    trialClosing.TrialType = "krzyz harcerski";
+                    trialClosing.TrialName = "";
+                }
+                else
+                {
+                    if (trialClosing.TrialType == "rank")
+                        trialClosing.TrialType = "stopien";
+
+                    if (trialClosing.TrialType == "ability")
+                        trialClosing.TrialType = "sprawnosc";
+
+                    if (trialClosing.Rank == "1")
+                        trialClosing.TrialName = "mlodzik";
+
+                    if (trialClosing.Rank == "2")
+                        trialClosing.TrialName = "wywiadowca";
+
+                    if (trialClosing.Rank == "3")
+                        trialClosing.TrialName = "odkrywca";
+
+                    if (trialClosing.Rank == "4")
+                        trialClosing.TrialName = "cwik";
+
+                    if (trialClosing.Rank == "5")
+                        trialClosing.TrialName = "harcerz orli";
+
+                    if (trialClosing.Rank == "6")
+                        trialClosing.TrialName = "harcerz Rzeczypospolitej";
+
+                    if (trialClosing.Ability == "hygenist")
+                        trialClosing.TrialName = "higienista";
+                    if (trialClosing.Ability == "paramedic")
+                        trialClosing.TrialName = "sanitariusz";
+                    if (trialClosing.Ability == "lifesaver")
+                        trialClosing.TrialName = "ratownik";
+                    if (trialClosing.Ability == "glimmer")
+                        trialClosing.TrialName = "ognik";
+                    if (trialClosing.Ability == "fire guard")
+                        trialClosing.TrialName = "straznik ognia";
+                    if (trialClosing.Ability == "fireplace master")
+                        trialClosing.TrialName = "mistrz ognisk";
+                    if (trialClosing.Ability == "drill expert")
+                        trialClosing.TrialName = "znawca musztry";
+                    if (trialClosing.Ability == "drill master")
+                        trialClosing.TrialName = "mistrz musztry";
+                    if (trialClosing.Ability == "needle")
+                        trialClosing.TrialName = "mlody plywak";
+                    if (trialClosing.Ability == "tailor")
+                        trialClosing.TrialName = "krawiec";
+                    if (trialClosing.Ability == "young swimmer")
+                        trialClosing.TrialName = "mlody plywak";
+                    if (trialClosing.Ability == "swimmer")
+                        trialClosing.TrialName = "plywak";
+                    if (trialClosing.Ability == "excellent swimmer")
+                        trialClosing.TrialName = "plywak doskonaly";
+                    if (trialClosing.Ability == "internaut")
+                        trialClosing.TrialName = "internauta";
+                    if (trialClosing.Ability == "family historian")
+                        trialClosing.TrialName = "historyk rodzinny";
+                    if (trialClosing.Ability == "european")
+                        trialClosing.TrialName = "europejczyk";
+                    if (trialClosing.Ability == "health leader")
+                        trialClosing.TrialName = "lider zdrowia";
+                    if (trialClosing.Ability == "nature friend")
+                        trialClosing.TrialName = "przyjaciel przyrody";
+                    if (trialClosing.Ability == "photograph")
+                        trialClosing.TrialName = "fotograf";
+                }
+            }
+
+            formOrder.TrialClosings = trialClosings;
+
+            foreach (TrialOpening trialOpening in trialOpenings)
+            {
+                if (trialOpening.TrialType == "scout cross")
+                {
+                    trialOpening.TrialType = "krzyz harcerski";
+                    trialOpening.TrialName = "";
+                }
+                else
+                {
+                    if (trialOpening.TrialType == "rank")
+                        trialOpening.TrialType = "stopien";
+
+                    if (trialOpening.TrialType == "ability")
+                        trialOpening.TrialType = "sprawnosc";
+
+                    if (trialOpening.Rank == "1")
+                        trialOpening.TrialName = "mlodzik";
+
+                    if (trialOpening.Rank == "2")
+                        trialOpening.TrialName = "wywiadowca";
+
+                    if (trialOpening.Rank == "3")
+                        trialOpening.TrialName = "odkrywca";
+
+                    if (trialOpening.Rank == "4")
+                        trialOpening.TrialName = "cwik";
+
+                    if (trialOpening.Rank == "5")
+                        trialOpening.TrialName = "harcerz orli";
+
+                    if (trialOpening.Rank == "6")
+                        trialOpening.TrialName = "harcerz Rzeczypospolitej";
+
+                    if (trialOpening.Ability == "hygenist")
+                        trialOpening.TrialName = "higienista";
+                    if (trialOpening.Ability == "paramedic")
+                        trialOpening.TrialName = "sanitariusz";
+                    if (trialOpening.Ability == "lifesaver")
+                        trialOpening.TrialName = "ratownik";
+                    if (trialOpening.Ability == "glimmer")
+                        trialOpening.TrialName = "ognik";
+                    if (trialOpening.Ability == "fire guard")
+                        trialOpening.TrialName = "strażnik ognia";
+                    if (trialOpening.Ability == "fireplace master")
+                        trialOpening.TrialName = "mistrz ognisk";
+                    if (trialOpening.Ability == "drill expert")
+                        trialOpening.TrialName = "znawca musztry";
+                    if (trialOpening.Ability == "drill master")
+                        trialOpening.TrialName = "mistrz musztry";
+                    if (trialOpening.Ability == "needle")
+                        trialOpening.TrialName = "mlody pływak";
+                    if (trialOpening.Ability == "tailor")
+                        trialOpening.TrialName = "krawiec";
+                    if (trialOpening.Ability == "young swimmer")
+                        trialOpening.TrialName = "mlody plywak";
+                    if (trialOpening.Ability == "swimmer")
+                        trialOpening.TrialName = "plywak";
+                    if (trialOpening.Ability == "excellent swimmer")
+                        trialOpening.TrialName = "plywak doskonaly";
+                    if (trialOpening.Ability == "internaut")
+                        trialOpening.TrialName = "internauta";
+                    if (trialOpening.Ability == "family historian")
+                        trialOpening.TrialName = "historyk rodzinny";
+                    if (trialOpening.Ability == "european")
+                        trialOpening.TrialName = "europejczyk";
+                    if (trialOpening.Ability == "health leader")
+                        trialOpening.TrialName = "lider zdrowia";
+                    if (trialOpening.Ability == "nature friend")
+                        trialOpening.TrialName = "przyjaciel przyrody";
+                    if (trialOpening.Ability == "photograph")
+                        trialOpening.TrialName = "fotograf";
+                }
+            }
+
+            formOrder.TrialOpenings = trialOpenings;
+
+            foreach(ReprimendsAndPraises reprimendsAndPraise in reprimendsAndPraises)
+            {
+                if (reprimendsAndPraise.Type == "praise")
+                    reprimendsAndPraise.Type = "pochwala";
+                if (reprimendsAndPraise.Type == "reprimand")
+                    reprimendsAndPraise.Type = "reprymenda";
+                if (reprimendsAndPraise.Type == "distinction")
+                    reprimendsAndPraise.Type = "wyróżnienie";
+            }
+
+            formOrder.ReprimendsAndPraises = reprimendsAndPraises;
+
+            foreach (Exclusion exclusion in exclusions)
+            {
+                if (exclusion.Reason == "resignation")
+                    exclusion.Reason = "rezygnacja";
+                if (exclusion.Reason == "non-payment of contributions")
+                    exclusion.Reason = "nieoplacenie skladek";
+                if (exclusion.Reason == "banishment")
+                    exclusion.Reason = "wydalenie";
+                if (exclusion.Reason == "other")
+                    exclusion.Reason = "inne";
+            }
+
+            formOrder.Exclusions = exclusions;
+
+            formOrder.Location = "Warszawa";
+
+            new GeneratorPdf().GenerateOrder(formOrder);
 
             return Redirect("orders");
         }
@@ -204,7 +439,7 @@ namespace moja_druzyna.Controllers
                 .ToList();
 
             List<Scout> scoutsThatCanBeAdded =
-                scoutsInTheTeam.Where(scout => !peselsOfScoutsThatAreAlreadyInTheAppointment.Contains(scout.PeselScout)).ToList();
+                scoutsInTheTeam.Where(scout => !peselsOfScoutsThatAreAlreadyInTheAppointment.Contains(scout.PeselScout) && scout.PeselScout != sessionAccesser.UserPesel).ToList();
 
             List<Host> hostsFromTheTeam = modelManager.GetListOfHostsFromATeam(sessionAccesser.CurrentTeamId);
 
@@ -215,8 +450,7 @@ namespace moja_druzyna.Controllers
                 new() {Text = "chorąży drużyny", Value = "ensign"},
                 new() {Text = "kwatermistrz", Value = "quatermaster"},
                 new() {Text = "kronikarz", Value = "chronicler"},
-                new() {Text = "zastępowy", Value = "host captain"},
-                new() {Text = "drużynowy", Value = "captain"}
+                new() {Text = "zastępowy", Value = "host captain"}
             };
             List<SelectListItem> dropDownList_Hosts = new List<SelectListItem>();
 
@@ -244,7 +478,7 @@ namespace moja_druzyna.Controllers
             ViewBag.DropDownList_Roles = dropDownList_Roles;
             ViewBag.DropDownList_Hosts = dropDownList_Hosts;
 
-            ViewBag.AreThereScoutsToAdd = !(peselsOfScoutsThatAreAlreadyInTheAppointment.Count() == numberOfScoutsInTheTeam);
+            ViewBag.AreThereScoutsToAdd = !(peselsOfScoutsThatAreAlreadyInTheAppointment.Count() == (numberOfScoutsInTheTeam - 1));
             ViewBag.OrderName = sessionAccesser.FormOrder.Name;
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
@@ -338,7 +572,7 @@ namespace moja_druzyna.Controllers
                 .ToList();
 
             List<Scout> scoutsThatCanBeAdded =
-                scoutsInTheTeam.Where(scout => !peselsOfScoutsThatAreAlreadyInTheExclusions.Contains(scout.PeselScout)).ToList();
+                scoutsInTheTeam.Where(scout => !peselsOfScoutsThatAreAlreadyInTheExclusions.Contains(scout.PeselScout) && scout.PeselScout != sessionAccesser.UserPesel).ToList();
 
             List<SelectListItem> dropDownList_Scouts = new List<SelectListItem>();
             List<SelectListItem> dropDownList_Reasons = new List<SelectListItem>()
@@ -364,7 +598,7 @@ namespace moja_druzyna.Controllers
             ViewBag.DropDownList_Scouts = dropDownList_Scouts;
             ViewBag.DropDownList_Reasons = dropDownList_Reasons;
 
-            ViewBag.AreThereScoutsToAdd = !(peselsOfScoutsThatAreAlreadyInTheExclusions.Count() == numberOfScoutsInTheTeam);
+            ViewBag.AreThereScoutsToAdd = !(peselsOfScoutsThatAreAlreadyInTheExclusions.Count() == (numberOfScoutsInTheTeam - 1));
             ViewBag.OrderName = sessionAccesser.FormOrder.Name;
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
@@ -456,7 +690,7 @@ namespace moja_druzyna.Controllers
                 .ToList();
 
             List<Scout> scoutsThatCanBeAdded =
-                scoutsInTheTeam.Where(scout => !peselsOfScoutsThatAreAlreadyInTheLayoffs.Contains(scout.PeselScout)).ToList();
+                scoutsInTheTeam.Where(scout => !peselsOfScoutsThatAreAlreadyInTheLayoffs.Contains(scout.PeselScout) && scout.PeselScout != sessionAccesser.UserPesel).ToList();
 
             List<Host> hostsFromTheTeam = modelManager.GetListOfHostsFromATeam(sessionAccesser.CurrentTeamId);
 
@@ -467,8 +701,7 @@ namespace moja_druzyna.Controllers
                 new() {Text = "chorąży drużyny", Value = "ensign"},
                 new() {Text = "kwatermistrz", Value = "quatermaster"},
                 new() {Text = "kronikarz", Value = "chronicler"},
-                new() {Text = "zastępowy", Value = "host captain"},
-                new() {Text = "drużynowy", Value = "captain"}
+                new() {Text = "zastępowy", Value = "host captain"}
             };
             List<SelectListItem> dropDownList_Hosts = new List<SelectListItem>();
 
@@ -496,7 +729,7 @@ namespace moja_druzyna.Controllers
             ViewBag.DropDownList_Roles = dropDownList_Roles;
             ViewBag.DropDownList_Hosts = dropDownList_Hosts;
 
-            ViewBag.AreThereScoutsToAdd = !(peselsOfScoutsThatAreAlreadyInTheLayoffs.Count() == numberOfScoutsInTheTeam);
+            ViewBag.AreThereScoutsToAdd = !(peselsOfScoutsThatAreAlreadyInTheLayoffs.Count() == (numberOfScoutsInTheTeam - 1));
             ViewBag.OrderName = sessionAccesser.FormOrder.Name;
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 

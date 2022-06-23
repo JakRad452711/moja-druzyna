@@ -70,7 +70,7 @@
                         <div class="mt-8px">@order.CreationDate.ToString("dd'.'MM'.'yyyy' 'HH':'mm")</div>
                     </div>
                     <div class="display-flex width-1d mt-8px mr-8px">
-                        <button id="manage-icon" name="hostId" asp-action="generateorderpdf" value=@order.Id class="no-border size-fit-content clear-white round-corners-5px">
+                        <button id="manage-icon" name="orderId" asp-action="generateorderpdf" value=@order.Id class="no-border size-fit-content clear-white round-corners-5px">
                             <img src="~/icons/managment/download-pdf.svg" class="icon-size-24" />
                         </button>
                     </div>

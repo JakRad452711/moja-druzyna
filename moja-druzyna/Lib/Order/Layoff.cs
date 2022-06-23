@@ -12,6 +12,7 @@ namespace moja_druzyna.Lib.Order
         public string ScoutName { get; set; }
         public string ScoutSurname { get; set; }
         public string Role { get; set; }
+        public string RoleName { get; set; }
         public string Host { get; set; }
 
         public bool UpdateDb(ApplicationDbContext dbContext, int teamId, bool execute)
@@ -19,7 +20,7 @@ namespace moja_druzyna.Lib.Order
             bool scoutExistsInTheTeam = dbContext.ScoutTeam
                 .Where(scoutTeam => scoutTeam.ScoutPeselScout == ScoutPesel && scoutTeam.TeamIdTeam == teamId)
                 .Count() != 0;
-            bool hostHasACaptain = dbContext.ScoutHost
+            bool hostHasACaptain = Host != null && dbContext.ScoutHost
                 .Where(scoutHost => scoutHost.HostIdHost == int.Parse(Host) && scoutHost.Role == "captain")
                 .Count() != 0;
 

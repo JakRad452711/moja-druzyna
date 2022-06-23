@@ -11,6 +11,7 @@ namespace moja_druzyna.Models
         [MaxLength(100)]
         public string Name { get; set; }
         public DateTime CreationDate { get; set; }
+        public string Location { get; set; }
 
         [ForeignKey("fk_orderInfo_order")]
         public int OrderId { get; set; }

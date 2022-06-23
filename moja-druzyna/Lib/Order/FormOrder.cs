@@ -16,15 +16,17 @@ namespace moja_druzyna.Lib.Order
             Other = new();
         }
 
-        public string Name { get; set; }
+        public string OrderNumber { get; set; }
+        public string TeamName { get; set; }
         public DateTime CreationDate { get; set; }
-        public string CreationPlace { get; set; }
+        public string Location { get; set; }
 
         public List<Layoff> Layoffs { get; set; }
         public List<Appointment> Appointments { get; set; }
         public List<TrialClosing> TrialClosings { get; set; }
         public List<TrialOpening> TrialOpenings { get; set; }
         public List<ReprimendsAndPraises> ReprimendsAndPraises { get; set; }
+        public List<Game> Games { get; set; }
         public List<Exclusion> Exclusions { get; set; }
         public Other Other { get; set; }
     }

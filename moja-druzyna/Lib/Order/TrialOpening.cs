@@ -7,6 +7,7 @@
         public string ScoutName { get; set; }
         public string ScoutSurname { get; set; }
         public string TrialType { get; set; }
+        public string TrialName { get; set; }
         public string Rank { get; set; }
         public string Ability { get; set; }
     }

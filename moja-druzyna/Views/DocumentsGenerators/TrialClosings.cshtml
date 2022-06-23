@@ -19,7 +19,7 @@
         <div class="medium-light font-muddy-black mb-32px">
             @ViewBag.TeamName <br />
         </div>
-        <div class="display-flex justify-content-center">
+        <div class="display-flex justify-content-center"> 
             <div class="clear-white big-shadow size-fit-content medium-light display-block mb-32px pr-16px pl-16px">
                 @if (ViewBag.AreThereScoutsToAdd == true)
                 {
@@ -82,7 +82,7 @@
                                     <select asp-for=@Model.TrialClosings[i].Rank class="input-box-width" asp-items=@ViewBag.DropDownList_Ranks></select>
                                 </div>
                             </div>
-                            <div class="display-flex justify-content-between">
+                            <div class="display-flex justify-content-between" hidden>
                                 <div class="form-group">
                                     <label class="list-item-width text-left">sprawność*</label> <br />
                                     <select asp-for=@Model.TrialClosings[i].Ability class="list-item-width" asp-items=@ViewBag.DropDownList_Abilities></select>
