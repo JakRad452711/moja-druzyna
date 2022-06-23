@@ -1,4 +1,4 @@
-﻿using moja_druzyna.Lib.Services.Order;
+﻿using moja_druzyna.Lib.Order;
 using moja_druzyna.Models;
 using System;
 using System.Collections.Generic;
@@ -33,7 +33,7 @@ namespace moja_druzyna.ViewModels
 
             public List<Appointment> Appointments { get; set; }
 
-            public List<Other> Other { get; set; }
+            public Other Other { get; set; }
 
             public List<ReprimendsAndPraises> ReprimendsAndPraises { get; set; }
 

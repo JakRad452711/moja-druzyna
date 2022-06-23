@@ -222,8 +222,6 @@
     display: inline-block;
     margin: 5px 0px;
     cursor: pointer;
-    outline: 1px solid grey;
-    border-radius: 10px;
 }
 
 .accept-decline-buttons {

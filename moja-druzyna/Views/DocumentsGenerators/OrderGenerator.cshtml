@@ -37,8 +37,6 @@
                 </div>
             </div>
  
-
-
             <div class="content text-left" style="height: auto">
                 <div class="account-content-left">
                     <!-- Rounded switch -->
@@ -49,7 +47,9 @@
                         </label>
                         <div class="account-content-right">
                             <div class="buttonedit">
-                                <a asp-action="layoffs" formmethod="get">wprowadź zmiany w sekcji</a>
+                                <button asp-action="layoffs"> 
+                                    wprowadź zmiany w sekcji
+                                </button>
                             </div>
                         </div>
                         <br />
@@ -62,7 +62,9 @@
                         </label>
                         <div class="account-content-right">
                             <div class="buttonedit">
-                                <a asp-action="appointments" formmethod="get">wprowadź zmiany w sekcji</a>
+                                <button asp-action="appointments"> 
+                                    wprowadź zmiany w sekcji
+                                </button>
                             </div>
                         </div>
                         <br />
@@ -75,7 +77,9 @@
                         </label>
                         <div class="account-content-right">
                             <div class="buttonedit">
-                                <a asp-action="trialclosings">wprowadź zmiany w sekcji</a>
+                                <button asp-action="trialclosings"> 
+                                    wprowadź zmiany w sekcji
+                                </button>
                             </div>
                         </div>
                         <br />
@@ -88,7 +92,9 @@
                         </label>
                         <div class="account-content-right">
                             <div class="buttonedit">
-                                <a asp-action="trialopenings">wprowadź zmiany w sekcji</a>
+                                <button asp-action="trialopenings"> 
+                                    wprowadź zmiany w sekcji
+                                </button>
                             </div>
                         </div>
                         <br />
@@ -101,7 +107,9 @@
                         </label>
                         <div class="account-content-right">
                             <div class="buttonedit">
-                                wprowadź zmiany w sekcji
+                                <button> 
+                                    wprowadź zmiany w sekcji
+                                </button>
                             </div>
                         </div>
                         <br />
@@ -114,7 +122,9 @@
                         </label>
                         <div class="account-content-right">
                             <div class="buttonedit">
-                                wprowadź zmiany w sekcji
+                                <button> 
+                                    wprowadź zmiany w sekcji
+                                </button>
                             </div>
                         </div>
                         <br />
@@ -127,7 +137,9 @@
                         </label>
                         <div class="account-content-right">
                             <div class="buttonedit">
-                                <a asp-action="reprimendsandpraises">wprowadź zmiany w sekcji</a>
+                                <button asp-action="reprimendsandpraises"> 
+                                    wprowadź zmiany w sekcji
+                                </button>
                             </div>
                         </div>
                         <br />
@@ -140,7 +152,9 @@
                         </label>
                         <div class="account-content-right">
                             <div class="buttonedit">
-                                <a asp-action="exclusions">wprowadź zmiany w sekcji</a>
+                                <button asp-action="exclusions"> 
+                                    wprowadź zmiany w sekcji
+                                </button>
                             </div>
                         </div>
                         <br />
@@ -153,7 +167,9 @@
                         </label>
                         <div class="account-content-right">
                             <div class="buttonedit">
-                                <a asp-action="other">wprowadź zmiany w sekcji</a>
+                                <button asp-action="other"> 
+                                    wprowadź zmiany w sekcji
+                                </button>
                             </div>
                         </div>
                         <br />
@@ -168,10 +184,18 @@
             <div class="center">
                 <div class="accept-decline-buttons">
                     <div class="buttonedit accept-decline-button">
-                        <a asp-action="layoffs" formmethod="get">wydaj rozkaz</a>
+                        <div class="buttonedit">
+                            <button asp-action="orderform_submit"> 
+                                wydaj rozkaz
+                            </button>
+                        </div>
                     </div>
                     <div class="buttonedit accept-decline-button">
-                        <a asp-action="orders">porzuć</a>
+                        <div class="buttonedit">
+                            <button asp-action="orders"> 
+                                porzuć
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
