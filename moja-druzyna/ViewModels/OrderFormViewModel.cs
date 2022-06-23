@@ -1,4 +1,5 @@
-﻿using moja_druzyna.Models;
+﻿using moja_druzyna.Lib.Order;
+using moja_druzyna.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,21 @@ namespace moja_druzyna.ViewModels
             public string Number { get; set; }
             public string Date { get; set; }
             public string Place { get; set; }
+
+            public List<Layoff> Layoffs { get; set; }
+
+            public List<Exclusion> Exclusion { get; set; }
+
+            public List<Appointment> Appointments { get; set; }
+
+            public Other Other { get; set; }
+
+            public List<ReprimendsAndPraises> ReprimendsAndPraises { get; set; }
+
+            public List<TrialClosing> TrialClosing { get; set; }
+
+            public List<TrialOpening> TrialOpening { get; set; }
+
         }
     }
 }
