@@ -24,6 +24,8 @@ namespace moja_druzyna.Areas.Identity.Pages.Account
         private readonly ApplicationDbContext _applicationDbContext;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
@@ -31,12 +33,16 @@ namespace moja_druzyna.Areas.Identity.Pages.Account
             ApplicationDbContext applicationDbContext,
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
+            RoleManager<IdentityRole> roleManager,
+            ApplicationDbContext dbContext,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
             _applicationDbContext = applicationDbContext;
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
+            _dbContext = dbContext;
             _logger = logger;
             _emailSender = emailSender;
         }
@@ -100,12 +106,16 @@ namespace moja_druzyna.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            ModelManager modelManager = new ModelManager(_applicationDbContext);
+
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            if (ModelState.IsValid)
+
+            if (ModelState.IsValid && modelManager.ScoutPrimaryKeyIsAvailable(Input.Pesel))
             {
                 var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
@@ -119,11 +129,10 @@ namespace moja_druzyna.Areas.Identity.Pages.Account
                         Surname             = Input.Surname,  
                         Nationality         = Input.Nationality,
                         MembershipNumber    = Input.MembershipNumber,
-                        Ns                  = Input.Ns.ToString()
+                        Ns                  = Input.Ns
                     };
 
-                    _applicationDbContext.Scouts.Add(scout);
-                    _applicationDbContext.SaveChanges();
+                    modelManager.CreateScoutCaptainWithTeam(scout);
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -138,7 +147,12 @@ namespace moja_druzyna.Areas.Identity.Pages.Account
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                        string emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        await _userManager.ConfirmEmailAsync(user, emailConfirmationToken);
+
+                        await AddRole(user.Id, "captain");
+
+                        return RedirectToPage("Login");
                     }
                     else
                     {
@@ -154,6 +168,30 @@ namespace moja_druzyna.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return Page();
+        }
+
+        public async Task<IActionResult> AddRole(string userId, string role)
+        {
+            await InitializeRoles();
+
+            IdentityUser user = await _userManager.FindByIdAsync(userId);
+
+            await _userManager.AddToRoleAsync(user, role);
+
+            return RedirectToAction("personaldata", "profilecontroller");
+        }
+
+        private async Task InitializeRoles()
+        {
+            foreach (var roleName in new List<string>() { "captain", "vice captain", "host captain", "quatermaster", "ensign", "chronicler", "scout", "parent" })
+            {
+                var roleExist = await _roleManager.RoleExistsAsync(roleName);
+
+                if (!roleExist)
+                {
+                    var roleResult = await _roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
         }
     }
 }

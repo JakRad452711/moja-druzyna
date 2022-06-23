@@ -8,7 +8,11 @@ namespace moja_druzyna.Models​
 {
     public partial class Parent
     {
-        
+        public Parent()
+        {
+            this.Scouts = new List<Scout>();
+        }
+
         [Key]
         [MaxLength(11)]
         public string Pesel { get; set; }
@@ -24,7 +28,7 @@ namespace moja_druzyna.Models​
         public string IdentityId { get; set; }
 
         public IdentityUser Identity { get; set; }
-        public virtual Adress Adresses { get; set; }
+        public virtual Address Adresses { get; set; }
         public virtual ICollection<Scout> Scouts { get; set; }
     }
 }

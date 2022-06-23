@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 #nullable disable
 
 namespace moja_druzyna.Models​
 {
     public partial class Agreement
     {
-     
+        public Agreement()
+        {
+            this.ScoutAgreements = new List<ScoutAgreement>();
+        }
+
         [Key]
         public int IdAgreement { get; set; }
         [MaxLength(50)]

@@ -1,0 +1,164 @@
+﻿@model ICollection<moja_druzyna.ViewModels.Team.ScoutAchievementsViewModel>
+
+@{
+    ViewData["Title"] = "osiągnięcia";
+    Layout = "_NoSidebarLayout";
+}
+
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/views/team/ScoutAchievements.css" asp-append-version="true" />
+<div class="text-center justify-content-center display-flex" style="min-width:650px">
+    <form>
+        <div class="list-item-width display-flex justify-content-center mb-32px mt-32px">
+            <div class="mr-8px mt-4px">
+                <img src="~/icons/main/green/flag.svg" class="icon-size-32 mt-1px" />
+            </div>
+            <div class="font-dark-green header1-light">
+                @ViewBag.ScoutTitle
+            </div>
+        </div>
+        <div class="list-item-width justify-content-center display-flex">
+            <div class="list-item-width medium-light font-muddy-black mb-32px">
+                @ViewBag.TeamName
+            </div>
+        </div>
+        <div class="list-item-width">
+            <div class="display-flex text-left medium-bold mb-4px ml-16px mr-16px">
+                <div class="display-flex justify-content-between width100p">
+                    <span class="width-1a">osiągnięcie</span>
+                    <span class="width-1b">typ</span>
+                    <span class="width-1c">data</span>
+                </div>
+            </div>
+        </div>
+            @foreach (var scoutAchievementVM in Model)
+            {
+                <div class="display-flex list-item-width clear-white small-shadow large-light mb-4px list-item-height">
+                    <div class="display-flex justify-content-between width100p text-left">
+                        <div class="width-1a ml-16px mt-8px">
+                            <div class="width100p display-flex overflow-hidden mt-2px" style="white-space:nowrap">
+                                @if (scoutAchievementVM.Type == "rank")
+                                {
+                                    if (scoutAchievementVM.Rank == "1")
+                                    {
+                                        <img src="~/icons/design/ranks/no-accents/rank-1.svg" class="rank-icon-size-1 mt-4px ml-8px" />
+                                    }
+                                    else if (scoutAchievementVM.Rank == "2")
+                                    {
+                                        <img src="~/icons/design/ranks/no-accents/rank-2.svg" class="rank-icon-size-1 mt-4px ml-8px" />
+                                    }
+                                    else if (scoutAchievementVM.Rank == "3")
+                                    {
+                                        <img src="~/icons/design/ranks/no-accents/rank-3.svg" class="rank-icon-size-1 mt-4px ml-8px" />
+                                    }
+                                    else if (scoutAchievementVM.Rank == "4")
+                                    {
+                                        <img src="~/icons/design/ranks/no-accents/rank-4.svg" class="rank-icon-size-1 mt-4px ml-8px" />
+                                    }
+                                    else if (scoutAchievementVM.Rank == "5")
+                                    {
+                                        <img src="~/icons/design/ranks/no-accents/rank-5.svg" class="rank-icon-size-1 mt-4px ml-8px" />
+                                    }
+                                    else if (scoutAchievementVM.Rank == "6")
+                                    {
+                                        <img src="~/icons/design/ranks/no-accents/rank-6.svg" class="rank-icon-size-1 mt-4px ml-8px" />
+                                    }
+                                }
+                                @if (scoutAchievementVM.Achievement == "hygenist")
+                                {
+                                    <span>higienista(tka)</span>
+                                }
+                                @if (scoutAchievementVM.Achievement == "paramedic")
+                                {
+                                    <span>sanitariusz(ka)</span>
+                                }
+                                @if (scoutAchievementVM.Achievement == "lifesaver")
+                                {
+                                    <span>ratownik</span>
+                                }
+                                @if (scoutAchievementVM.Achievement == "glimmer")
+                                {
+                                    <span>ognik</span>
+                                }
+                                @if (scoutAchievementVM.Achievement == "fire guard")
+                                {
+                                    <span>strażnik ognia</span>
+                                }
+                                @if (scoutAchievementVM.Achievement == "fireplace master")
+                                {
+                                    <span>mistrz ognisk</span>
+                                }
+                                @if (scoutAchievementVM.Achievement == "drill expert")
+                                {
+                                    <span>znawca musztry</span>
+                                }
+                                @if (scoutAchievementVM.Achievement == "drill master")
+                                {
+                                    <span>mistrz musztry</span>
+                                }
+                                @if (scoutAchievementVM.Achievement == "needle")
+                                {
+                                    <span>igiełka</span>
+                                }
+                                @if (scoutAchievementVM.Achievement == "tailor")
+                                {
+                                    <span>krawiec</span>
+                                }
+                                @if (scoutAchievementVM.Achievement == "young swimmer")
+                                {
+                                    <span>młody pływak</span>
+                                }
+                                @if (scoutAchievementVM.Achievement == "swimmer")
+                                {
+                                    <span>pływak</span>
+                                }
+                                @if (scoutAchievementVM.Achievement == "excellent swimmer")
+                                {
+                                    <span>pływak doskonały</span>
+                                }
+                                @if (scoutAchievementVM.Achievement == "internaut")
+                                {
+                                    <span>internauta(ka)</span>
+                                }
+                                @if (scoutAchievementVM.Achievement == "family historian")
+                                {
+                                    <span>historyk rodzinny</span>
+                                }
+                                @if (scoutAchievementVM.Achievement == "european")
+                                {
+                                    <span>europejczyk</span>
+                                }
+                                @if (scoutAchievementVM.Achievement == "health leader")
+                                {
+                                    <span>lider zdrowia</span>
+                                }
+                                @if (scoutAchievementVM.Achievement == "nature friend")
+                                {
+                                    <span>przyjaciel przyrody</span>
+                                }
+                                @if (scoutAchievementVM.Achievement == "photograph")
+                                {
+                                    <span>fotograf</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="width-1b mt-8px overflow-hidden">
+                            @if(scoutAchievementVM.Type == "rank")
+                            {
+                                <span>stopień</span>
+                            }
+                            else
+                            {
+                                <span>sprawność</span>
+                            }
+                        </div>
+                        <div class="width-1c mt-8px overflow-hidden mr-16px">
+                            @scoutAchievementVM.AcquirementTime.ToString("dd.MM.yyyy HH:mm")
+                        </div>
+                    </div>
+                </div>
+            }
+            <div style="height: 60px">
+            </div>
+        </form>
+</div>

@@ -1,0 +1,19 @@
+﻿#manage-icon:not(:hover) {
+    filter: opacity(40%)
+}
+
+.width-1a {
+    width: 210px;
+}
+
+.width-1b {
+    width: 53px;
+}
+
+.width-1c {
+    width: 120px;
+}
+
+.width-1d {
+    width: 80px;
+}

@@ -1,14 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using moja_druzyna.Data;
+using moja_druzyna.Data.Session;
 using moja_druzyna.Models;
+using moja_druzyna.ViewModels;
 using System.Diagnostics;
-using System.Linq;
-using System.Collections.Generic;
-using Spire.Pdf;
-using Spire.Pdf.Graphics;
-using System.Drawing;
-using moja_druzyna.src;
 
 namespace moja_druzyna.Controllers
 {
@@ -17,135 +14,72 @@ namespace moja_druzyna.Controllers
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<ProfileController> _logger;
 
-        public ProfileController(ApplicationDbContext dbContext, ILogger<ProfileController> logger)
+        private readonly SessionAccesser sessionAccesser;
+
+        private static AFormViewModel aFormViewModel = new AFormViewModel();
+
+        public ProfileController(ApplicationDbContext dbContext, ILogger<ProfileController> logger, IHttpContextAccessor httpContextAccessor)
         {
             _dbContext = dbContext;
             _logger = logger;
+
+            sessionAccesser = new SessionAccesser(dbContext, httpContextAccessor);
         }
 
         public IActionResult PersonalData()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
-            Scout userData = _dbContext.Scouts.First();
+            Scout userData = _dbContext.Scouts.Find(sessionAccesser.UserPesel);
 
             return View(userData);
         }
 
         public IActionResult ServiceHistory()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
-            // Team teamData = _dbContext.Teams.Where(x => x.TeamId == 2).First();
-            /*        
-            var interactionData = _dbContext.ScoutTeams;
-            
-            List<ScoutTeam> interactions = new List<ScoutTeam>();
-            foreach (var team in interactionData)
-            {
-                interactions.Add(team);
-            }
-
-            return View(interactions);
-            */
-            Scout interactionData = _dbContext.Scouts.First();
-            GeneratorPdf generatorPdf = new GeneratorPdf();
-            //generatorPdf.CreateTestPdf();
-            Releasing r1 = new Releasing(interactionData, "zastepowy", "Wilki");
-            Releasing r2 = new Releasing(interactionData, "kronikarz", "kadra");
-            Appointment a1 = new Appointment(interactionData, "przyboczny", "kadra");
-            Appointment a2 = new Appointment(interactionData, "zastepowy", "Wiewiorki");
-            List<Releasing> rel = new List<Releasing>();
-            List<Appointment> app = new List<Appointment>();
-            rel.Add(r1);
-            rel.Add(r2);
-            app.Add(a1);
-            app.Add(a2);
-            rel.Add(r1);
-            rel.Add(r2);
-            app.Add(a1);
-            app.Add(a2);
-            rel.Add(r1);
-            rel.Add(r2);
-            app.Add(a1);
-            app.Add(a2);
-            rel.Add(r1);
-            rel.Add(r2);
-            app.Add(a1);
-            app.Add(a2);
-            rel.Add(r1);
-            rel.Add(r2);
-            app.Add(a1);
-            app.Add(a2);
-            rel.Add(r1);
-            rel.Add(r2);
-            app.Add(a1);
-            app.Add(a2);
-            rel.Add(r1);
-            rel.Add(r2);
-            app.Add(a1);
-            app.Add(a2);
-            ClosingTrial c1 = new ClosingTrial(interactionData, "stopien", "Pionierka");
-            List<ClosingTrial> closings = new List<ClosingTrial>();
-            closings.Add(c1);
-            string str1 = "Skladam podziekowania druhowi harcmistrzowi Jakubowi R. \n za niespanie po nocach.";
-            string str2 = "Mam nadzieje, że udalo sie zdac statystyke";
-            string str3 = "Obrona w piatek!";
-            List<string> others = new List<string>();
-            others.Add(str1);
-            others.Add(str2);
-            others.Add(str3);
-            Order order = new Order("L2-2022", "88 PDHS Dragon", "22.06.2022", "Poznan", rel, app, closings, null, null, null, null, others);
-            generatorPdf.GenerateOrder(order);
-            return View(interactionData);
+            return View();
         }
 
         public IActionResult Ranks()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             return View();
         }
 
         public IActionResult Achievments()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             return View();
         }
 
         public IActionResult Roles()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             return View();
         }
 
         public IActionResult CoursesAndPermissions()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             return View();
         }
 
         public IActionResult GdprConsents()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             return View();
         }
 
         public IActionResult Privacy()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             return View();
         }

@@ -1,0 +1,24 @@
+﻿#manage-icon:not(:hover) {
+    filter: opacity(40%)
+}
+
+.input-box-width {
+    min-width: 312px;
+    width: calc(312px);
+}
+
+.width-1a {
+    width: 210px;
+}
+
+.width-1b {
+    width: 210px;
+}
+
+.width-1c {
+    width: 128px;
+}
+
+.width-1d {
+    width: 24px;
+}

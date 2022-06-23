@@ -1,0 +1,207 @@
+﻿@{
+    ViewData["Title"] = "Edytor Rozkazów";
+}
+
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/views/documents-generators/DocumentsGenerators.css" asp-append-version="true" />
+<div id="big-box">
+    <div id="content-title" class="text-center">
+        <div id="header-box" class="large-regular font-dark-green">
+            <div id="header-box-inside">
+                <div id="text-center">
+                    <h1 class="display-4"> Tworzenie nowego wzoru rozkazu </h1> 
+                </div>
+                <div style="width:1px"><br /></div>
+            </div>
+        </div>
+        <p class="large-regular"> Wydaj rozkaz: </p>              
+    </div>
+
+    <div id="parentdiv" class="borderadded">
+        <form  asp-action="OrderForm_Submit">
+            <div id="base-form-id">
+                <div class="field-and-name">
+                    Numer:
+                    <br />
+                    <input type="text">
+                </div>
+                <div class="field-and-name">
+                    Data:
+                    <br />
+                    <input type="text">
+                </div>
+                <div class="field-and-name extend-to-border">
+                    Miejscowość:
+                    <br />
+                    <input type="text">
+                </div>
+            </div>
+ 
+            <div class="content text-left" style="height: auto">
+                <div class="account-content-left">
+                    <!-- Rounded switch -->
+                    <div class="smallborderadded">
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <label class="checkboxsimple">
+                            <input type="checkbox" name="checkbox" value="text"> 1. Zwolnienia
+                        </label>
+                        <div class="account-content-right">
+                            <div class="buttonedit">
+                                <a asp-action="layoffs"> 
+                                    wprowadź zmiany w sekcji
+                                </a>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+
+                    <div class="smallborderadded">
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <label class="checkboxsimple">
+                            <input type="checkbox" name="checkbox" value="text"> 2. Mianowania
+                        </label>
+                        <div class="account-content-right">
+                            <div class="buttonedit">
+                                <a asp-action="appointments"> 
+                                    wprowadź zmiany w sekcji
+                                </a>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+
+                    <div class="smallborderadded">
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <label class="checkboxsimple">
+                            <input type="checkbox" name="checkbox" value="text"> 3. Zamknięcia prób
+                        </label>
+                        <div class="account-content-right">
+                            <div class="buttonedit">
+                                <a asp-action="trialclosings"> 
+                                    wprowadź zmiany w sekcji
+                                </a>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+
+                    <div class="smallborderadded">
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <label class="checkboxsimple">
+                            <input type="checkbox" name="checkbox" value="text"> 4. Otwarcia prób
+                        </label>
+                        <div class="account-content-right">
+                            <div class="buttonedit">
+                                <a asp-action="trialopenings"> 
+                                    wprowadź zmiany w sekcji
+                                </a>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+
+                    <div class="smallborderadded">
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <label class="checkboxsimple">
+                            <input type="checkbox" name="checkbox" value="text"> 5. Przyznanie punktów za stopnie i sprawności
+                        </label>
+                        <div class="account-content-right">
+                            <div class="buttonedit">
+                                <button> 
+                                    wprowadź zmiany w sekcji
+                                </button>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+
+                    <div class="smallborderadded">
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <label class="checkboxsimple">
+                            <input type="checkbox" name="checkbox" value="text"> 6. Podsumowanie gier
+                        </label>
+                        <div class="account-content-right">
+                            <div class="buttonedit">
+                                <button> 
+                                    wprowadź zmiany w sekcji
+                                </button>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+
+                    <div class="smallborderadded">
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <label class="checkboxsimple">
+                            <input type="checkbox" name="checkbox" value="text"> 7. Pochwały, wyróżnienia, nagany
+                        </label>
+                        <div class="account-content-right">
+                            <div class="buttonedit">
+                                <a asp-action="reprimendsandpraises"> 
+                                    wprowadź zmiany w sekcji
+                                </a>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+
+                    <div class="smallborderadded">
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <label class="checkboxsimple">
+                            <input type="checkbox" name="checkbox" value="text"> 8. Skreślenia ze stanu
+                        </label>
+                        <div class="account-content-right">
+                            <div class="buttonedit">
+                                <a asp-action="exclusions"> 
+                                    wprowadź zmiany w sekcji
+                                </a>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+
+                    <div class="smallborderadded">
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <label class="checkboxsimple">
+                            <input type="checkbox" name="checkbox" value="text"> 9. Inne
+                        </label>
+                        <div class="account-content-right">
+                            <div class="buttonedit">
+                                <a asp-action="other"> 
+                                    wprowadź zmiany w sekcji
+                                </a>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                </div>
+            </div>
+
+            <div id="content-title" class="text-center extra-padding">
+                <p> wydaj rozkaz po wprowadzeniu zmian do wybranych sekcji </p>
+            </div>
+
+            <div class="center">
+                <div class="accept-decline-buttons">
+                    <div class="buttonedit accept-decline-button">
+                        <div class="buttonedit">
+                            <button asp-action="orderform_submit"> 
+                                wydaj rozkaz
+                            </button>
+                        </div>
+                    </div>
+                    <div class="buttonedit accept-decline-button">
+                        <div class="buttonedit">
+                            <button asp-action="orders"> 
+                                porzuć
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    
+
+</div>
