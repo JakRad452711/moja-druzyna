@@ -18,168 +18,164 @@
     </div>
 
     <div id="parentdiv" class="borderadded">
-        <form id="base-form-id" asp-action="OrderFormSubmit">
-            <div class="field-and-name">
-                Numer:
-                <br />
-                <input type="text">
+        <form  asp-action="OrderFormSubmit">
+            <div id="base-form-id">
+                <div class="field-and-name">
+                    Numer:
+                    <br />
+                    <input type="text">
+                </div>
+                <div class="field-and-name">
+                    Data:
+                    <br />
+                    <input type="text">
+                </div>
+                <div class="field-and-name extend-to-border">
+                    Miejscowość:
+                    <br />
+                    <input type="text">
+                </div>
             </div>
-            <div class="field-and-name">
-                Data:
-                <br />
-                <input type="text">
+ 
+
+
+            <div class="content text-left" style="height: auto">
+                <div class="account-content-left">
+                    <!-- Rounded switch -->
+                    <div class="smallborderadded">
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <label class="checkboxsimple">
+                            <input type="checkbox" name="checkbox" value="text"> 1. Zwolnienia
+                        </label>
+                        <div class="account-content-right">
+                            <div class="buttonedit">
+                                <a asp-action="layoffs" formmethod="get">wprowadź zmiany w sekcji</a>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+
+                    <div class="smallborderadded">
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <label class="checkboxsimple">
+                            <input type="checkbox" name="checkbox" value="text"> 2. Mianowania
+                        </label>
+                        <div class="account-content-right">
+                            <div class="buttonedit">
+                                <a asp-action="appointments" formmethod="get">wprowadź zmiany w sekcji</a>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+
+                    <div class="smallborderadded">
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <label class="checkboxsimple">
+                            <input type="checkbox" name="checkbox" value="text"> 3. Zamknięcia prób
+                        </label>
+                        <div class="account-content-right">
+                            <div class="buttonedit">
+                                <a asp-action="trialclosings">wprowadź zmiany w sekcji</a>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+
+                    <div class="smallborderadded">
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <label class="checkboxsimple">
+                            <input type="checkbox" name="checkbox" value="text"> 4. Otwarcia prób
+                        </label>
+                        <div class="account-content-right">
+                            <div class="buttonedit">
+                                <a asp-action="trialopenings">wprowadź zmiany w sekcji</a>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+
+                    <div class="smallborderadded">
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <label class="checkboxsimple">
+                            <input type="checkbox" name="checkbox" value="text"> 5. Przyznanie punktów za stopnie i sprawności
+                        </label>
+                        <div class="account-content-right">
+                            <div class="buttonedit">
+                                wprowadź zmiany w sekcji
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+
+                    <div class="smallborderadded">
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <label class="checkboxsimple">
+                            <input type="checkbox" name="checkbox" value="text"> 6. Podsumowanie gier
+                        </label>
+                        <div class="account-content-right">
+                            <div class="buttonedit">
+                                wprowadź zmiany w sekcji
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+
+                    <div class="smallborderadded">
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <label class="checkboxsimple">
+                            <input type="checkbox" name="checkbox" value="text"> 7. Pochwały, wyróżnienia, nagany
+                        </label>
+                        <div class="account-content-right">
+                            <div class="buttonedit">
+                                <a asp-action="reprimendsandpraises">wprowadź zmiany w sekcji</a>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+
+                    <div class="smallborderadded">
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <label class="checkboxsimple">
+                            <input type="checkbox" name="checkbox" value="text"> 8. Skreślenia ze stanu
+                        </label>
+                        <div class="account-content-right">
+                            <div class="buttonedit">
+                                <a asp-action="exclusions">wprowadź zmiany w sekcji</a>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+
+                    <div class="smallborderadded">
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <label class="checkboxsimple">
+                            <input type="checkbox" name="checkbox" value="text"> 9. Inne
+                        </label>
+                        <div class="account-content-right">
+                            <div class="buttonedit">
+                                <a asp-action="other">wprowadź zmiany w sekcji</a>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                </div>
             </div>
-            <div class="field-and-name extend-to-border">
-                Miejscowość:
-                <br />
-                <input type="text">
+
+            <div id="content-title" class="text-center extra-padding">
+                <p> wydaj rozkaz po wprowadzeniu zmian do wybranych sekcji </p>
+            </div>
+
+            <div class="center">
+                <div class="accept-decline-buttons">
+                    <div class="buttonedit accept-decline-button">
+                        <a asp-action="layoffs" formmethod="get">wydaj rozkaz</a>
+                    </div>
+                    <div class="buttonedit accept-decline-button">
+                        <a asp-action="orders">porzuć</a>
+                    </div>
+                </div>
             </div>
         </form>
-        <a asp-action="layoffs" formmethod="get">zwolnienia</a>
-        <a asp-action="appointments" formmethod="get">mianowania</a>
-        <a asp-action="trialclosings">zamknięcia prób</a>
-        <a asp-action="trialopenings">otwarcia prób</a>
-        <a asp-action="reprimendsandpraises">pochwały</a>
-        <a asp-action="exclusions">skreślenia ze stanu</a>
-        <a asp-action="other">inne</a>
-
-        <div class="content text-left" style="height: auto">
-            <div class="account-content-left">
-                <!-- Rounded switch -->
-                <div class="smallborderadded">
-                    <meta name="viewport" content="width=device-width, initial-scale=1">
-                    <label class="checkboxsimple">
-                        <input type="checkbox" name="checkbox" value="text"> 1. Zwolnienia
-                    </label>
-                    <div class="account-content-right">
-                        <div class="buttonedit">
-                            wprowadź zmiany w sekcji
-                        </div>
-                    </div>
-                    <br />
-                </div>
-
-                <div class="smallborderadded">
-                    <meta name="viewport" content="width=device-width, initial-scale=1">
-                    <label class="checkboxsimple">
-                        <input type="checkbox" name="checkbox" value="text"> 2. Mianowania
-                    </label>
-                    <div class="account-content-right">
-                        <div class="buttonedit">
-                            wprowadź zmiany w sekcji
-                        </div>
-                    </div>
-                    <br />
-                </div>
-
-                <div class="smallborderadded">
-                    <meta name="viewport" content="width=device-width, initial-scale=1">
-                    <label class="checkboxsimple">
-                        <input type="checkbox" name="checkbox" value="text"> 3. Zamknięcia prób
-                    </label>
-                    <div class="account-content-right">
-                        <div class="buttonedit">
-                            wprowadź zmiany w sekcji
-                        </div>
-                    </div>
-                    <br />
-                </div>
-
-                <div class="smallborderadded">
-                    <meta name="viewport" content="width=device-width, initial-scale=1">
-                    <label class="checkboxsimple">
-                        <input type="checkbox" name="checkbox" value="text"> 4. Otwarcia prób
-                    </label>
-                    <div class="account-content-right">
-                        <div class="buttonedit">
-                            wprowadź zmiany w sekcji
-                        </div>
-                    </div>
-                    <br />
-                </div>
-
-                <div class="smallborderadded">
-                    <meta name="viewport" content="width=device-width, initial-scale=1">
-                    <label class="checkboxsimple">
-                        <input type="checkbox" name="checkbox" value="text"> 5. Przyznanie punktów za stopnie i sprawności
-                    </label>
-                    <div class="account-content-right">
-                        <div class="buttonedit">
-                            wprowadź zmiany w sekcji
-                        </div>
-                    </div>
-                    <br />
-                </div>
-
-                <div class="smallborderadded">
-                    <meta name="viewport" content="width=device-width, initial-scale=1">
-                    <label class="checkboxsimple">
-                        <input type="checkbox" name="checkbox" value="text"> 6. Podsumowanie gier
-                    </label>
-                    <div class="account-content-right">
-                        <div class="buttonedit">
-                            wprowadź zmiany w sekcji
-                        </div>
-                    </div>
-                    <br />
-                </div>
-
-                <div class="smallborderadded">
-                    <meta name="viewport" content="width=device-width, initial-scale=1">
-                    <label class="checkboxsimple">
-                        <input type="checkbox" name="checkbox" value="text"> 7. Pochwały, wyróżnienia, nagany
-                    </label>
-                    <div class="account-content-right">
-                        <div class="buttonedit">
-                            wprowadź zmiany w sekcji
-                        </div>
-                    </div>
-                    <br />
-                </div>
-
-                <div class="smallborderadded">
-                    <meta name="viewport" content="width=device-width, initial-scale=1">
-                    <label class="checkboxsimple">
-                        <input type="checkbox" name="checkbox" value="text"> 8. Skreślenia ze stanu
-                    </label>
-                    <div class="account-content-right">
-                        <div class="buttonedit">
-                            wprowadź zmiany w sekcji
-                        </div>
-                    </div>
-                    <br />
-                </div>
-
-                <div class="smallborderadded">
-                    <meta name="viewport" content="width=device-width, initial-scale=1">
-                    <label class="checkboxsimple">
-                        <input type="checkbox" name="checkbox" value="text"> 9. Inne
-                    </label>
-                    <div class="account-content-right">
-                        <div class="buttonedit">
-                            wprowadź zmiany w sekcji
-                        </div>
-                    </div>
-                    <br />
-                </div>
-            </div>
-
-        </div>
-
-        <div id="content-title" class="text-center extra-padding">
-            <p> wydaj rozkaz po wprowadzeniu zmian do wybranych sekcji </p>
-        </div>
-
-        <div class="center">
-            <div class="accept-decline-buttons">
-                <div class="buttonedit accept-decline-button">
-                    wydaj rozkaz
-                </div>
-                <div class="buttonedit accept-decline-button">
-                    porzuć
-                </div>
-            </div>
-        </div>
     </div>
 
     
