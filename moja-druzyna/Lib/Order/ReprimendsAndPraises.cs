@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace moja_druzyna.Lib.Services.Order
+﻿namespace moja_druzyna.Lib.Order
 {
     public class ReprimendsAndPraises
     {

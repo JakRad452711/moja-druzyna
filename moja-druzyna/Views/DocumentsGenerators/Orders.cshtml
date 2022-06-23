@@ -9,8 +9,8 @@
 <div class="text-center justify-content-center display-flex" style="min-width:650px">
     <form asp-action="orders">
         <div class="list-item-width display-flex justify-content-center mb-32px">
-            <div class="mr-8px mt-2px">
-                <img src="~/icons/main/green/flag.svg" class="icon-size-40" />
+            <div class="mr-8px mt-4px">
+                <img src="~/icons/main/green/sticky note.svg" class="icon-size-32 mt-1px" />
             </div>
             <div class="font-dark-green header1-light">
                 Rozkazy
@@ -19,35 +19,43 @@
         <div class="list-item-width medium-light font-muddy-black mb-32px">
             @ViewBag.TeamName <br />
         </div>
-        <div class="display-flex justify-content-center">
-            <div class="clear-white big-shadow size-fit-content medium-light display-block mb-32px">
-                <div class="large-light mb-16px">
-                    dodaj rozkaz
-                </div>
-                <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
-                    <div class="form-group">
-                        <label asp-for="AddedOrderName" class="input-box-width text-left">nazwa rozkazu</label> <br />
-                        <input asp-for="AddedOrderName" class="input-box-width" /><br />
-                        <span asp-validation-for="AddedOrderName" class="input-box-width text-left text-danger"></span>
+        @if (ViewBag.UserRole == "captain")
+        {
+            <div class="display-flex justify-content-center">
+                <div class="clear-white big-shadow size-fit-content medium-light display-block mb-32px">
+                    <div class="large-light mb-16px">
+                        dodaj rozkaz
+                    </div>
+                    <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
+                        <div class="form-group">
+                            <label asp-for="AddedOrderName" class="input-box-width text-left">numer rozkazu</label> <br />
+                            <input asp-for="AddedOrderName" class="input-box-width" /><br />
+                            <span asp-validation-for="AddedOrderName" class="input-box-width text-left text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="display-flex p-8px justify-content-center width-100p">
+                        <button type="submit" class="round-corners-5px font-muddy-black button-padding">dodaj</button>
                     </div>
                 </div>
-                <div class="display-flex p-8px justify-content-center width-100p">
-                    <button type="submit" class="round-corners-5px font-muddy-black button-padding">
-                        <a class="text-dark" asp-controller="documentsgenerators" asp-action="ordergenerator">
-                            dodaj                      
-                        </a>
-                    </button>
+            </div>
+        }
+        @if (Model.OrderViewModel_Orders.Count() > 0)
+        {
+            <div class="display-flex list-item-width text-left medium-bold mb-4px">
+                <div class="display-flex list-item-width justify-content-between ml-16px mr-8px">
+                    <span class="width-1a">nazwa rozkazu</span>
+                    <span class="width-1b">wydający</span>
+                    <span class="width-1c text-left">data wydania</span>
+                    <span class="width-1d"></span>
                 </div>
             </div>
-        </div>
-        <div class="display-flex list-item-width text-left medium-bold mb-4px">
-            <div class="display-flex list-item-width justify-content-between ml-16px mr-8px">
-                <span class="width-1a">nazwa rozkazu</span>
-                <span class="width-1b">wydający</span>
-                <span class="width-1c text-left">data wydania</span>
-                <span class="width-1d"></span>
+        }
+        else
+        {
+            <div class="paragraph-light mt-64px">
+                Aktualnie nie ma żadnych rozkazów
             </div>
-        </div>
+        }
         @foreach (var order in Model.OrderViewModel_Orders)
         {
             <div class="display-flex list-item-size clear-white small-shadow round-corners-12px large-light mb-4px">
@@ -62,8 +70,8 @@
                         <div class="mt-8px">@order.CreationDate.ToString("dd'.'MM'.'yyyy' 'HH':'mm")</div>
                     </div>
                     <div class="display-flex width-1d mt-8px mr-8px">
-                        <button id="manage-icon" name="hostId" asp-controller="team" asp-action="host" value=b class="no-border size-fit-content clear-white round-corners-5px">
-                            <img src="~/icons/managment/edit.svg" class="icon-size-24" />
+                        <button id="manage-icon" name="hostId" asp-action="generateorderpdf" value=@order.Id class="no-border size-fit-content clear-white round-corners-5px">
+                            <img src="~/icons/managment/download-pdf.svg" class="icon-size-24" />
                         </button>
                     </div>
                 </div>

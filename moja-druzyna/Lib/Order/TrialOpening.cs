@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace moja_druzyna.Lib.Services.Order
+﻿namespace moja_druzyna.Lib.Order
 {
     public class TrialOpening
     {
@@ -13,5 +8,6 @@ namespace moja_druzyna.Lib.Services.Order
         public string ScoutSurname { get; set; }
         public string TrialType { get; set; }
         public string Rank { get; set; }
+        public string Ability { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using moja_druzyna.Lib.Services.Order;
+﻿using moja_druzyna.Lib.Order;
 using System.Collections.Generic;
 
 namespace moja_druzyna.ViewModels.DocumentsGenerators
