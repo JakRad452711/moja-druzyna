@@ -18,7 +18,7 @@
     </div>
 
     <div id="parentdiv" class="borderadded">
-        <form id="base-form-id" asp-action="OrderFormSubmit">
+        <form id="base-form-id" asp-action="OrderForm_Submit">
             <div class="field-and-name">
                 Numer:
                 <br />
@@ -34,6 +34,7 @@
                 <br />
                 <input type="text">
             </div>
+            <button type="submit" formmethod="get">wydaj</button>
         </form>
         <a asp-action="layoffs" formmethod="get">zwolnienia</a>
         <a asp-action="appointments" formmethod="get">mianowania</a>

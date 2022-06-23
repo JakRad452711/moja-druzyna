@@ -1,17 +1,21 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using moja_druzyna.Data;
 using moja_druzyna.Data.Session;
-using moja_druzyna.Lib.Services.Order;
+using moja_druzyna.Lib.Order;
 using moja_druzyna.Models;
 using moja_druzyna.ViewModels;
 using moja_druzyna.ViewModels.DocumentsGenerators;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using static moja_druzyna.ViewModels.DocumentsGenerators.OrdersViewModel;
 
 namespace moja_druzyna.Controllers
@@ -20,22 +24,35 @@ namespace moja_druzyna.Controllers
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<DocumentsGeneratorsController> _logger;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         private readonly SessionAccesser sessionAccesser;
         private readonly ModelManager modelManager;
 
         private static OrderFormViewModel orderFormViewModel = new OrderFormViewModel();
 
-        public DocumentsGeneratorsController(ApplicationDbContext dbContext, ILogger<DocumentsGeneratorsController> logger, IHttpContextAccessor httpContextAccessor)
+        public DocumentsGeneratorsController(ApplicationDbContext dbContext, 
+            ILogger<DocumentsGeneratorsController> logger, 
+            IHttpContextAccessor httpContextAccessor,
+            UserManager<IdentityUser> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             _dbContext = dbContext;
             _logger = logger;
+            _userManager = userManager;
+            _roleManager = roleManager;
+
             sessionAccesser = new SessionAccesser(dbContext, httpContextAccessor);
             modelManager = new ModelManager(dbContext);
         }
 
+        [Authorize(Roles = "captain,vice captain,host captain,ensign,quatermaster,chronicler,scout")]
         public IActionResult Orders()
         {
+            ViewBag.UserRole = modelManager.GetScoutRoleInATeam(sessionAccesser.UserPesel, sessionAccesser.CurrentTeamId);
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
+
             List<OrderInfo> orderInfos = _dbContext.OrderInfos
                 .Where(orderInfo => orderInfo.TeamIdTeam == sessionAccesser.CurrentTeamId)
                 .ToList();
@@ -61,6 +78,7 @@ namespace moja_druzyna.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "captain,vice captain,host captain,ensign,quatermaster,chronicler,scout")]
         public IActionResult Orders(OrdersViewModel ordersViewModel)
         {
             if (ordersViewModel.AddedOrderName != null)
@@ -75,6 +93,7 @@ namespace moja_druzyna.Controllers
             return Redirect("orders");
         }
 
+        [Authorize(Roles = "captain")]
         public IActionResult OrderGenerator()
         {
             if (!User.Identity.IsAuthenticated)
@@ -84,21 +103,96 @@ namespace moja_druzyna.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "captain")]
         public IActionResult OrderForm()
         {
 
             return View(orderFormViewModel);
         }
 
-        [HttpPost]
-        public IActionResult OrderForm_Submit(OrderFormViewModel _orderFormViewModel)
-        {
-            orderFormViewModel = _orderFormViewModel;
+        [Authorize(Roles = "captain")]
+        public async Task<IActionResult> OrderForm_Submit()
+        {   
+            List<Layoff> layoffs = sessionAccesser.FormOrder.LayoffsSaved;
+            List<Appointment> appointments = sessionAccesser.FormOrder.AppointmentsSaved;
+            List<TrialClosing> trialClosings = sessionAccesser.FormOrder.TrialClosingsSaved;
+            List<Exclusion> exclusions = sessionAccesser.FormOrder.ExclusionsSaved;
+            int teamId = sessionAccesser.CurrentTeamId;
 
-            throw new NotImplementedException();
+            foreach (Layoff layoff in layoffs == null ? new() : layoffs)
+            {
+                if(layoff.UpdateDb(_dbContext, sessionAccesser.CurrentTeamId, true))
+                {
+                    await SetRole(layoff.ScoutId, "scout");
+                }
+            }
 
-            return Redirect("OrderForm");
+            foreach (Appointment appointment in appointments == null ? new() : appointments)
+            {
+                if (appointment.UpdateDb(_dbContext, sessionAccesser.CurrentTeamId, true, _logger))
+                {
+                    await SetRole(appointment.ScoutId, appointment.Role);
+                }
+            }
 
+            foreach (TrialClosing trialClosing in trialClosings == null ? new() : trialClosings)
+            {
+                trialClosing.UpdateDb(_dbContext, sessionAccesser.CurrentTeamId, true);
+            }
+
+            foreach (Exclusion exclusion in exclusions == null ? new() : exclusions)
+            {
+                exclusion.UpdateDb(_dbContext, sessionAccesser.CurrentTeamId, true);
+            }
+
+            if(_dbContext.ScoutTeam.Where(scoutTeam => scoutTeam.TeamIdTeam == sessionAccesser.CurrentTeamId && scoutTeam.Role == "captain").Count() == 0)
+            {
+                ScoutTeam scoutTeam = _dbContext.ScoutTeam
+                    .Where(scoutTeam => scoutTeam.ScoutPeselScout == sessionAccesser.UserPesel && scoutTeam.TeamIdTeam == sessionAccesser.CurrentTeamId)
+                    .First();
+                ScoutHost scoutHost = _dbContext.ScoutHost
+                    .Where(scoutHost => scoutHost.ScoutPeselScout == sessionAccesser.UserPesel)
+                    .First();
+
+                scoutTeam.Role = "captain";
+
+                _dbContext.ScoutTeam.Update(scoutTeam);
+                _dbContext.ScoutHost.Remove(scoutHost);
+                _dbContext.SaveChanges();
+            }
+
+            FormOrder formOrder = new FormOrder()
+            {
+                CreationDate = sessionAccesser.FormOrder.CreationDate,
+                CreationPlace = sessionAccesser.FormOrder.CreationPlace,
+                Name = sessionAccesser.FormOrder.Name,
+                TrialClosings = sessionAccesser.FormOrder.TrialClosingsSaved,
+                Appointments = sessionAccesser.FormOrder.AppointmentsSaved,
+                Exclusions = sessionAccesser.FormOrder.ExclusionsSaved,
+                Layoffs = sessionAccesser.FormOrder.LayoffsSaved,
+                ReprimendsAndPraises = sessionAccesser.FormOrder.ReprimendsAndPraisesSaved,
+                TrialOpenings = sessionAccesser.FormOrder.TrialOpenings,
+                Other = sessionAccesser.FormOrder.Other
+            };
+
+            string formOrderJSON = JsonConvert.SerializeObject(formOrder);
+
+            Order order = new Order() { Contents = formOrderJSON };
+            OrderInfo orderInfo = new OrderInfo()
+            {
+                Order = order,
+                Scout = _dbContext.Scouts.Find(sessionAccesser.UserPesel),
+                ScoutPeselScout = sessionAccesser.UserPesel,
+                Name = formOrder.Name,
+                Team = _dbContext.Teams.Find(sessionAccesser.CurrentTeamId),
+                CreationDate = DateTime.Now
+            };
+
+            _dbContext.Orders.Add(order);
+            _dbContext.OrderInfos.Add(orderInfo);
+            _dbContext.SaveChanges();
+
+            return Redirect("orders");
         }
 
         public IActionResult Appointments()
@@ -109,7 +203,7 @@ namespace moja_druzyna.Controllers
                 .Select(appointment => appointment.ScoutPesel)
                 .ToList();
 
-            List<Scout> scoutsThatCanBeAdded = 
+            List<Scout> scoutsThatCanBeAdded =
                 scoutsInTheTeam.Where(scout => !peselsOfScoutsThatAreAlreadyInTheAppointment.Contains(scout.PeselScout)).ToList();
 
             List<Host> hostsFromTheTeam = modelManager.GetListOfHostsFromATeam(sessionAccesser.CurrentTeamId);
@@ -117,9 +211,12 @@ namespace moja_druzyna.Controllers
             List<SelectListItem> dropDownList_Scouts = new List<SelectListItem>();
             List<SelectListItem> dropDownList_Roles = new List<SelectListItem>()
             {
-                new() {Text = "funkcja 1", Value = "1"},
-                new() {Text = "funkcja 2", Value = "2"},
-                new() {Text = "funkcja 3", Value = "3"}
+                new() {Text = "przyboczny", Value = "vice captain"},
+                new() {Text = "chorąży drużyny", Value = "ensign"},
+                new() {Text = "kwatermistrz", Value = "quatermaster"},
+                new() {Text = "kronikarz", Value = "chronicler"},
+                new() {Text = "zastępowy", Value = "host captain"},
+                new() {Text = "drużynowy", Value = "captain"}
             };
             List<SelectListItem> dropDownList_Hosts = new List<SelectListItem>();
 
@@ -156,6 +253,8 @@ namespace moja_druzyna.Controllers
         [HttpPost]
         public IActionResult Appointments(AppointmentsViewModel appointmentsViewModel)
         {
+            appointmentsViewModel.Appointments.Reverse();
+
             SessionFormOrderContext formOrder = sessionAccesser.FormOrder;
             formOrder.Appointments = appointmentsViewModel.Appointments;
             formOrder.AppointmentsSaved = appointmentsViewModel.Appointments;
@@ -168,11 +267,11 @@ namespace moja_druzyna.Controllers
         {
             SessionFormOrderContext formOrder = sessionAccesser.FormOrder;
 
-            if(formOrder.AppointmentsSaved == null)
+            if (formOrder.AppointmentsSaved == null)
             {
                 formOrder.AppointmentsSaved = new();
             }
-            
+
             formOrder.Appointments = formOrder.AppointmentsSaved;
 
             sessionAccesser.FormOrder = formOrder;
@@ -217,7 +316,7 @@ namespace moja_druzyna.Controllers
             List<string> idsOfScoutsFromTheAppointments = appointmentsViewModel.Appointments
                 .Select(appointment => appointment.ScoutId)
                 .ToList();
-            
+
             if (idsOfScoutsFromTheAppointments.Contains(scoutId))
             {
                 SessionFormOrderContext formOrder = sessionAccesser.FormOrder;
@@ -244,9 +343,10 @@ namespace moja_druzyna.Controllers
             List<SelectListItem> dropDownList_Scouts = new List<SelectListItem>();
             List<SelectListItem> dropDownList_Reasons = new List<SelectListItem>()
             {
-                new() {Text = "powód 1", Value = "1"},
-                new() {Text = "powód 2", Value = "2"},
-                new() {Text = "powód 3", Value = "3"}
+                new() {Text = "rezygnacja", Value = "resignation"},
+                new() {Text = "niepłacenie składek", Value = "non-payment of contributions"},
+                new() {Text = "wydalenie", Value = "banishment"},
+                new() {Text = "inne", Value = "other"}
             };
 
             foreach (Scout scout in scoutsThatCanBeAdded)
@@ -363,9 +463,12 @@ namespace moja_druzyna.Controllers
             List<SelectListItem> dropDownList_Scouts = new List<SelectListItem>();
             List<SelectListItem> dropDownList_Roles = new List<SelectListItem>()
             {
-                new() {Text = "funkcja 1", Value = "1"},
-                new() {Text = "funkcja 2", Value = "2"},
-                new() {Text = "funkcja 3", Value = "3"}
+                new() {Text = "przyboczny", Value = "vice captain"},
+                new() {Text = "chorąży drużyny", Value = "ensign"},
+                new() {Text = "kwatermistrz", Value = "quatermaster"},
+                new() {Text = "kronikarz", Value = "chronicler"},
+                new() {Text = "zastępowy", Value = "host captain"},
+                new() {Text = "drużynowy", Value = "captain"}
             };
             List<SelectListItem> dropDownList_Hosts = new List<SelectListItem>();
 
@@ -524,9 +627,9 @@ namespace moja_druzyna.Controllers
             List<SelectListItem> dropDownList_Scouts = new List<SelectListItem>();
             List<SelectListItem> dropDownList_Types = new List<SelectListItem>()
             {
-                new() {Text = "rodzaj 1", Value = "1"},
-                new() {Text = "rodzaj 2", Value = "2"},
-                new() {Text = "rodzaj 3", Value = "3"}
+                new() {Text = "pochwała", Value = "praise"},
+                new() {Text = "nagana", Value = "reprimand"},
+                new() {Text = "wyróżnienie", Value = "distinction"}
             };
 
             foreach (Scout scout in scoutsThatCanBeAdded)
@@ -586,7 +689,7 @@ namespace moja_druzyna.Controllers
                 .Select(reprimendOrPraise => reprimendOrPraise.ScoutId)
                 .ToList()
                 .Contains(reprimendsAndPraisesViewModel.AddedScoutId);
-            
+
             if (scoutIsInTheTeam && scoutIsNotInTheAppointentList)
             {
                 Scout scout = _dbContext.Scouts.Where(_scout => _scout.IdentityId == reprimendsAndPraisesViewModel.AddedScoutId).First();
@@ -640,23 +743,42 @@ namespace moja_druzyna.Controllers
             List<Host> hostsFromTheTeam = modelManager.GetListOfHostsFromATeam(sessionAccesser.CurrentTeamId);
 
             List<SelectListItem> dropDownList_Scouts = new List<SelectListItem>();
-            List<SelectListItem> dropDownList_TrialTypes = new List<SelectListItem>() 
+            List<SelectListItem> dropDownList_TrialTypes = new List<SelectListItem>()
             {
-                new() {Text = "typ 1", Value = "1"},
-                new() {Text = "typ 2", Value = "2"},
-                new() {Text = "typ 3", Value = "3"}
+                new() {Text = "krzyż harcerski", Value = "scout cross"},
+                new() {Text = "stopień", Value = "rank"},
+                new() {Text = "sprawność", Value = "ability"}
             };
             List<SelectListItem> dropDownList_Ranks = new List<SelectListItem>()
             {
-                new() {Text = "stopień 1", Value = "1"},
-                new() {Text = "stopień 2", Value = "2"},
-                new() {Text = "stopień 3", Value = "3"}
+                new() {Text = "młodzik/ochotniczka", Value = "1"},
+                new() {Text = "wywiadowca/tropicielka", Value = "2"},
+                new() {Text = "odkrywca/pionierka", Value = "3"},
+                new() {Text = "ćwik/samarytanka", Value = "4"},
+                new() {Text = "harcerz orli/harcerka orla", Value = "5"},
+                new() {Text = "harcerz rzeczypospolitej/harcerka rzeczypospolitej", Value = "6"}
             };
             List<SelectListItem> dropDownList_Abilities = new List<SelectListItem>()
             {
-                new() {Text = "zdoność 1", Value = "1"},
-                new() {Text = "zdoność 2", Value = "2"},
-                new() {Text = "zdoność 3", Value = "3"}
+                new() {Text = "higienista", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "hygenist").First().IdAchievement.ToString()},
+                new() {Text = "sanitariusz", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "paramedic").First().IdAchievement.ToString()},
+                new() {Text = "ratownik", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "lifesaver").First().IdAchievement.ToString()},
+                new() {Text = "ognik", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "glimmer").First().IdAchievement.ToString()},
+                new() {Text = "strażnik ognia", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "fire guard").First().IdAchievement.ToString()},
+                new() {Text = "mistrz ognisk", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "fireplace master").First().IdAchievement.ToString()},
+                new() {Text = "znawca musztry", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "drill expert").First().IdAchievement.ToString()},
+                new() {Text = "mistrz musztry", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "drill master").First().IdAchievement.ToString()},
+                new() {Text = "igiełka", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "needle").First().IdAchievement.ToString()},
+                new() {Text = "krawiec", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "tailor").First().IdAchievement.ToString()},
+                new() {Text = "młody pływak", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "young swimmer").First().IdAchievement.ToString()},
+                new() {Text = "pływak", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "swimmer").First().IdAchievement.ToString()},
+                new() {Text = "pływak doskonały", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "excellent swimmer").First().IdAchievement.ToString()},
+                new() {Text = "internauta", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "internaut").First().IdAchievement.ToString()},
+                new() {Text = "historyk rodzinny", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "family historian").First().IdAchievement.ToString()},
+                new() {Text = "europejczyk", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "european").First().IdAchievement.ToString()},
+                new() {Text = "lider zdrowia", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "health leader").First().IdAchievement.ToString()},
+                new() {Text = "przyjaciel przyrody", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "nature friend").First().IdAchievement.ToString()},
+                new() {Text = "fotograf", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "photograph").First().IdAchievement.ToString()},
             };
 
             foreach (Scout scout in scoutsThatCanBeAdded)
@@ -774,21 +896,40 @@ namespace moja_druzyna.Controllers
             List<SelectListItem> dropDownList_Scouts = new List<SelectListItem>();
             List<SelectListItem> dropDownList_TrialTypes = new List<SelectListItem>()
             {
-                new() {Text = "typ 1", Value = "1"},
-                new() {Text = "typ 2", Value = "2"},
-                new() {Text = "typ 3", Value = "3"}
+                new() {Text = "krzyż harcerski", Value = "scout cross"},
+                new() {Text = "stopień", Value = "rank"},
+                new() {Text = "sprawność", Value = "ability"}
             };
             List<SelectListItem> dropDownList_Ranks = new List<SelectListItem>()
             {
-                new() {Text = "stopień 1", Value = "1"},
-                new() {Text = "stopień 2", Value = "2"},
-                new() {Text = "stopień 3", Value = "3"}
+                new() {Text = "młodzik/ochotniczka", Value = "1"},
+                new() {Text = "wywiadowca/tropicielka", Value = "2"},
+                new() {Text = "odkrywca/pionierka", Value = "3"},
+                new() {Text = "ćwik/samarytanka", Value = "4"},
+                new() {Text = "harcerz orli/harcerka orla", Value = "5"},
+                new() {Text = "harcerz rzeczypospolitej/harcerka rzeczypospolitej", Value = "6"}
             };
             List<SelectListItem> dropDownList_Abilities = new List<SelectListItem>()
             {
-                new() {Text = "zdoność 1", Value = "1"},
-                new() {Text = "zdoność 2", Value = "2"},
-                new() {Text = "zdoność 3", Value = "3"}
+                new() {Text = "higienista", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "hygenist").First().IdAchievement.ToString()},
+                new() {Text = "sanitariusz", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "paramedic").First().IdAchievement.ToString()},
+                new() {Text = "ratownik", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "lifesaver").First().IdAchievement.ToString()},
+                new() {Text = "ognik", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "glimmer").First().IdAchievement.ToString()},
+                new() {Text = "strażnik ognia", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "fire guard").First().IdAchievement.ToString()},
+                new() {Text = "mistrz ognisk", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "fireplace master").First().IdAchievement.ToString()},
+                new() {Text = "znawca musztry", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "drill expert").First().IdAchievement.ToString()},
+                new() {Text = "mistrz musztry", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "drill master").First().IdAchievement.ToString()},
+                new() {Text = "igiełka", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "needle").First().IdAchievement.ToString()},
+                new() {Text = "krawiec", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "tailor").First().IdAchievement.ToString()},
+                new() {Text = "młody pływak", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "young swimmer").First().IdAchievement.ToString()},
+                new() {Text = "pływak", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "swimmer").First().IdAchievement.ToString()},
+                new() {Text = "pływak doskonały", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "excellent swimmer").First().IdAchievement.ToString()},
+                new() {Text = "internauta", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "internaut").First().IdAchievement.ToString()},
+                new() {Text = "historyk rodzinny", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "family historian").First().IdAchievement.ToString()},
+                new() {Text = "europejczyk", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "european").First().IdAchievement.ToString()},
+                new() {Text = "lider zdrowia", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "health leader").First().IdAchievement.ToString()},
+                new() {Text = "przyjaciel przyrody", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "nature friend").First().IdAchievement.ToString()},
+                new() {Text = "fotograf", Value = _dbContext.Achievements.Where(achievement => achievement.Type == "photograph").First().IdAchievement.ToString()},
             };
 
             foreach (Scout scout in scoutsThatCanBeAdded)
@@ -805,6 +946,7 @@ namespace moja_druzyna.Controllers
             ViewBag.DropDownList_Scouts = dropDownList_Scouts;
             ViewBag.DropDownList_TrialTypes = dropDownList_TrialTypes;
             ViewBag.DropDownList_Ranks = dropDownList_Ranks;
+            ViewBag.DropDownList_Abilities = dropDownList_Abilities;
 
             ViewBag.AreThereScoutsToAdd = !(peselsOfScoutsThatAreAlreadyInTheTrialOpenings.Count() == numberOfScoutsInTheTeam);
             ViewBag.OrderName = sessionAccesser.FormOrder.Name;
@@ -893,6 +1035,17 @@ namespace moja_druzyna.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public async Task<IActionResult> SetRole(string userId, string role)
+        {
+            IdentityUser user = await _userManager.FindByIdAsync(userId);
+            IList<string> userRoles = await _userManager.GetRolesAsync(user);
+
+            await _userManager.RemoveFromRolesAsync(user, userRoles);
+            await _userManager.AddToRoleAsync(user, role);
+
+            return RedirectToAction("personaldata", "profilecontroller");
         }
     }
 }

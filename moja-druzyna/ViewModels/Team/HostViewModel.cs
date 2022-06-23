@@ -19,6 +19,7 @@ namespace moja_druzyna.ViewModels.Team
         public class HostViewModel_Scout
         {
             public string IdentityId { get; set; }
+            public string Rank { get; set; }
             public string Title { get; set; }
             public bool IsHostCaptain { get; set; }
         }
