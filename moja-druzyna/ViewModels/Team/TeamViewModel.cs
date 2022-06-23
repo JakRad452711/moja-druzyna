@@ -9,6 +9,7 @@ namespace moja_druzyna.ViewModels.Team
     {
         public string Id { get; set; }
         public string Pesel { get; set; }
+        public string Rank { get; set; }
         public string Title { get; set; }
         public string Host { get; set; }
     }

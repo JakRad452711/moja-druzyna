@@ -4,8 +4,8 @@ using Microsoft.Extensions.Logging;
 using moja_druzyna.Data;
 using moja_druzyna.Data.Session;
 using moja_druzyna.Models;
+using moja_druzyna.ViewModels;
 using System.Diagnostics;
-using System.Linq;
 
 namespace moja_druzyna.Controllers
 {
@@ -15,6 +15,8 @@ namespace moja_druzyna.Controllers
         private readonly ILogger<ProfileController> _logger;
 
         private readonly SessionAccesser sessionAccesser;
+
+        private static AFormViewModel aFormViewModel = new AFormViewModel();
 
         public ProfileController(ApplicationDbContext dbContext, ILogger<ProfileController> logger, IHttpContextAccessor httpContextAccessor)
         {
@@ -26,8 +28,7 @@ namespace moja_druzyna.Controllers
 
         public IActionResult PersonalData()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             Scout userData = _dbContext.Scouts.Find(sessionAccesser.UserPesel);
 
@@ -36,56 +37,49 @@ namespace moja_druzyna.Controllers
 
         public IActionResult ServiceHistory()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             return View();
         }
 
         public IActionResult Ranks()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             return View();
         }
 
         public IActionResult Achievments()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             return View();
         }
 
         public IActionResult Roles()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             return View();
         }
 
         public IActionResult CoursesAndPermissions()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             return View();
         }
 
         public IActionResult GdprConsents()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             return View();
         }
 
         public IActionResult Privacy()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             return View();
         }

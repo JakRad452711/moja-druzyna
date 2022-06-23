@@ -1,0 +1,13 @@
+﻿namespace moja_druzyna.Lib.Order
+{
+    public class TrialOpening
+    {
+        public string ScoutId { get; set; }
+        public string ScoutPesel { get; set; }
+        public string ScoutName { get; set; }
+        public string ScoutSurname { get; set; }
+        public string TrialType { get; set; }
+        public string Rank { get; set; }
+        public string Ability { get; set; }
+    }
+}

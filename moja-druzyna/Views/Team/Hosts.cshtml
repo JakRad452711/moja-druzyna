@@ -9,8 +9,8 @@
 <div class="text-center justify-content-center display-flex" style="min-width:650px">
     <form asp-action="hosts">
         <div class="list-item-width display-flex justify-content-center mb-32px">
-            <div class="mr-8px mt-2px">
-                <img src="~/icons/main/green/flag.svg" class="icon-size-40" />
+            <div class="mr-8px mt-4px">
+                <img src="~/icons/main/green/flag.svg" class="icon-size-32 mt-1px" />
             </div>
             <div class="font-dark-green header1-light">
                 Moje zastępy
@@ -21,29 +21,33 @@
         </div>
         @if (ViewBag.DropDownList_Scouts.Count > 0)
         {
-            <div class="display-flex justify-content-center">
-                <div class="clear-white big-shadow size-fit-content medium-light display-block mb-32px">
-                    <div class="large-light mb-16px">
-                        dodaj zastęp
-                    </div>
-                    <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
-                        <div class="form-group">
-                            <label asp-for="addedHostName" class="input-box-width text-left">nazwa zastępu</label> <br />
-                            <input asp-for="addedHostName" class="input-box-width" /><br />
-                            <span asp-validation-for="addedHostName" class="input-box-width text-left text-danger"></span>
+            @if (ViewBag.UserRole == "captain")
+            {
+                <div class="display-flex justify-content-center">
+                    <div class="clear-white big-shadow size-fit-content medium-light display-block mb-32px">
+                        <div class="large-light mb-16px">
+                            dodaj zastęp
                         </div>
-                    </div>
-                    <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
-                        <div class="form-group">
-                            <label asp-for="hostCaptainPesel" class="input-box-width text-left">zastępowy</label> <br />
-                            <select asp-for="hostCaptainPesel" class="input-box-width" asp-items="@ViewBag.DropDownList_Scouts"></select>
+                        <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
+                            <div class="form-group">
+                                <label asp-for="addedHostName" class="input-box-width text-left">nazwa zastępu</label> <br />
+                                <input asp-for="addedHostName" class="input-box-width" /><br />
+                                <span asp-validation-for="addedHostName" class="input-box-width text-left text-danger"></span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="display-flex p-8px justify-content-center width-100p">
-                        <button type="submit" class="round-corners-5px font-muddy-black button-padding">dodaj</button>
+                        <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
+                            <div class="form-group">
+                                <label asp-for="hostCaptainPesel" class="input-box-width text-left">zastępowy</label> <br />
+                                <select asp-for="hostCaptainPesel" class="input-box-width" asp-items="@ViewBag.DropDownList_Scouts"></select>
+                            </div>
+                        </div>
+                        <div class="display-flex p-8px justify-content-center width-100p">
+                            <button type="submit" class="round-corners-5px font-muddy-black button-padding">dodaj</button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
+
         }
         else
         {
@@ -79,12 +83,32 @@
                         <div class="mt-8px">@host.HostCaptainLabel</div>
                     </div>
                     <div class="display-flex width-1c mt-8px mr-16px">
-                        <button id="manage-icon" name="hostId" asp-controller="team" asp-action="host" value=@host.HostId class="no-border size-fit-content clear-white round-corners-5px">
-                            <img src="~/icons/managment/edit.svg" class="icon-size-24" />
-                        </button>
-                        <button id="manage-icon" name="hostId" asp-controller="team" asp-action="deletehost" value=@host.HostId class="no-border size-fit-content clear-white round-corners-5px">
-                            <img src="~/icons/managment/delete.svg" class="icon-size-24" />
-                        </button>
+                        @if (ViewBag.UserRole == "captain")
+                        {
+                            <button id="manage-icon" name="hostId" asp-controller="team" asp-action="host" value=@host.HostId class="no-border size-fit-content clear-white round-corners-5px">
+                                <img src="~/icons/managment/show.svg" class="icon-size-24" />
+                            </button>
+                            <button id="manage-icon" name="hostId" asp-controller="team" asp-action="deletehost" value=@host.HostId class="no-border size-fit-content clear-white round-corners-5px">
+                                <img src="~/icons/managment/delete.svg" class="icon-size-24" />
+                            </button>
+                        }
+                        else if (ViewBag.UserRoleInTheHost == "captain" || ViewBag.UserRole == "vice captain")
+                        {
+                            <button id="manage-icon" name="hostId" asp-controller="team" asp-action="host" value=@host.HostId class="no-border size-fit-content clear-white round-corners-5px">
+                                <img src="~/icons/managment/show.svg" class="icon-size-24" />
+                            </button>
+                            <button name="hostId" asp-controller="team" asp-action="deletehost" value=@host.HostId class="no-border size-fit-content clear-white round-corners-5px inactive" disabled>
+                                <img src="~/icons/managment/delete.svg" class="icon-size-24" />
+                            </button>
+                        }
+                        else
+                        {
+                            <div class="icon-size-24 mr-32px">
+                            </div>
+                            <button id="manage-icon" name="hostId" asp-controller="team" asp-action="host" value=@host.HostId class="no-border size-fit-content clear-white round-corners-5px">
+                                <img src="~/icons/managment/show.svg" class="icon-size-24" />
+                            </button>
+                        }
                     </div>
                 </div>
             </div>

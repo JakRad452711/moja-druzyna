@@ -19,6 +19,61 @@ namespace moja_druzyna.Data
             return _dbContext.Scouts.Where(_scout => _scout.PeselScout == pesel).Count() == 0;
         }
 
+        public bool ScoutIsInTheTeam(string pesel, int teamId)
+        {
+            return _dbContext.ScoutTeam.Where(scoutTeam => scoutTeam.ScoutPeselScout == pesel && scoutTeam.TeamIdTeam == teamId).Count() > 0;
+        }
+
+        public string GetScoutPesel(string id)
+        {
+            return _dbContext.Scouts.Where(scout => scout.IdentityId == id).First().PeselScout;
+        }
+
+        public string GetScoutRoleInATeam(string scoutPesel, int teamId)
+        {
+            if (_dbContext.ScoutTeam.Where(scoutTeam => scoutTeam.ScoutPeselScout == scoutPesel && scoutTeam.TeamIdTeam == teamId).Count() == 0)
+                return null;
+
+            ScoutTeam scoutTeam = _dbContext.ScoutTeam
+                .Where(scoutTeam => scoutTeam.ScoutPeselScout == scoutPesel && scoutTeam.TeamIdTeam == teamId)
+                .First();
+
+            if (scoutTeam == null)
+                return null;
+
+            return scoutTeam.Role;
+        }
+
+        public Host GetScoutsHostFromATeam(string scoutPesel, int teamId)
+        {
+            List<int> idsOfHostsFromTheTeam = GetListOfHostsFromATeam(teamId).Select(host => host.IdHost).ToList();
+
+            if (idsOfHostsFromTheTeam == null || 
+                !_dbContext.ScoutHost
+                    .Where(scoutHost => idsOfHostsFromTheTeam.Contains(scoutHost.HostIdHost) && scoutHost.ScoutPeselScout == scoutPesel)
+                    .Any())
+                return null;
+
+            ScoutHost scoutHost = _dbContext.ScoutHost
+                .Where(scoutHost => idsOfHostsFromTheTeam.Contains(scoutHost.HostIdHost) && scoutHost.ScoutPeselScout == scoutPesel)
+                .First();
+            Host theHost = _dbContext.Hosts.Find(scoutHost.HostIdHost);
+
+            return theHost;
+        }
+
+        public string GetUserRoleInAHost(string userPesel, int hostId)
+        {
+            if (_dbContext.ScoutHost.Where(scoutHost => scoutHost.ScoutPeselScout == userPesel && scoutHost.HostIdHost == hostId).Count() == 0)
+                return null;
+
+            ScoutHost scoutHost = _dbContext.ScoutHost
+                .Where(scoutHost => scoutHost.ScoutPeselScout == userPesel && scoutHost.HostIdHost == hostId)
+                .First();
+
+            return scoutHost.Role;
+        }
+
         public void CreateScoutAccount(int teamId, Scout scout)
         {
             if (!ScoutPrimaryKeyIsAvailable(scout.PeselScout))
@@ -173,6 +228,16 @@ namespace moja_druzyna.Data
             _dbContext.SaveChanges();
         }
 
+        public List<Scout> GetScoutsFromATeam(int teamId)
+        {
+            List<string> peselsOfScoutsThatAreInTheTeam= _dbContext.ScoutTeam
+                .Where(scoutTeam => scoutTeam.TeamIdTeam == teamId)
+                .Select(scoutTeam => scoutTeam.ScoutPeselScout)
+                .ToList();
+
+            return _dbContext.Scouts.Where(scout => peselsOfScoutsThatAreInTheTeam.Contains(scout.PeselScout)).ToList();
+        }
+
         public List<Host> GetListOfHostsFromATeam(int teamId)
         {
             List<Host> hostsInTheTeam = _dbContext.Hosts
@@ -204,7 +269,7 @@ namespace moja_druzyna.Data
             List<int> hostIdsInTheTeam = hostsInTheTeam.Select(host => host.IdHost).ToList();
 
             List<Scout> scoutsInTheTeam = _dbContext.ScoutTeam
-                .Where(scoutTeam => scoutTeam.TeamIdTeam == teamId && scoutTeam.Role == "scout")
+                .Where(scoutTeam => scoutTeam.TeamIdTeam == teamId && scoutTeam.Role != "captain")
                 .Select(_scoutTeam => _scoutTeam.Scout)
                 .ToList();
             List<string> scoutPeselsInTheTeam = scoutsInTheTeam.Select(scout => scout.PeselScout)
