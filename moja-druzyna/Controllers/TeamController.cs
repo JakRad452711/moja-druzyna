@@ -201,6 +201,24 @@ namespace moja_druzyna.Controllers
             return View(scout);
         }
 
+        public IActionResult ScoutData()
+        {
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
+
+            string pesel = modelManager.GetScoutPesel(sessionAccesser.CurrentScoutId);
+            Scout scout = _dbContext.Scouts.Find(pesel);
+
+            return View(scout);
+        }
+
+        [HttpPost]
+        public IActionResult ScoutData(string scoutId)
+        {
+            sessionAccesser.CurrentScoutId = scoutId;
+
+            return Redirect("ScoutData");
+        }
+
         public IActionResult Hosts()
         {
             ViewBag.UserRole = modelManager.GetScoutRoleInATeam(sessionAccesser.UserPesel, sessionAccesser.CurrentTeamId);
