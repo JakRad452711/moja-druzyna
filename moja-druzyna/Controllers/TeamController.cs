@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -19,7 +20,7 @@ namespace moja_druzyna.Controllers
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<TeamController> _logger;
         UserManager<IdentityUser> _userManager;
-
+        
         private readonly SessionAccesser sessionAccesser;
         private readonly ModelManager modelManager;
 
@@ -37,19 +38,29 @@ namespace moja_druzyna.Controllers
 
         public IActionResult Team()
         {
+            ViewBag.UserRole = modelManager.GetScoutRoleInATeam(sessionAccesser.UserPesel, sessionAccesser.CurrentTeamId);
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             ICollection<TeamViewModel> scoutsInfo = new List<TeamViewModel>();
 
             int currentTeamId = sessionAccesser.CurrentTeamId;
 
-            foreach (Scout scout in _dbContext.ScoutTeam.Where(scoutTeam => scoutTeam.TeamIdTeam == currentTeamId).Select(_scoutTeam => _scoutTeam.Scout))
+            List<Scout> scouts = _dbContext.ScoutTeam.Where(scoutTeam => scoutTeam.TeamIdTeam == currentTeamId).Select(_scoutTeam => _scoutTeam.Scout).ToList();
+
+            foreach (Scout scout in scouts)
             {
+                Host _host = modelManager.GetScoutsHostFromATeam(scout.PeselScout, sessionAccesser.CurrentTeamId);
+
                 string id = scout.IdentityId;
                 string title = string.Format("{0} {1}", scout.Surname, scout.Name);
+                string rank = null;
                 string pesel = scout.PeselScout;
-                string host = "nazwa zastępu";
-                scoutsInfo.Add(new TeamViewModel() { Id = id, Title = title, Host = host, Pesel = pesel });
+                string host = _host == null ? "" : _host.Name;
+
+                if(_dbContext.ScoutRanks.Where(scoutRank => scoutRank.ScoutPeselScout == scout.PeselScout).Count() != 0)
+                    rank = _dbContext.ScoutRanks.Where(scoutRank => scoutRank.ScoutPeselScout == scout.PeselScout && scoutRank.IsCurrent).First().RankName;
+
+                scoutsInfo.Add(new TeamViewModel() { Id = id, Title = title, Rank = rank, Host = host, Pesel = pesel });
             }
 
             scoutsInfo = scoutsInfo.OrderBy(info => info.Title).ToList();
@@ -57,6 +68,7 @@ namespace moja_druzyna.Controllers
             return View(scoutsInfo);
         }
 
+        [Authorize(Roles = "captain")]
         public IActionResult TeamChangeName(string newName)
         {
             if (newName != null)
@@ -74,26 +86,39 @@ namespace moja_druzyna.Controllers
             return Redirect("team");
         }
 
+        [Authorize(Roles = "captain")]
         public IActionResult RemoveScout(string scoutId)
         {
             Scout removedScout = _dbContext.Scouts.Where(scout => scout.IdentityId == scoutId).First();
             ScoutTeam scoutTeam = _dbContext.ScoutTeam
                 .Where(scoutTeam => scoutTeam.ScoutPeselScout == removedScout.PeselScout)
                 .First();
+            Parent parent = _dbContext.Parents.Find(removedScout.PeselScout);
 
             
             if(scoutTeam.Role == "scout" && removedScout.IdentityId != sessionAccesser.UserId)
             {
+                List<int> idsOfHostsFromTheTeam = modelManager.GetListOfHostsFromATeam(sessionAccesser.CurrentTeamId).Select(host => host.IdHost).ToList();
+                List<ScoutHost> scoutHostsFromTheTeam = _dbContext.ScoutHost
+                    .Where(scoutHost => idsOfHostsFromTheTeam
+                    .Contains(scoutHost.HostIdHost) && scoutHost.ScoutPeselScout == removedScout.PeselScout)
+                    .ToList();
+
+                if (scoutHostsFromTheTeam != null && scoutHostsFromTheTeam.Count() > 0)
+                    _dbContext.ScoutHost.Remove(scoutHostsFromTheTeam.First());
+                
                 _dbContext.Scouts.Remove(removedScout);
+                _dbContext.Parents.Remove(parent);
                 _dbContext.SaveChanges();
             }
-            
 
             return Redirect("team");
         }
 
+        [Authorize(Roles = "captain,vice captain")]
         public IActionResult AddScout()
         {
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
             ViewBag.scoutWasAdded = scoutWasAdded;
             scoutWasAdded = false;
 
@@ -101,8 +126,11 @@ namespace moja_druzyna.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "captain,vice captain")]
         public IActionResult AddScout(AddScoutViewModel addScoutViewModel)
         {
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
+
             if (ModelState.IsValid)
             {
                 Scout addedScout = new Scout
@@ -134,8 +162,11 @@ namespace moja_druzyna.Controllers
             return View();
         }
 
+        [Authorize(Roles = "captain,vice captain")]
         public IActionResult EditScout(string scoutId)
         {
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
+
             Scout editedScout = _dbContext.Scouts
                 .Where(scout => scout.IdentityId == scoutId)
                 .First();
@@ -151,6 +182,7 @@ namespace moja_druzyna.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "captain,vice captain")]
         public IActionResult EditScout(Scout scout)
         {
             if (ModelState.IsValid)
@@ -169,8 +201,82 @@ namespace moja_druzyna.Controllers
             return View(scout);
         }
 
+        [Authorize(Roles = "captain,vice captain")]
+        public IActionResult ScoutData()
+        {
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
+
+            string pesel = modelManager.GetScoutPesel(sessionAccesser.CurrentScoutId);
+            Scout scout = _dbContext.Scouts.Find(pesel);
+
+            bool hasAddress = _dbContext.Adresses.Where(address => address.ScoutPeselScout == sessionAccesser.UserPesel).Any();
+
+            if (hasAddress)
+            {
+                scout.Adress = _dbContext.Adresses.Where(address => address.ScoutPeselScout == sessionAccesser.UserPesel).First();
+            }
+
+            return View(scout);
+        }
+
+        [HttpPost]
+        public IActionResult ScoutData(string scoutId)
+        {
+            sessionAccesser.CurrentScoutId = scoutId;
+
+            return Redirect("ScoutData");
+        }
+
+        public IActionResult ScoutAchievements()
+        {
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
+
+            string pesel = modelManager.GetScoutPesel(sessionAccesser.CurrentScoutId);
+            Scout scout = _dbContext.Scouts.Find(pesel);
+
+            ViewBag.ScoutTitle = string.Format("{0} {1} - osiągnięcia", scout.Name, scout.Surname);
+
+            List<ScoutRank> scoutRanks = _dbContext.ScoutRanks
+                .Where(scoutRank => scoutRank.ScoutPeselScout == pesel)
+                .ToList();
+
+            List<ScoutAchievement> scoutAchievements = _dbContext.ScoutAchievements
+                .Where(scoutAchievement => scoutAchievement.ScoutPeselScout == pesel)
+                .ToList();
+
+            List<ScoutAchievementsViewModel> scoutAchievementsViewModels = new();
+
+            foreach (ScoutRank scoutRank in scoutRanks)
+            {
+                scoutAchievementsViewModels.Add(
+                    new ScoutAchievementsViewModel()
+                    {
+                        Type = "rank",
+                        Rank = scoutRank.RankName,
+                        AcquirementTime = scoutRank.DateAcquirement,
+                    });
+            }
+
+            foreach(ScoutAchievement scoutAchievement in scoutAchievements)
+            {
+                Achievement achievement = _dbContext.Achievements.Find(scoutAchievement.AchievementIdAchievement);
+                scoutAchievementsViewModels.Add(
+                    new ScoutAchievementsViewModel()
+                    {
+                        Type = "ability",
+                        Achievement = achievement.Type,
+                        AcquirementTime = scoutAchievement.Date
+                    });
+
+                _logger.LogInformation(achievement.Type);
+            }
+
+            return View(scoutAchievementsViewModels.OrderByDescending(scoutAchievementVM => scoutAchievementVM.AcquirementTime).ToList());
+        }
+
         public IActionResult Hosts()
         {
+            ViewBag.UserRole = modelManager.GetScoutRoleInATeam(sessionAccesser.UserPesel, sessionAccesser.CurrentTeamId);
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             List<Scout> scoutsThatAreNotInAnyHostFromTheTeam = 
@@ -196,16 +302,22 @@ namespace moja_druzyna.Controllers
 
             foreach(Host host in hosts)
             {
-                string hostCaptainPesel = _dbContext.ScoutHost
+                string hostCaptainPesel;
+                Scout hostCaptain = new();
+
+                if (_dbContext.ScoutHost.Where(scoutHost => scoutHost.HostIdHost == host.IdHost && scoutHost.Role == "captain").Count() != 0)
+                {
+                    hostCaptainPesel = _dbContext.ScoutHost
                     .Where(scoutHost => scoutHost.HostIdHost == host.IdHost && scoutHost.Role == "captain")
                     .First()
                     .ScoutPeselScout;
-                Scout hostCaptain = _dbContext.Scouts.Find(hostCaptainPesel);
+                    hostCaptain = _dbContext.Scouts.Find(hostCaptainPesel);
+                }
 
                 hostsViewModels_Host.Add(new HostsViewModel_Host() { 
                         HostId = host.IdHost, 
                         HostName = host.Name, 
-                        HostCaptainLabel = string.Format("{0} {1}", hostCaptain.Name, hostCaptain.Surname)
+                        HostCaptainLabel = string.Format("{0} {1}", (hostCaptain.Name == null ? "zastęp nie ma zastępowego!" : hostCaptain.Name), hostCaptain.Surname)
                     }
                 );
             }
@@ -221,6 +333,7 @@ namespace moja_druzyna.Controllers
         [HttpPost]
         public IActionResult Hosts(HostsViewModel hostsViewModel)
         {
+            ViewBag.UserRole = modelManager.GetScoutRoleInATeam(sessionAccesser.UserPesel, sessionAccesser.CurrentTeamId);
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             List<string> peselsOfScoutsFromTheTeamThatAreNotInAnyHostFromTheTeam =
@@ -230,34 +343,13 @@ namespace moja_druzyna.Controllers
 
             if (ModelState.IsValid && peselsOfScoutsFromTheTeamThatAreNotInAnyHostFromTheTeam.Contains(hostsViewModel.hostCaptainPesel))
             {
-                Team team = _dbContext.Teams.Find(sessionAccesser.CurrentTeamId);
-                Scout hostCaptain = _dbContext.Scouts.Find(hostsViewModel.hostCaptainPesel);
-                Host host = new Host() { Name = hostsViewModel.addedHostName, Team = team, TeamIdTeam = team.IdTeam };
-                ScoutHost scoutHost = new ScoutHost() 
-                { 
-                    Host = host, 
-                    HostIdHost = host.IdHost, 
-                    Scout = hostCaptain, 
-                    ScoutPeselScout = hostCaptain.PeselScout, 
-                    Role = "captain"
-                };
-                ScoutTeam scoutTeam = _dbContext.ScoutTeam
-                    .Where(_scoutTeam => _scoutTeam.ScoutPeselScout == hostCaptain.PeselScout && _scoutTeam.TeamIdTeam == team.IdTeam)
-                    .First();
+                if (hostsViewModel != null && hostsViewModel.addedHostName != null)
+                {
+                    sessionAccesser.AddedHostName = hostsViewModel.addedHostName;
+                    sessionAccesser.AddedHostCaptainPesel = hostsViewModel.hostCaptainPesel;
 
-
-                team.Hosts.Add(host);
-                team.ScoutTeam.Add(scoutTeam);
-                hostCaptain.ScoutHost.Add(scoutHost);
-                host.ScoutHost.Add(scoutHost);
-                scoutTeam.Role = "host captain";
-
-                _dbContext.Teams.Update(team);
-                _dbContext.Scouts.Update(hostCaptain);
-                _dbContext.Hosts.Add(host);
-                _dbContext.ScoutHost.Add(scoutHost);
-                _dbContext.ScoutTeam.Update(scoutTeam);
-                _dbContext.SaveChanges();
+                    return Redirect("addhost");
+                }
             }
 
             List<Scout> scoutsFromTheTeamThatAreNotInAnyHostFromTheTeam =
@@ -303,7 +395,42 @@ namespace moja_druzyna.Controllers
             return View(hostsViewModel);
         }
 
+        [Authorize(Roles = "captain,vice captain")]
+        public IActionResult AddHost()
+        {
+            Team team = _dbContext.Teams.Find(sessionAccesser.CurrentTeamId);
+            Scout hostCaptain = _dbContext.Scouts.Find(sessionAccesser.AddedHostCaptainPesel);
+            Host host = new Host() { Name = sessionAccesser.AddedHostName, Team = team, TeamIdTeam = team.IdTeam };
+            ScoutHost scoutHost = new ScoutHost()
+            {
+                Host = host,
+                HostIdHost = host.IdHost,
+                Scout = hostCaptain,
+                ScoutPeselScout = hostCaptain.PeselScout,
+                Role = "captain"
+            };
+            ScoutTeam scoutTeam = _dbContext.ScoutTeam
+                .Where(_scoutTeam => _scoutTeam.ScoutPeselScout == hostCaptain.PeselScout && _scoutTeam.TeamIdTeam == team.IdTeam)
+                .First();
+
+            team.Hosts.Add(host);
+            team.ScoutTeam.Add(scoutTeam);
+            hostCaptain.ScoutHost.Add(scoutHost);
+            host.ScoutHost.Add(scoutHost);
+            scoutTeam.Role = "host captain";
+
+            _dbContext.Teams.Update(team);
+            _dbContext.Scouts.Update(hostCaptain);
+            _dbContext.Hosts.Add(host);
+            _dbContext.ScoutHost.Add(scoutHost);
+            _dbContext.ScoutTeam.Update(scoutTeam);
+            _dbContext.SaveChanges();
+
+            return Redirect("hosts");
+        }
+
         [HttpPost]
+        [Authorize(Roles = "captain")]
         public IActionResult DeleteHost(int hostId)
         {
             List<Host> hostsInTheTeam = modelManager.GetListOfHostsFromATeam(sessionAccesser.CurrentTeamId);
@@ -331,6 +458,8 @@ namespace moja_druzyna.Controllers
 
         public IActionResult Host()
         {
+            ViewBag.UserRole = modelManager.GetScoutRoleInATeam(sessionAccesser.UserPesel, sessionAccesser.CurrentTeamId);
+            ViewBag.UserRoleInTheHost = modelManager.GetUserRoleInAHost(sessionAccesser.UserPesel, sessionAccesser.CurrentHostId);
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
             ViewBag.HostName = sessionAccesser.CurrentHostName;
 
@@ -346,6 +475,7 @@ namespace moja_druzyna.Controllers
             List<ScoutHost> scoutHosts = 
                 _dbContext.ScoutHost.Where(scoutHost => scoutHost.HostIdHost == sessionAccesser.CurrentHostId).ToList();
 
+
             foreach (var scout in scoutsFromTheTeamThatAreNotInAnyHostFromTheTeam)
             {
                 dropDownList_Scouts.Add(new SelectListItem
@@ -360,10 +490,15 @@ namespace moja_druzyna.Controllers
                 bool isHostCaptain = scoutHosts.Where(scoutHost => scoutHost.ScoutPeselScout == scout.PeselScout)
                         .First()
                         .Role == "captain";
+                string rank = null;
+
+                if (_dbContext.ScoutRanks.Where(scoutRank => scoutRank.ScoutPeselScout == scout.PeselScout).Count() != 0)
+                    rank = _dbContext.ScoutRanks.Where(scoutRank => scoutRank.ScoutPeselScout == scout.PeselScout && scoutRank.IsCurrent).First().RankName;
 
                 hostViewModel_Scouts.Add(new HostViewModel_Scout()
                 {
                     IdentityId = scout.IdentityId,
+                    Rank = rank,
                     Title = string.Format("{0} {1}", scout.Surname, scout.Name),
                     IsHostCaptain = isHostCaptain
                 });
@@ -385,18 +520,27 @@ namespace moja_druzyna.Controllers
                 sessionAccesser.CurrentHostName = _dbContext.Hosts.Find(hostId).Name;
             }
 
-            List<ScoutHost> scoutHosts = _dbContext.ScoutHost.Where(scoutHost => scoutHost.HostIdHost == hostId).ToList();
+            if (hostViewModel != null && hostViewModel.AddedScoutPesel != null)
+                return RedirectToAction("addscouttohost", hostViewModel);
+
+            return Redirect("host");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "captain,vice captain,host captain")]
+        public IActionResult AddScoutToHost(HostViewModel hostViewModel)
+        {
+            List<ScoutHost> scoutHosts = _dbContext.ScoutHost.Where(scoutHost => scoutHost.HostIdHost == sessionAccesser.CurrentHostId).ToList();
             List<Scout> scoutsInTheHost = _dbContext.Scouts
                 .Where(scout => scoutHosts.Select(scoutHost => scoutHost.ScoutPeselScout)
                     .ToList()
                     .Contains(scout.PeselScout))
                 .ToList();
 
-            List<string> peselsOfScoutsFromTheTeamThatAreNotInAnyHostFromTheTeam = 
+            List<string> peselsOfScoutsFromTheTeamThatAreNotInAnyHostFromTheTeam =
                 modelManager.GetScoutsFromATeamThatAreNotInAnyHostFromTheTeam(sessionAccesser.CurrentTeamId)
                     .Select(scout => scout.PeselScout)
                     .ToList();
-
 
             if (hostViewModel != null && hostViewModel.AddedScoutPesel != null && peselsOfScoutsFromTheTeamThatAreNotInAnyHostFromTheTeam.Contains(hostViewModel.AddedScoutPesel))
             {
@@ -405,7 +549,7 @@ namespace moja_druzyna.Controllers
                 ScoutHost newScoutHost = new ScoutHost()
                 {
                     Host = host,
-                    HostIdHost = hostId,
+                    HostIdHost = sessionAccesser.CurrentHostId,
                     Scout = addedScout,
                     ScoutPeselScout = addedScout.PeselScout,
                     Role = "scout"
@@ -419,11 +563,12 @@ namespace moja_druzyna.Controllers
                 _dbContext.ScoutHost.Add(newScoutHost);
                 _dbContext.SaveChanges();
             }
-            
+
             return Redirect("host");
         }
 
         [HttpPost]
+        [Authorize(Roles = "captain,vice captain,host captain")]
         public IActionResult RemoveScoutFromHost(string scoutId)
         {
             Scout removedScout = _dbContext.Scouts.Where(scout => scout.IdentityId == scoutId).First();

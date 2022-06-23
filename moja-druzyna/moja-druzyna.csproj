@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FreeSpire.PDF" Version="8.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.16" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.17" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.17" />
@@ -18,10 +19,28 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="SkiaSharp" Version="2.88.0" />
+    <PackageReference Include="System.Buffers" Version="4.5.1" />
+    <PackageReference Include="System.Memory" Version="4.5.5" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="wwwroot\icons\navigation\nav-hamburger.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+
+    <Folder Include="src\" />
+
+    <Folder Include="wwwroot\views\home\" />
+    <Reference Include="Spire.License">
+      <HintPath>..\..\..\..\..\Program Files (x86)\e-iceblue\Spire.Pdf-Fe\Bin\NET5.0\Spire.License.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Pdf">
+      <HintPath>..\..\..\..\..\Program Files (x86)\e-iceblue\Spire.Pdf-Fe\Bin\NET5.0\Spire.Pdf.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

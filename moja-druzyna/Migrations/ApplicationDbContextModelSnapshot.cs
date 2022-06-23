@@ -497,6 +497,59 @@ namespace moja_druzyna.Migrations
                     b.ToTable("host");
                 });
 
+            modelBuilder.Entity("moja_druzyna.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Contents")
+                        .HasMaxLength(12000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("moja_druzyna.Models.OrderInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ScoutPeselScout")
+                        .HasColumnType("nvarchar(11)");
+
+                    b.Property<int>("TeamIdTeam")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ScoutPeselScout");
+
+                    b.HasIndex("TeamIdTeam");
+
+                    b.ToTable("OrderInfos");
+                });
+
             modelBuilder.Entity("moja_druzyna.Models.Parent", b =>
                 {
                     b.Property<string>("Pesel")
@@ -968,6 +1021,31 @@ namespace moja_druzyna.Migrations
                         .HasForeignKey("TeamIdTeam")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("moja_druzyna.Models.OrderInfo", b =>
+                {
+                    b.HasOne("moja_druzyna.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("moja_druzyna.Models.Scout", "Scout")
+                        .WithMany()
+                        .HasForeignKey("ScoutPeselScout");
+
+                    b.HasOne("moja_druzyna.Models.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamIdTeam")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Scout");
 
                     b.Navigation("Team");
                 });

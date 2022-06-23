@@ -30,8 +30,8 @@
                 </div>
                 <div id="sidebar-content" class="font-muddy-black medium-regular">
                     <div id="navigations">
-                        <div id="sidebar-profile" class="muddy-white-2">
-                            <div id="sidebar-section-header" class="light-gray paragraph-regular">
+                        <div id="sidebar-profile" class="muddy-white-2 pb-8px small-shadow">
+                            <div id="sidebar-section-header" class="light-gray paragraph-regular small-shadow">
                                 <img src="~/icons/main/person.svg" id="navigations-icon" />
                                 <div id="sidebar-section-header-text">
                                     <a class="text-dark" asp-controller="profile" asp-action="personaldata">
@@ -75,28 +75,21 @@
                                 </a>
                             </div>
                         </div>
-                        <div id="sidebar-reports" class="muddy-white-2">
-                            <div id="sidebar-section-header" class="light-gray paragraph-regular">
+                        <div id="sidebar-reports" class="muddy-white-2 pb-8px small-shadow">
+                            <div id="sidebar-section-header" class="light-gray paragraph-regular small-shadow">
                                 <img src="~/icons/main/sticky note.svg" id="navigations-icon" />
                                 <div id="sidebar-section-header-text">
                                     Raporty
                                 </div>
                             </div>
                             <div id="navigations-item-first">
-                                1
-                            </div>
-                            <div id="navigations-item-next">
-                                2
-                            </div>
-                            <div id="navigations-item-next">
-                                3
-                            </div>
-                            <div id="navigations-item-next">
-                                4
+                                <a class="text-dark" asp-controller="documentsgenerators" asp-action="orders">
+                                        Rozkazy
+                                </a>
                             </div>
                         </div>
-                        <div id="sidebar-team" class="muddy-white-2">
-                            <div id="sidebar-section-header" class="light-gray paragraph-regular">
+                        <div id="sidebar-team" class="muddy-white-2 pb-8px small-shadow">
+                            <div id="sidebar-section-header" class="light-gray paragraph-regular small-shadow">
                                 <img src="~/icons/main/flag.svg" id="navigations-icon" />
                                 <div id="sidebar-section-header-text">
                                     <a class="text-dark" asp-controller="team" asp-action="team">
@@ -114,15 +107,9 @@
                                     Moje zastępy
                                 </a>
                             </div>
-                            <div id="navigations-item-next">
-                                3
-                            </div>
-                            <div id="navigations-item-next">
-                                4
-                            </div>
                         </div>
-                        <div id="sidebar-ranking" class="muddy-white-2">
-                            <div id="sidebar-section-header" class="light-gray paragraph-regular">
+                        <div id="sidebar-ranking" class="muddy-white-2 pb-8px small-shadow">
+                            <div id="sidebar-section-header" class="light-gray paragraph-regular small-shadow">
                                 <img src="~/icons/main/cup.svg" id="navigations-icon" />
                                 <div id="sidebar-section-header-text">
                                     Ranking
@@ -133,12 +120,6 @@
                             </div>
                             <div id="navigations-item-next">
                                 Zasady
-                            </div>
-                            <div id="navigations-item-next">
-                                3
-                            </div>
-                            <div id="navigations-item-next">
-                                4
                             </div>
                         </div>
                     </div>

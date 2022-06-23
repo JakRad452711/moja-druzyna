@@ -5,13 +5,15 @@ using System.Security.Claims;
 
 namespace moja_druzyna.Data.Session
 {
-    public class SessionAccesser : ISessionUserContext, ISessionTeamContext
+    public class SessionAccesser : ISessionUserContext, ISessionTeamContext, ISessionAddHostContext
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         private readonly string sessionUserContextName = "UserContext";
         private readonly string sessionTeamContextName = "TeamContext";
+        private readonly string sessionFormOrderContextName = "FormOrderContext";
+        private readonly string sessionAddHostContextName = "AddHostContext";
         
         public SessionAccesser(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor)
         {
@@ -28,6 +30,8 @@ namespace moja_druzyna.Data.Session
         {
             InitializeSessionUserContext(httpContextAccessor);
             InitializeSessionTeamContext(httpContextAccessor);
+            InitializeSessionFormOrderContext(httpContextAccessor);
+            InitializeSessionAddHostContext(httpContextAccessor);
         }
 
         public string UserId
@@ -110,6 +114,26 @@ namespace moja_druzyna.Data.Session
             }
         }
 
+        public string CurrentScoutId
+        {
+            get
+            {
+                ISessionTeamContext sessionTeamContext = JsonConvert
+                    .DeserializeObject<SessionTeamContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionTeamContextName));
+
+                return sessionTeamContext.CurrentScoutId;
+            }
+            set
+            {
+                ISessionTeamContext sessionTeamContext = JsonConvert
+                    .DeserializeObject<SessionTeamContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionTeamContextName));
+
+                sessionTeamContext.CurrentScoutId = value;
+
+                _httpContextAccessor.HttpContext.Session.SetString(sessionTeamContextName, JsonConvert.SerializeObject(sessionTeamContext));
+            }
+        }
+
         public string CurrentTeamName
         {
             get
@@ -150,6 +174,63 @@ namespace moja_druzyna.Data.Session
             }
         }
 
+        public string AddedHostName
+        {
+            get
+            {
+                ISessionAddHostContext sessionAddHostcontext = JsonConvert
+                    .DeserializeObject<SessionAddHostContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionAddHostContextName));
+
+                return sessionAddHostcontext.AddedHostName;
+            }
+            set
+            {
+                ISessionAddHostContext sessionAddHostContext = JsonConvert
+                    .DeserializeObject<SessionAddHostContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionAddHostContextName));
+
+                sessionAddHostContext.AddedHostName = value;
+
+                _httpContextAccessor.HttpContext.Session.SetString(sessionAddHostContextName, JsonConvert.SerializeObject(sessionAddHostContext));
+            }
+        }
+
+        public string AddedHostCaptainPesel
+        {
+            get
+            {
+                ISessionAddHostContext sessionAddHostContext = JsonConvert
+                    .DeserializeObject<SessionAddHostContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionAddHostContextName));
+
+                return sessionAddHostContext.AddedHostCaptainPesel;
+            }
+            set
+            {
+                ISessionAddHostContext sessionAddHostContext = JsonConvert
+                    .DeserializeObject<SessionAddHostContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionAddHostContextName));
+
+                sessionAddHostContext.AddedHostCaptainPesel = value;
+
+                _httpContextAccessor.HttpContext.Session.SetString(sessionAddHostContextName, JsonConvert.SerializeObject(sessionAddHostContext));
+            }
+        }
+
+        public SessionFormOrderContext FormOrder
+        {
+            get
+            {
+                SessionFormOrderContext sessionFormOrderContext = JsonConvert
+                    .DeserializeObject<SessionFormOrderContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionFormOrderContextName));
+
+                return sessionFormOrderContext;
+            }
+            set
+            {
+                SessionFormOrderContext sessionFormOrderContext = value;
+
+                _httpContextAccessor.HttpContext.Session.SetString(sessionFormOrderContextName, JsonConvert.SerializeObject(sessionFormOrderContext));
+            }
+        }
+
         public void InitializeSessionUserContext(IHttpContextAccessor httpContextAccessor)
         {
             if (httpContextAccessor.HttpContext.Session.GetString(sessionUserContextName) != null)
@@ -185,6 +266,24 @@ namespace moja_druzyna.Data.Session
             };
 
             httpContextAccessor.HttpContext.Session.SetString(sessionTeamContextName, JsonConvert.SerializeObject(sessionTeamContext));
+        }
+
+        public void InitializeSessionAddHostContext(IHttpContextAccessor httpContextAccessor)
+        {
+            if (httpContextAccessor.HttpContext.Session.GetString(sessionAddHostContextName) != null)
+                return;
+
+            ISessionAddHostContext sessionAddHostContext = new SessionAddHostContext();
+
+            httpContextAccessor.HttpContext.Session.SetString(sessionAddHostContextName, JsonConvert.SerializeObject(sessionAddHostContext));
+        }
+
+        public void InitializeSessionFormOrderContext(IHttpContextAccessor httpContextAccessor)
+        {
+            if (httpContextAccessor.HttpContext.Session.GetString(sessionFormOrderContextName) != null)
+                return;
+
+            httpContextAccessor.HttpContext.Session.SetString(sessionFormOrderContextName, JsonConvert.SerializeObject(new SessionFormOrderContext()));
         }
     }
 }

@@ -1,0 +1,102 @@
+﻿@model moja_druzyna.ViewModels.DocumentsGenerators.ReprimendsAndPraisesViewModel
+
+@{
+    ViewData["Title"] = "rozkazy - pochwały, wyróżnienia, nagany";
+}
+
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/views/documents-generators/Orders.css" asp-append-version="true" />
+<div class="text-center justify-content-center display-flex" style="min-width:650px">
+    <form asp-action="reprimendsandpraises">
+        <div class="display-flex justify-content-center mb-32px">
+            <div class="mr-4px mt-4px">
+                <img src="~/icons/main/green/sticky note.svg" class="icon-size-32 mt-1px" />
+            </div>
+            <div class="font-dark-green header1-light">
+                @ViewBag.OrderName - pochwały, wyróżnienia, nagany
+            </div>
+        </div>
+        <div class="medium-light font-muddy-black mb-32px">
+            @ViewBag.TeamName <br />
+        </div>
+        <div class="display-flex justify-content-center">
+            <div class="clear-white big-shadow size-fit-content medium-light display-block mb-32px pr-16px pl-16px">
+                @if (ViewBag.AreThereScoutsToAdd == true)
+                {
+                    <div class="size-fit-content pl-16px pr-16px mb-16px">
+                        <div class="justify-content-center text-center list-item-width">
+                            <div class="large-light mb-16px">
+                                pochwały, wyróżnienia, nagany
+                            </div>
+                            <div class="display-flex width-fit-content align-items-end list-item-width">
+                                <div class="display-flex justify-content-center">
+                                    <div class="form-group">
+                                        <label class="input-box-width text-left">osoba</label> <br />
+                                        <select asp-for="AddedScoutId" class="input-box-width" asp-items="@ViewBag.DropDownList_Scouts"></select>
+                                    </div>
+                                </div>
+                                <div class="display-flex p-8px justify-content-center height-fit-content mb-8px">
+                                    <button asp-action="reprimendsandpraisesadd" class="round-corners-5px font-muddy-black no-border button-padding">dodaj wpis</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="display-flex justify-content-center mt-8px">
+                        <div class="muddy-white-2 small-shadow size-fit-content medium-light display-block mb-32px button-padding">
+                            <div class="b-4px">
+                                wszystkim osobom jakim można było został dodany wpis
+                            </div>
+                        </div>
+                    </div>
+                }
+                @for (int i = Model.ReprimendsAndPraises.Count() - 1; i >= 0; i--)
+                {
+                    <div class="muddy-white-2 small-shadow size-fit-content medium-light display-block mb-16px pr-16px pl-16px">
+                        <div class="justify-content-center text-left list-item-width">
+                            <div class="display-flex">
+                                <div class="large-light mb-8px min-width-fit-content">
+                                    @string.Format("{0} {1}", Model.ReprimendsAndPraises[i].ScoutName, Model.ReprimendsAndPraises[i].ScoutSurname)
+                                </div>
+                                <div class="width100p height-fit-content mt-2px" style="margin-right:-8px">
+                                    <div class="float-right">
+                                        <button asp-action="reprimendsandpraisesremove" name="scoutId" value=@Model.ReprimendsAndPraises[i].ScoutId class="no-border muddy-white-2 round-corners-5px">
+                                            <img src="~/icons/managment/remove.svg" class="icon-size-24" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="display-flex justify-content-between">
+                                <input asp-for=@Model.ReprimendsAndPraises[i].ScoutId class="input-box-width" hidden />
+                                <input asp-for=@Model.ReprimendsAndPraises[i].ScoutPesel class="input-box-width" hidden />
+                                <input asp-for=@Model.ReprimendsAndPraises[i].ScoutName class="input-box-width" hidden />
+                                <input asp-for=@Model.ReprimendsAndPraises[i].ScoutSurname class="input-box-width" hidden />
+                                <div class="form-group">
+                                    <label class="list-item-width text-left">rodzaj</label> <br />
+                                    <select asp-for=@Model.ReprimendsAndPraises[i].Type class="list-item-width" asp-items=@ViewBag.DropDownList_Types></select>
+                                </div>
+                            </div>
+                            <div class="display-flex justify-content-between">
+                                <div class="form-group">
+                                    <label class="list-item-width text-left">uzasadnienie</label> <br />
+                                    <textarea asp-for=@Model.ReprimendsAndPraises[i].Explanation class="list-item-width"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="display-flex p-8px pb-2px justify-content-center height-fit-content">
+                    <button type="submit" class="round-corners-5px button-padding font-dark-green border-dark-green mr-8px">zapisz</button>
+                    <button asp-action="reprimendsandpraisesrevert" class="round-corners-5px button-padding font-danger-red border-danger-red">przywróć ostatni zapis</button>
+                </div>
+                <div class="display-flex p-8px justify-content-center height-fit-content mb-8px">
+                    <button asp-action="ordergenerator" class="round-corners-5px button-padding no-border" style="width:216px">wróć do edytora rozkazu</button>
+                </div>
+            </div>
+        </div>
+        <div style="height: 60px">
+        </div>
+    </form>
+</div>

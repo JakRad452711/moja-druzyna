@@ -4,11 +4,9 @@ using Microsoft.Extensions.Logging;
 using moja_druzyna.Data;
 using moja_druzyna.Data.Session;
 using moja_druzyna.Models;
+using moja_druzyna.ViewModels;
 using System.Diagnostics;
 using System.Linq;
-using System.Collections.Generic;
-using System;
-using moja_druzyna.src;
 
 namespace moja_druzyna.Controllers
 {
@@ -18,6 +16,8 @@ namespace moja_druzyna.Controllers
         private readonly ILogger<ProfileController> _logger;
 
         private readonly SessionAccesser sessionAccesser;
+
+        private static AFormViewModel aFormViewModel = new AFormViewModel();
 
         public ProfileController(ApplicationDbContext dbContext, ILogger<ProfileController> logger, IHttpContextAccessor httpContextAccessor)
         {
@@ -29,81 +29,64 @@ namespace moja_druzyna.Controllers
 
         public IActionResult PersonalData()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             Scout userData = _dbContext.Scouts.Find(sessionAccesser.UserPesel);
+            bool hasAddress = _dbContext.Adresses.Where(address => address.ScoutPeselScout == sessionAccesser.UserPesel).Any();
+
+            if(hasAddress)
+            {
+                userData.Adress = _dbContext.Adresses.Where(address => address.ScoutPeselScout == sessionAccesser.UserPesel).First();
+            }
 
             return View(userData);
         }
 
         public IActionResult ServiceHistory()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
-
-            List<string> data = new List<string>();
-            data.Add("22222222222");
-            data.Add("98061485535");
-            data.Add("03313088369");
-            data.Add("01111111111");
-            data.Add("123456");
-            data.Add("XD123");
-            data.Add("abcdefghijk");
-
-            Test_Pesel test1 = new Test_Pesel();
-            foreach (string test in data)
-            {
-                _logger.LogInformation(test1.testPesel(test));
-            }
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             return View();
         }
 
         public IActionResult Ranks()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             return View();
         }
 
         public IActionResult Achievments()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             return View();
         }
 
         public IActionResult Roles()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             return View();
         }
 
         public IActionResult CoursesAndPermissions()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             return View();
         }
 
         public IActionResult GdprConsents()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             return View();
         }
 
         public IActionResult Privacy()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Redirect("/Identity/Account/Login");
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             return View();
         }
