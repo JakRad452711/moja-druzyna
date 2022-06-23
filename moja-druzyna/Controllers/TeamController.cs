@@ -201,6 +201,71 @@ namespace moja_druzyna.Controllers
             return View(scout);
         }
 
+        public IActionResult ScoutData()
+        {
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
+
+            string pesel = modelManager.GetScoutPesel(sessionAccesser.CurrentScoutId);
+            Scout scout = _dbContext.Scouts.Find(pesel);
+
+            return View(scout);
+        }
+
+        [HttpPost]
+        public IActionResult ScoutData(string scoutId)
+        {
+            sessionAccesser.CurrentScoutId = scoutId;
+
+            return Redirect("ScoutData");
+        }
+
+        public IActionResult ScoutAchievements()
+        {
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
+
+            string pesel = modelManager.GetScoutPesel(sessionAccesser.CurrentScoutId);
+            Scout scout = _dbContext.Scouts.Find(pesel);
+
+            ViewBag.ScoutTitle = string.Format("{0} {1} - osiągnięcia", scout.Name, scout.Surname);
+
+            List<ScoutRank> scoutRanks = _dbContext.ScoutRanks
+                .Where(scoutRank => scoutRank.ScoutPeselScout == pesel)
+                .ToList();
+
+            List<ScoutAchievement> scoutAchievements = _dbContext.ScoutAchievements
+                .Where(scoutAchievement => scoutAchievement.ScoutPeselScout == pesel)
+                .ToList();
+
+            List<ScoutAchievementsViewModel> scoutAchievementsViewModels = new();
+
+            foreach (ScoutRank scoutRank in scoutRanks)
+            {
+                scoutAchievementsViewModels.Add(
+                    new ScoutAchievementsViewModel()
+                    {
+                        Type = "rank",
+                        Rank = scoutRank.RankName,
+                        AcquirementTime = scoutRank.DateAcquirement,
+                    });
+            }
+
+            foreach(ScoutAchievement scoutAchievement in scoutAchievements)
+            {
+                Achievement achievement = _dbContext.Achievements.Find(scoutAchievement.AchievementIdAchievement);
+                scoutAchievementsViewModels.Add(
+                    new ScoutAchievementsViewModel()
+                    {
+                        Type = "ability",
+                        Achievement = achievement.Type,
+                        AcquirementTime = scoutAchievement.Date
+                    });
+
+                _logger.LogInformation(achievement.Type);
+            }
+
+            return View(scoutAchievementsViewModels.OrderByDescending(scoutAchievementVM => scoutAchievementVM.AcquirementTime).ToList());
+        }
+
         public IActionResult Hosts()
         {
             ViewBag.UserRole = modelManager.GetScoutRoleInATeam(sessionAccesser.UserPesel, sessionAccesser.CurrentTeamId);

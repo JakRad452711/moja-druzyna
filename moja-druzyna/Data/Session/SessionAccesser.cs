@@ -114,6 +114,26 @@ namespace moja_druzyna.Data.Session
             }
         }
 
+        public string CurrentScoutId
+        {
+            get
+            {
+                ISessionTeamContext sessionTeamContext = JsonConvert
+                    .DeserializeObject<SessionTeamContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionTeamContextName));
+
+                return sessionTeamContext.CurrentScoutId;
+            }
+            set
+            {
+                ISessionTeamContext sessionTeamContext = JsonConvert
+                    .DeserializeObject<SessionTeamContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionTeamContextName));
+
+                sessionTeamContext.CurrentScoutId = value;
+
+                _httpContextAccessor.HttpContext.Session.SetString(sessionTeamContextName, JsonConvert.SerializeObject(sessionTeamContext));
+            }
+        }
+
         public string CurrentTeamName
         {
             get

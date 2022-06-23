@@ -92,6 +92,9 @@
                         @teamVM.Host
                     </div>
                     <div class="display-flex width-1d mt-8px mr-16px">
+                        <button id="manage-icon" name="scoutId" asp-controller="team" asp-action="scoutdata" formmethod="post" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px">
+                            <img src="~/icons/managment/show.svg" class="icon-size-24" />
+                        </button>
                         @if (ViewBag.UserRole == "captain")
                         {
                             <button id="manage-icon" name="scoutId" asp-controller="team" asp-action="editscout" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px">

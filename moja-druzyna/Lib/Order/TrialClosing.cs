@@ -1,4 +1,5 @@
-﻿using moja_druzyna.Data;
+﻿using Microsoft.Extensions.Logging;
+using moja_druzyna.Data;
 using moja_druzyna.Models;
 using System;
 using System.Collections.Generic;
@@ -37,7 +38,7 @@ namespace moja_druzyna.Lib.Order
                 .Where(scoutAchievement => scoutAchievement.AchievementIdAchievement == int.Parse(Ability) && scoutAchievement.ScoutPeselScout == ScoutPesel)
                 .Count() != 0;
 
-            if (!execute || !scoutExistsInTheTeam || ((!rankExists || scoutHasTheRank) && TrialType == "rank") || ((!abilityExists || scoutHasTheRank) && TrialType == "ability"))
+            if (!execute || !scoutExistsInTheTeam || ((!rankExists || scoutHasTheRank) && TrialType == "rank") || ((!abilityExists || scoutHasTheAbility) && TrialType == "ability"))
                 return false;
 
             Scout scout = dbContext.Scouts.Find(ScoutPesel);
@@ -93,12 +94,13 @@ namespace moja_druzyna.Lib.Order
                     Scout = scout,
                     ScoutPeselScout = ScoutPesel,
                     Achievement = achievement,
-                    AchievementIdAchievement = achievement.IdAchievement,
                     Date = DateTime.Now
                 };
-
+                
                 dbContext.ScoutAchievements.Add(scoutAchievement);
                 dbContext.SaveChanges();
+
+                return true;
             }
 
             return false;
