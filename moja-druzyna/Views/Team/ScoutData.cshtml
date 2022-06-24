@@ -69,7 +69,6 @@
                         Adres<br />
                     </div>
                     <br />
-                    Adres zamieszkania:<br />
                     Ulica:<br />
                     Numer domu/bloku:<br />
                     Miasto:<br />
@@ -83,12 +82,11 @@
                         <br />
                     </div>
                     <br />
-                    Adres zamieszkania <br />
-                    Ulica <br />
-                    Numer domu/bloku <br />
-                    Miasto <br />
-                    Kod pocztowy <br />
-                    Kraj <br />
+                    @Html.ValueFor(user => user.Adress.StreetZam) <br />
+                    @Html.ValueFor(user => user.Adress.NumberHouseZam) <br />
+                    @Html.ValueFor(user => user.Adress.CityZam) <br />
+                    @Html.ValueFor(user => user.Adress.ZipZam) <br />
+                    @Html.ValueFor(user => user.Adress.CountryZam)<br>
                 </div>
             </div>
         </div>
@@ -129,9 +127,8 @@
                         Adres korespondencji<br />
                     </div>
                     <div style="width:300px;line-height:42px;">
-                        <input type="checkbox" /> Taki sam jak zamieszkania <br />
+                        <input type="checkbox" hidden/> <br />
                     </div>
-                    Adres zamieszkania:<br />
                     Ulica:<br />
                     Numer domu/bloku:<br />
                     Miasto:<br />
@@ -147,15 +144,11 @@
                     <div style="line-height:42px">
                         <br />
                     </div>
-                    @Html.DisplayFor(user => user.Name) <br />
-                    @if (Model.SecondName == null)
-                    {<a>n/a</a> }
-                    else
-                    { <a>@Model.SecondName</a>} <br />
-                    @Html.DisplayFor(user => user.Surname) <br />
-                    @Html.DisplayFor(user => user.PeselScout) <br />
-                    @Html.DisplayFor(user => user.DateOfBirth) <br />
-                    @Html.DisplayFor(user => user.Nationality) <br />
+                    @Html.ValueFor(user => user.Adress.StreetKor) <br />
+                    @Html.ValueFor(user => user.Adress.NumberHouseKor) <br />
+                    @Html.ValueFor(user => user.Adress.CityKor) <br />
+                    @Html.ValueFor(user => user.Adress.ZipKor) <br />
+                    @Html.ValueFor(user => user.Adress.CountryKor)<br>
                 </div>
             </div>
         </div>

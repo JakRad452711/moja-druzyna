@@ -201,12 +201,20 @@ namespace moja_druzyna.Controllers
             return View(scout);
         }
 
+        [Authorize(Roles = "captain,vice captain")]
         public IActionResult ScoutData()
         {
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             string pesel = modelManager.GetScoutPesel(sessionAccesser.CurrentScoutId);
             Scout scout = _dbContext.Scouts.Find(pesel);
+
+            bool hasAddress = _dbContext.Adresses.Where(address => address.ScoutPeselScout == sessionAccesser.UserPesel).Any();
+
+            if (hasAddress)
+            {
+                scout.Adress = _dbContext.Adresses.Where(address => address.ScoutPeselScout == sessionAccesser.UserPesel).First();
+            }
 
             return View(scout);
         }
