@@ -27,7 +27,7 @@
             {
                 <div class="font-dark-green mb-8px">
                     edycja osoby powiodła się <br />
-                    <button asp-action="team" class="round-corners-5px button-padding no-border mt-4px">wróć</button>
+                    <button asp-action="team" formmethod="get" class="round-corners-5px button-padding no-border mt-4px">wróć</button>
                 </div>
             }
             @if (ViewBag.scoutEditionFailed == true)
@@ -138,7 +138,7 @@
             </div>
             <div class="display-flex p-8px justify-content-center">
                 <button type="submit" class="round-corners-5px font-dark-green border-dark-green button-padding mr-16px">edytuj</button>
-                <button asp-action="team" class="round-corners-5px font-danger-red border-danger-red button-padding">anuluj</button>
+                <button asp-action="team" formmethod="get" class="round-corners-5px font-danger-red border-danger-red button-padding">anuluj</button>
             </div>
         </div>
         <div style="height: 120px">
