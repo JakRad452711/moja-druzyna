@@ -1,4 +1,5 @@
-﻿@model moja_druzyna.ViewModels.Team.HostsViewModel
+﻿@using moja_druzyna.Const;
+@model moja_druzyna.ViewModels.Team.HostsViewModel
 
 @{
     ViewData["Title"] = "moje zastępy";
@@ -19,35 +20,31 @@
         <div class="list-item-width medium-light font-muddy-black mb-32px">
             @ViewBag.TeamName <br />
         </div>
-        @if (ViewBag.DropDownList_Scouts.Count > 0)
+        @if (ViewBag.DropDownList_Scouts.Count > 0 && (ViewBag.UserRole == TeamRoles.Captain || ViewBag.UserRole == TeamRoles.ViceCaptain))
         {
-            @if (ViewBag.UserRole == "captain")
-            {
-                <div class="display-flex justify-content-center">
-                    <div class="clear-white big-shadow size-fit-content medium-light display-block mb-32px">
-                        <div class="large-light mb-16px">
-                            dodaj zastęp
-                        </div>
-                        <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
-                            <div class="form-group">
-                                <label asp-for="addedHostName" class="input-box-width text-left">nazwa zastępu</label> <br />
-                                <input asp-for="addedHostName" class="input-box-width" /><br />
-                                <span asp-validation-for="addedHostName" class="input-box-width text-left text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
-                            <div class="form-group">
-                                <label asp-for="hostCaptainPesel" class="input-box-width text-left">zastępowy</label> <br />
-                                <select asp-for="hostCaptainPesel" class="input-box-width" asp-items="@ViewBag.DropDownList_Scouts"></select>
-                            </div>
-                        </div>
-                        <div class="display-flex p-8px justify-content-center width-100p">
-                            <button type="submit" class="round-corners-5px font-muddy-black button-padding">dodaj</button>
+            <div class="display-flex justify-content-center">
+                <div class="clear-white big-shadow size-fit-content medium-light display-block mb-32px">
+                    <div class="large-light mb-16px">
+                        dodaj zastęp
+                    </div>
+                    <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
+                        <div class="form-group">
+                            <label asp-for="addedHostName" class="input-box-width text-left">nazwa zastępu</label> <br />
+                            <input asp-for="addedHostName" class="input-box-width" /><br />
+                            <span asp-validation-for="addedHostName" class="input-box-width text-left text-danger"></span>
                         </div>
                     </div>
+                    <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
+                        <div class="form-group">
+                            <label asp-for="hostCaptainPesel" class="input-box-width text-left">zastępowy</label> <br />
+                            <select asp-for="hostCaptainPesel" class="input-box-width" asp-items="@ViewBag.DropDownList_Scouts"></select>
+                        </div>
+                    </div>
+                    <div class="display-flex p-8px justify-content-center width-100p">
+                        <button type="submit" class="round-corners-5px font-muddy-black button-padding">dodaj</button>
+                    </div>
                 </div>
-            }
-
+            </div>
         }
         else
         {

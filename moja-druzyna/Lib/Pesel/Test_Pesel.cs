@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace moja_druzyna.src
+namespace moja_druzyna.Lib.Pesel
 {
     public class Test_Pesel
     {
@@ -16,12 +16,14 @@ namespace moja_druzyna.src
                 bool male = p.isMale();
                 if (male == true)
                 {
-                    output  = output + "Płeć: Mężczyzna";
-                } else
+                    output = output + "Płeć: Mężczyzna";
+                }
+                else
                 {
                     output = output + "Płeć: Kobieta";
                 }
-            } else
+            }
+            else
             {
                 output = $"PESEL {data} jest niepoprawny!";
             }

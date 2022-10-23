@@ -1,6 +1,6 @@
 ﻿namespace moja_druzyna.Lib.Order
 {
-    public class TrialOpening
+    public class TrialOpening : IOrderElement
     {
         public string ScoutId { get; set; }
         public string ScoutPesel { get; set; }
@@ -10,5 +10,10 @@
         public string TrialName { get; set; }
         public string Rank { get; set; }
         public string Ability { get; set; }
+
+        public string GetScoutId()
+        {
+            return ScoutId;
+        }
     }
 }

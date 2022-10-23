@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace moja_druzyna.src
+namespace moja_druzyna.Lib.Pesel
 {
     public class Pesel
     {
@@ -27,7 +27,7 @@ namespace moja_druzyna.src
             }
             try
             {
-                long temp = System.Int64.Parse(PESEL);
+                long temp = long.Parse(PESEL);
                 return true;
             }
             catch { return false; }
@@ -55,10 +55,11 @@ namespace moja_druzyna.src
             if (d10 > 1)
             {
                 month = 10 * d10 + d1 - 20;
-            } else
+            }
+            else
             {
                 month = 10 * d10 + d1;
-            } 
+            }
             return month;
         }
 
@@ -84,7 +85,7 @@ namespace moja_druzyna.src
             int sum = 0;
             for (int i = 0; i < 10; i++)
             {
-                sum = sum + ((PESEL[i] - '0') * multipliers[i]);
+                sum = sum + (PESEL[i] - '0') * multipliers[i];
             }
             return sum % 10;
         }
@@ -99,11 +100,11 @@ namespace moja_druzyna.src
             else
             {
                 int rest = summary();
-                if (rest == 0 & (PESEL[10] - '0') != 0)
+                if (rest == 0 & PESEL[10] - '0' != 0)
                 {
                     valid = false;
                 }
-                else if ((PESEL[10] - '0') != 10 - rest)
+                else if (PESEL[10] - '0' != 10 - rest)
                 {
                     valid = false;
                 }
@@ -111,7 +112,7 @@ namespace moja_druzyna.src
                 {
                     valid = false;
                 }
-                else if (getMonth() == 4 | (getMonth() == 6 | (getMonth() == 9 | getMonth() == 11)))
+                else if (getMonth() == 4 | getMonth() == 6 | getMonth() == 9 | getMonth() == 11)
                 {
                     if (getDay() == 31)
                     {

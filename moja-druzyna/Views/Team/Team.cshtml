@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/views/team/Team.css" asp-append-version="true" />
 <div class="text-center justify-content-center display-flex" style="min-width:650px">
-    <form>
+    <form method="get">
         <div class="list-item-width display-flex justify-content-center mb-32px">
             <div class="mr-8px mt-4px">
                 <img src="~/icons/main/green/flag.svg" class="icon-size-32 mt-1px" />
@@ -33,7 +33,7 @@
                         </div>
                     </div>
                     <div class="display-flex pb-8px pt-2px justify-content-center width-100p">
-                        <button asp-action="teamchangename" class="round-corners-5px font-muddy-black button-padding">zmień</button>
+                        <button asp-action="teamchangename" asp-controller="team" formmethod="post" class="round-corners-5px font-muddy-black button-padding">zmień</button>
                     </div>
                 </div>
             </div>
@@ -100,7 +100,7 @@
                             <button id="manage-icon" name="scoutId" asp-controller="team" asp-action="editscout" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px">
                                 <img src="~/icons/managment/edit.svg" class="icon-size-24" />
                             </button>
-                            <button id="manage-icon" name="scoutId" asp-controller="team" asp-action="removescout" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px">
+                            <button id="manage-icon" name="scoutId" asp-controller="team" asp-action="removescout" formmethod="post" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px">
                                 <img src="~/icons/managment/delete.svg" class="icon-size-24" />
                             </button>
                         }
@@ -109,7 +109,7 @@
                             <button id="manage-icon" name="scoutId" asp-controller="team" asp-action="editscout" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px ">
                                 <img src="~/icons/managment/edit.svg" class="icon-size-24" />
                             </button>
-                            <button name="scoutId" asp-controller="team" asp-action="removescout" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px inactive" disabled>
+                            <button name="scoutId" asp-controller="team" asp-action="removescout" formmethod="post" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px inactive" disabled>
                                 <img src="~/icons/managment/delete.svg" class="icon-size-24" />
                             </button>
                         }

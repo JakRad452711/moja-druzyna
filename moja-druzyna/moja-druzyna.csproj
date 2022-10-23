@@ -32,8 +32,6 @@
 
   <ItemGroup>
 
-    <Folder Include="src\" />
-
     <Folder Include="wwwroot\views\home\" />
     <Reference Include="Spire.License">
       <HintPath>..\..\..\..\..\Program Files (x86)\e-iceblue\Spire.Pdf-Fe\Bin\NET5.0\Spire.License.dll</HintPath>

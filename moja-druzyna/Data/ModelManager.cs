@@ -1,4 +1,5 @@
-﻿using moja_druzyna.Models;
+﻿using moja_druzyna.Const;
+using moja_druzyna.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,94 +18,6 @@ namespace moja_druzyna.Data
         public bool ScoutPrimaryKeyIsAvailable(string pesel)
         {
             return _dbContext.Scouts.Where(_scout => _scout.PeselScout == pesel).Count() == 0;
-        }
-
-        public bool ScoutIsInTheTeam(string pesel, int teamId)
-        {
-            return _dbContext.ScoutTeam.Where(scoutTeam => scoutTeam.ScoutPeselScout == pesel && scoutTeam.TeamIdTeam == teamId).Count() > 0;
-        }
-
-        public string GetScoutPesel(string id)
-        {
-            return _dbContext.Scouts.Where(scout => scout.IdentityId == id).First().PeselScout;
-        }
-
-        public string GetScoutRoleInATeam(string scoutPesel, int teamId)
-        {
-            if (_dbContext.ScoutTeam.Where(scoutTeam => scoutTeam.ScoutPeselScout == scoutPesel && scoutTeam.TeamIdTeam == teamId).Count() == 0)
-                return null;
-
-            ScoutTeam scoutTeam = _dbContext.ScoutTeam
-                .Where(scoutTeam => scoutTeam.ScoutPeselScout == scoutPesel && scoutTeam.TeamIdTeam == teamId)
-                .First();
-
-            if (scoutTeam == null)
-                return null;
-
-            return scoutTeam.Role;
-        }
-
-        public Host GetScoutsHostFromATeam(string scoutPesel, int teamId)
-        {
-            List<int> idsOfHostsFromTheTeam = GetListOfHostsFromATeam(teamId).Select(host => host.IdHost).ToList();
-
-            if (idsOfHostsFromTheTeam == null || 
-                !_dbContext.ScoutHost
-                    .Where(scoutHost => idsOfHostsFromTheTeam.Contains(scoutHost.HostIdHost) && scoutHost.ScoutPeselScout == scoutPesel)
-                    .Any())
-                return null;
-
-            ScoutHost scoutHost = _dbContext.ScoutHost
-                .Where(scoutHost => idsOfHostsFromTheTeam.Contains(scoutHost.HostIdHost) && scoutHost.ScoutPeselScout == scoutPesel)
-                .First();
-            Host theHost = _dbContext.Hosts.Find(scoutHost.HostIdHost);
-
-            return theHost;
-        }
-
-        public string GetUserRoleInAHost(string userPesel, int hostId)
-        {
-            if (_dbContext.ScoutHost.Where(scoutHost => scoutHost.ScoutPeselScout == userPesel && scoutHost.HostIdHost == hostId).Count() == 0)
-                return null;
-
-            ScoutHost scoutHost = _dbContext.ScoutHost
-                .Where(scoutHost => scoutHost.ScoutPeselScout == userPesel && scoutHost.HostIdHost == hostId)
-                .First();
-
-            return scoutHost.Role;
-        }
-
-        public void CreateScoutAccount(int teamId, Scout scout)
-        {
-            if (!ScoutPrimaryKeyIsAvailable(scout.PeselScout))
-                throw new ArgumentException("CreateScoutAccount: scout with such primary key already exists");
-
-            Team team = _dbContext.Teams.Find(teamId);
-            ScoutTeam newScoutTeam = new() { Role = "scout", Scout = scout, ScoutPeselScout = scout.PeselScout, Team = team, TeamIdTeam = team.IdTeam };
-            Parent parent = scout.Parent;
-            Address address = scout.Adress;
-
-            if(parent == null)
-            {
-                List<Scout> scouts = new List<Scout>();
-                scouts.Add(scout);
-
-                parent = new Parent() { Pesel = scout.PeselScout, Scouts = scouts };
-            }
-
-            if (address == null)
-            {
-                address = new Address() { Scout = scout, ScoutPeselScout = scout.PeselScout, Parent = parent, ParentPesel = parent.Pesel };
-            }
-            
-
-            scout.Adress = address;
-
-            _dbContext.Scouts.Add(scout);
-            _dbContext.ScoutTeam.Add(newScoutTeam);
-            _dbContext.Adresses.Add(address);
-            _dbContext.Parents.Add(parent);
-            _dbContext.SaveChanges();
         }
 
         public void CreateScoutCaptainWithTeam(Scout scoutCaptain)
@@ -154,137 +67,69 @@ namespace moja_druzyna.Data
             _dbContext.SaveChanges();
         }
 
-        public void EditScout(Scout newScout)
+#warning temporary solution
+        public void InitializeDbValues()
         {
-            Scout oldScout = _dbContext.Scouts.Find(newScout.PeselScout);
+            if (_dbContext.Achievements.Any() && _dbContext.Ranks.Any())
+                return;
 
-            if (newScout.Name != null)
-                oldScout.Name = newScout.Name;
-            if (newScout.Surname != null)
-                oldScout.Surname = newScout.Surname;
-            if (newScout.SecondName != null)
-                oldScout.SecondName = newScout.SecondName;
-            if (newScout.MembershipNumber != null)
-                oldScout.MembershipNumber = newScout.MembershipNumber;
-            if (newScout.DateOfBirth != null)
-                oldScout.DateOfBirth = newScout.DateOfBirth;
-            if (newScout.Nationality != null)
-                oldScout.Nationality = newScout.Nationality;
-            oldScout.Ns = newScout.Ns;
-            if (newScout.DateOfEntry != null)
-                oldScout.DateOfEntry = newScout.DateOfEntry;
-            if (newScout.DateOfLeaving != null)
-                oldScout.DateOfLeaving = newScout.DateOfLeaving;
-
-            if (newScout.Adress != null)
+            List<string> achievementNames = new List<string>()
             {
-                Address address = _dbContext.Adresses.Where(_address => _address.ScoutPeselScout == newScout.PeselScout).First();
+                ScoutAbilities.Hygenist,
+                ScoutAbilities.Paramedic,
+                ScoutAbilities.Lifesaver,
+                ScoutAbilities.Glimmer,
+                ScoutAbilities.FireGuard,
+                ScoutAbilities.FireplaceMaster,
+                ScoutAbilities.DrillExpert,
+                ScoutAbilities.DrillMaster,
+                ScoutAbilities.Needle,
+                ScoutAbilities.Tailor,
+                ScoutAbilities.YoungSwimmer,
+                ScoutAbilities.Swimmer,
+                ScoutAbilities.ExcellentSwimmer,
+                ScoutAbilities.Internaut,
+                ScoutAbilities.FamilyHistorian,
+                ScoutAbilities.European,
+                ScoutAbilities.HealthLeader,
+                ScoutAbilities.NatureFriend,
+                ScoutAbilities.Photograph
+            };
 
-                if (newScout.Adress.AddressKor != null)
-                    address.AddressKor = newScout.Adress.AddressKor;
-                if (newScout.Adress.CityKor != null)
-                    address.CityKor = newScout.Adress.CityKor;
-                if (newScout.Adress.CountryKor != null)
-                    address.CountryKor = newScout.Adress.CountryKor;
-                if (newScout.Adress.NumberHouseKor != null)
-                    address.NumberHouseKor = newScout.Adress.NumberHouseKor;
-                if (newScout.Adress.StreetKor != null)
-                    address.StreetKor = newScout.Adress.StreetKor;
-                if (newScout.Adress.ZipKor != null)
-                    address.ZipKor = newScout.Adress.ZipKor;
-                if (newScout.Adress.AddressZam != null)
-                    address.AddressZam = newScout.Adress.AddressZam;
-                if (newScout.Adress.CityZam != null)
-                    address.CityZam = newScout.Adress.CityZam;
-                if (newScout.Adress.CountryZam != null)
-                    address.CountryZam = newScout.Adress.CountryZam;
-                if (newScout.Adress.NumberHouseZam != null)
-                    address.NumberHouseZam = newScout.Adress.NumberHouseZam;
-                if (newScout.Adress.StreetZam != null)
-                    address.StreetZam = newScout.Adress.StreetZam;
-                if (newScout.Adress.ZipZam != null)
-                    address.ZipZam = newScout.Adress.ZipZam;
+            List<string> rankNames = new List<string>()
+            {
+                ScoutRanks.Rank1,
+                ScoutRanks.Rank2,
+                ScoutRanks.Rank3,
+                ScoutRanks.Rank4,
+                ScoutRanks.Rank5,
+                ScoutRanks.Rank6,
+            };
 
-                _dbContext.Adresses.Update(address);
+            foreach (string name in achievementNames)
+            {
+                Achievement achievement = new Achievement() { Type = name };
+
+                if (_dbContext.Achievements.FirstOrDefault(a => a.Type == achievement.Type) == null)
+                {
+                    _dbContext.Achievements.Add(achievement);
+                    _dbContext.SaveChanges();
+                }
             }
 
-            if (newScout.Parent != null)
+            foreach (string name in rankNames)
             {
-                Parent parent = _dbContext.Parents.Where(_parent => _parent.Pesel == newScout.ParentParentPesel).First();
+                Rank rank = new Rank()
+                {
+                    Name = name,
+                };
 
-                if (newScout.Parent.Adresses != null)
-                    parent.Adresses = newScout.Parent.Adresses;
-                if (newScout.Parent.Scouts != null)
-                    parent.Scouts = newScout.Parent.Scouts;
-                if (newScout.Parent.Name != null)
-                    parent.Name = newScout.Parent.Name;
-                if (newScout.Parent.Surname != null)
-                    parent.Name = newScout.Parent.Surname;
-
-                _dbContext.Parents.Update(parent);
+                if(_dbContext.Ranks.FirstOrDefault(r => r.Name == name) == null)
+                {
+                    _dbContext.Ranks.Add(rank);
+                    _dbContext.SaveChanges();
+                }
             }
-
-            _dbContext.Scouts.Update(oldScout);
-            _dbContext.SaveChanges();
-        }
-
-        public List<Scout> GetScoutsFromATeam(int teamId)
-        {
-            List<string> peselsOfScoutsThatAreInTheTeam= _dbContext.ScoutTeam
-                .Where(scoutTeam => scoutTeam.TeamIdTeam == teamId)
-                .Select(scoutTeam => scoutTeam.ScoutPeselScout)
-                .ToList();
-
-            return _dbContext.Scouts.Where(scout => peselsOfScoutsThatAreInTheTeam.Contains(scout.PeselScout)).ToList();
-        }
-
-        public List<Host> GetListOfHostsFromATeam(int teamId)
-        {
-            List<Host> hostsInTheTeam = _dbContext.Hosts
-                .Where(host => host.TeamIdTeam == teamId)
-                .ToList();
-
-            return hostsInTheTeam;
-        }
-
-        public List<Scout> GetScoutsFromAHost(int hostId)
-        {
-            List<string> peselsOfScoutsInTheHost = _dbContext.ScoutHost
-                .Where(scoutHost => scoutHost.HostIdHost == hostId)
-                .Select(scoutHost => scoutHost.ScoutPeselScout)
-                .ToList();
-            List<Scout> scoutsFromTheHost = _dbContext.Scouts
-                .Where(scout => peselsOfScoutsInTheHost
-                .Contains(scout.PeselScout))
-                .ToList();
-
-            return scoutsFromTheHost;
-        }
-
-        public List<Scout> GetScoutsFromATeamThatAreNotInAnyHostFromTheTeam(int teamId)
-        {
-            List<Host> hostsInTheTeam = _dbContext.Hosts
-                .Where(host => host.TeamIdTeam == teamId)
-                .ToList();
-            List<int> hostIdsInTheTeam = hostsInTheTeam.Select(host => host.IdHost).ToList();
-
-            List<Scout> scoutsInTheTeam = _dbContext.ScoutTeam
-                .Where(scoutTeam => scoutTeam.TeamIdTeam == teamId && scoutTeam.Role != "captain")
-                .Select(_scoutTeam => _scoutTeam.Scout)
-                .ToList();
-            List<string> scoutPeselsInTheTeam = scoutsInTheTeam.Select(scout => scout.PeselScout)
-                .ToList();
-
-            List<string> peselsOfScoutsThatAreInAHostInTheTeam = _dbContext.ScoutHost
-                .Where(scoutHost => scoutPeselsInTheTeam.Contains(scoutHost.ScoutPeselScout) && hostIdsInTheTeam.Contains(scoutHost.HostIdHost))
-                .Select(scoutHost => scoutHost.ScoutPeselScout)
-                .ToList();
-
-            List<Scout> scoutsThatAreNotInAnyHostFromTheTeam = scoutsInTheTeam
-                .Where(scout => !peselsOfScoutsThatAreInAHostInTheTeam.Contains(scout.PeselScout))
-                .ToList();
-
-            return scoutsThatAreNotInAnyHostFromTheTeam;
         }
     }
 }
