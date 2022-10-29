@@ -57,10 +57,10 @@ namespace moja_druzyna.Models​
         public IdentityUser Identity { get; set; }
         public virtual Parent Parent { get; set; }
         public virtual DutyHistory DutyHistory { get; set; }
-        public virtual ScoutAchievement ScoutAchievement { get; set; }
         public virtual Address Adress { get; set; }
 
         public virtual ICollection<ScoutAgreement> ScoutAgreements { get; set; }
+        public virtual ICollection<ScoutAchievement> ScoutAchievements { get; set; }
         public virtual ICollection<ScoutCollection> ScoutCollections { get; set; }
         public virtual ICollection<ScoutCourse> ScoutCourses { get; set; }
         public virtual ICollection<ScoutEvent> ScoutEvents { get; set; }
@@ -84,7 +84,7 @@ namespace moja_druzyna.Models​
                 .Include(s => s.Identity)
                 .Include(s => s.Parent)
                 .Include(s => s.DutyHistory)
-                .Include(s => s.ScoutAchievement)
+                .Include(s => s.ScoutAchievements)
                 .Include(s => s.Adress)
                 .Include(s => s.ScoutAgreements)
                 .Include(s => s.ScoutCollections)
@@ -116,7 +116,7 @@ namespace moja_druzyna.Models​
                 .Include(s => s.Identity)
                 .Include(s => s.Parent)
                 .Include(s => s.DutyHistory)
-                .Include(s => s.ScoutAchievement)
+                .Include(s => s.ScoutAchievements)
                 .Include(s => s.Adress)
                 .Include(s => s.ScoutAgreements)
                 .Include(s => s.ScoutCollections)
@@ -134,60 +134,76 @@ namespace moja_druzyna.Models​
             return scout;
         }
 
-        public void Edit(Scout newScout)
+        public void Edit(Scout changes)
         {
             CheckDbContextInstance("void Edit(Scout newScout)");
 
-            Scout oldScout = _dbContext.Scouts.Find(newScout.PeselScout);
+            Scout oldScout = this;
 
-            oldScout.Name = ReturnNotNullValue<string> (newScout.Name, oldScout.Name);
-            oldScout.Surname = ReturnNotNullValue<string>(newScout.Surname, oldScout.Surname);
-            oldScout.SecondName = ReturnNotNullValue<string>(newScout.SecondName, oldScout.SecondName);
-            oldScout.MembershipNumber = ReturnNotNullValue<string>(newScout.MembershipNumber, oldScout.MembershipNumber);
-            oldScout.DateOfBirth = ReturnNotNullValue<DateTime?>(newScout.DateOfBirth, oldScout.DateOfBirth);
-            oldScout.Nationality = ReturnNotNullValue<string>(newScout.Nationality, oldScout.Nationality);
-            oldScout.Ns = newScout.Ns;
-            oldScout.DateOfEntry = ReturnNotNullValue<DateTime?>(newScout.DateOfEntry, oldScout.DateOfEntry);
-            oldScout.DateOfLeaving = ReturnNotNullValue<DateTime?>(newScout.DateOfLeaving, oldScout.DateOfLeaving);
+            oldScout.Name = ReturnNotNullValue<string> (changes.Name, oldScout.Name);
+            oldScout.Surname = ReturnNotNullValue<string>(changes.Surname, oldScout.Surname);
+            oldScout.SecondName = ReturnNotNullValue<string>(changes.SecondName, oldScout.SecondName);
+            oldScout.MembershipNumber = ReturnNotNullValue<string>(changes.MembershipNumber, oldScout.MembershipNumber);
+            oldScout.DateOfBirth = ReturnNotNullValue<DateTime?>(changes.DateOfBirth, oldScout.DateOfBirth);
+            oldScout.Nationality = ReturnNotNullValue<string>(changes.Nationality, oldScout.Nationality);
+            oldScout.Ns = changes.Ns;
+            oldScout.DateOfEntry = ReturnNotNullValue<DateTime?>(changes.DateOfEntry, oldScout.DateOfEntry);
+            oldScout.DateOfLeaving = ReturnNotNullValue<DateTime?>(changes.DateOfLeaving, oldScout.DateOfLeaving);
 
-            if (newScout.Adress != null)
+            Address address = _dbContext.Adresses.FirstOrDefault(_address => _address.ScoutPeselScout == changes.PeselScout);
+
+            if (changes.Adress != null && address != null)
             {
-                Address address = _dbContext.Adresses.First(_address => _address.ScoutPeselScout == newScout.PeselScout);
-
-                address.AddressKor = ReturnNotNullValue<string>(newScout.Adress.AddressKor, address.AddressKor);
-                address.CityKor = ReturnNotNullValue<string>(newScout.Adress.CityKor, address.CityKor);
-                address.CountryKor = ReturnNotNullValue<string>(newScout.Adress.CountryKor, address.CountryKor);
-                address.NumberHouseKor = ReturnNotNullValue<string>(newScout.Adress.NumberHouseKor, address.NumberHouseKor);
-                address.StreetKor = ReturnNotNullValue<string>(newScout.Adress.StreetKor, address.StreetKor);
-                address.ZipKor = ReturnNotNullValue<string>(newScout.Adress.ZipKor, address.ZipKor);
-                address.AddressZam = ReturnNotNullValue<string>(newScout.Adress.AddressZam, address.AddressZam);
-                address.CityZam = ReturnNotNullValue<string>(newScout.Adress.CityZam, address.CityZam);
-                address.CountryZam = ReturnNotNullValue<string>(newScout.Adress.CountryZam, address.CountryZam);
-                address.NumberHouseZam = ReturnNotNullValue<string>(newScout.Adress.NumberHouseZam, address.NumberHouseZam);
-                address.StreetZam = ReturnNotNullValue<string>(newScout.Adress.StreetZam, address.StreetZam);
-                address.ZipZam = ReturnNotNullValue<string>(newScout.Adress.ZipZam, address.ZipZam);
+                address.AddressKor = ReturnNotNullValue<string>(changes.Adress.AddressKor, address.AddressKor);
+                address.CityKor = ReturnNotNullValue<string>(changes.Adress.CityKor, address.CityKor);
+                address.CountryKor = ReturnNotNullValue<string>(changes.Adress.CountryKor, address.CountryKor);
+                address.NumberHouseKor = ReturnNotNullValue<string>(changes.Adress.NumberHouseKor, address.NumberHouseKor);
+                address.StreetKor = ReturnNotNullValue<string>(changes.Adress.StreetKor, address.StreetKor);
+                address.ZipKor = ReturnNotNullValue<string>(changes.Adress.ZipKor, address.ZipKor);
+                address.AddressZam = ReturnNotNullValue<string>(changes.Adress.AddressZam, address.AddressZam);
+                address.CityZam = ReturnNotNullValue<string>(changes.Adress.CityZam, address.CityZam);
+                address.CountryZam = ReturnNotNullValue<string>(changes.Adress.CountryZam, address.CountryZam);
+                address.NumberHouseZam = ReturnNotNullValue<string>(changes.Adress.NumberHouseZam, address.NumberHouseZam);
+                address.StreetZam = ReturnNotNullValue<string>(changes.Adress.StreetZam, address.StreetZam);
+                address.ZipZam = ReturnNotNullValue<string>(changes.Adress.ZipZam, address.ZipZam);
 
                 this.Adress = address;
                 _dbContext.Adresses.Update(address);
             }
-
-            if (newScout.Parent != null)
+            else if(changes.Adress != null)
             {
-                Parent parent = _dbContext.Parents.Where(_parent => _parent.Pesel == newScout.ParentParentPesel).First();
+                changes.Adress.ScoutPeselScout = PeselScout;
+                changes.Adress.ParentPesel = ParentParentPesel == null ? PeselScout : ParentParentPesel;
+                this.Adress = changes.Adress;
+                _dbContext.Adresses.Add(changes.Adress);
+            }
 
-                parent.Adresses = ReturnNotNullValue<Address>(newScout.Parent.Adresses, parent.Adresses);
-                parent.Scouts = ReturnNotNullValue<ICollection<Scout>>(newScout.Parent.Scouts, parent.Scouts);
-                parent.Name = ReturnNotNullValue<string>(newScout.Parent.Name, parent.Name);
-                parent.Surname = ReturnNotNullValue<string>(newScout.Parent.Surname, parent.Surname);
+            Parent parent = _dbContext.Parents.FirstOrDefault(_parent => _parent.Pesel == changes.ParentParentPesel);
 
+            if (changes.Parent != null && parent != null)
+            {
+                parent.Adresses = ReturnNotNullValue<Address>(changes.Parent.Adresses, parent.Adresses);
+                parent.Scouts = ReturnNotNullValue<ICollection<Scout>>(changes.Parent.Scouts, parent.Scouts);
+                parent.Name = ReturnNotNullValue<string>(changes.Parent.Name, parent.Name);
+                parent.Surname = ReturnNotNullValue<string>(changes.Parent.Surname, parent.Surname);
+
+                this.Parent = parent;
                 _dbContext.Parents.Update(parent);
+            }
+            else if(changes.Parent != null)
+            {
+                if (changes.Parent.Pesel == null)
+                    throw new ArgumentException("void Edit(Scout newScout): Parent object has to have a key");
+
+                this.Parent = changes.Parent;
+                _dbContext.Parents.Add(changes.Parent);
             }
 
             _dbContext.Scouts.Update(oldScout);
             _dbContext.SaveChanges();
         }
 
-        public List<ScoutAchievement> GetAchievements()
+        public List<ScoutAchievement> GetScoutAchievements()
         {
             CheckDbContextInstance("List<ScoutAchievement> GetAchievements()");
 
