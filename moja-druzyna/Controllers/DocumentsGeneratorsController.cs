@@ -112,7 +112,13 @@ namespace moja_druzyna.Controllers
             List<Exclusion> exclusions = sessionAccesser.FormOrder.ExclusionsSaved;
 
             foreach (Layoff layoff in layoffs == null ? new() : layoffs)
-                team.Layoff(layoff);
+                try
+                {
+                    team.Layoff(layoff);
+                }
+                catch(Lib.Exceptions.LayoffRoleMismatchException)
+                {
+                };
 
             foreach (Appointment appointment in appointments == null ? new() : appointments)
                 team.Appoint(appointment);

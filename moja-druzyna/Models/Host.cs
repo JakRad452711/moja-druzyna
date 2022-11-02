@@ -57,8 +57,8 @@ namespace moja_druzyna.Models​
         {
             CheckDbContextInstance("void AddScout(string scoutPesel)");
 
-            if (!_dbContext.Scouts.Any(s => s.PeselScout == scoutPesel))
-                throw new RecordNotFoundException(String.Format("Scout with {0} pesel doesn't exist", scoutPesel));
+            if (!_dbContext.ScoutTeam.Any(s => s.ScoutPeselScout == scoutPesel && s.TeamIdTeam == TeamIdTeam))
+                throw new RecordNotFoundException(String.Format("Scout with {0} pesel doesn't exist in the team", scoutPesel));
 
             if (GetScouts().Select(s => s.PeselScout).Contains(scoutPesel))
                 return;
@@ -154,8 +154,8 @@ namespace moja_druzyna.Models​
 
         public void RemoveScout(string scoutPesel)
         {
-            if (!ScoutHost.Select(sh => sh.ScoutPeselScout).Contains(scoutPesel) || GetScoutRole(scoutPesel) == HostRoles.HostCaptain)
-                return;
+            if (!ScoutHost.Select(sh => sh.ScoutPeselScout).Contains(scoutPesel))
+                throw new UnauthorizedAccessException("void RemoveScout(string scoutPesel): the scouts pesel belongs to a scout not from this host");
 
             ScoutHost scoutHost = ScoutHost.First(sh => sh.ScoutPeselScout == scoutPesel);
             ScoutTeam scoutTeam = _dbContext.ScoutTeam.Find(scoutPesel, Team.IdTeam);

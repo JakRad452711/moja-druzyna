@@ -238,7 +238,7 @@ namespace moja_druzyna.Controllers
             ViewBag.ScoutTitle = string.Format("{0} {1} - osiągnięcia", scout.Name, scout.Surname);
 
             List<ScoutRank> scoutRanks = scout.ScoutRanks.ToList();
-            List<ScoutAchievement> scoutAchievements = scout.GetAchievements();
+            List<ScoutAchievement> scoutAchievements = scout.GetScoutAchievements();
 
             List<ScoutAchievementsViewModel> scoutAchievementsViewModels = new();
 
