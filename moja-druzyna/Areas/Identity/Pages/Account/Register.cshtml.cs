@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using moja_druzyna.Data;
-using moja_druzyna.Lib.Pesel;
+using moja_druzyna.Lib.PeselModule;
 using moja_druzyna.Models;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -108,7 +108,7 @@ namespace moja_druzyna.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-            if (ModelState.IsValid && modelManager.ScoutPrimaryKeyIsAvailable(Input.Pesel) && new Pesel(Input.Pesel).isValid())
+            if (ModelState.IsValid && modelManager.ScoutPrimaryKeyIsAvailable(Input.Pesel) && new Pesel(Input.Pesel).IsValid())
             {
                 var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -128,7 +128,7 @@ namespace moja_druzyna.Areas.Identity.Pages.Account
                         Nationality = Input.Nationality,
                         MembershipNumber = Input.MembershipNumber,
                         Ns = Input.Ns,
-                        DateOfBirth = new Pesel(Input.Pesel).getBirthday()
+                        DateOfBirth = new Pesel(Input.Pesel).GetBirthday()
                     };
 
                     modelManager.CreateScoutCaptainWithTeam(scout);

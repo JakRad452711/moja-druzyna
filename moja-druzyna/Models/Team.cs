@@ -60,6 +60,8 @@ namespace moja_druzyna.Models​
 
         public void AddOrder(FormOrder formOrder, string creatorPesel, string creationLocation)
         {
+            CheckDbContextInstance("void AddOrder(FormOrder formOrder, string creatorPesel, string creationLocation)");
+
             string formOrderJSON = JsonConvert.SerializeObject(formOrder);
 
             Order order = new Order() { Contents = formOrderJSON };
@@ -82,6 +84,8 @@ namespace moja_druzyna.Models​
 
         public bool ScoutHasOneOfRoles(string scoutPesel, List<string> roles)
         {
+            CheckDbContextInstance("bool ScoutHasOneOfRoles(string scoutPesel, List<string> roles)");
+
             ScoutTeam scoutTeam = ScoutTeam.FirstOrDefault(st => st.ScoutPeselScout == scoutPesel);
 
             if (scoutTeam == null)
@@ -129,6 +133,11 @@ namespace moja_druzyna.Models​
             host.Team = this;
             host.TeamIdTeam = this.IdTeam;
 
+            _dbContext.Hosts.Add(host);
+            _dbContext.SaveChanges();
+
+            host.IdHost = _dbContext.Hosts.First(h => h.Name == host.Name).IdHost;
+
             ScoutHost scoutHost = new ScoutHost()
             {
                 Host = host,
@@ -148,9 +157,7 @@ namespace moja_druzyna.Models​
             host.ScoutHost.Add(scoutHost);
             scoutTeam.Role = TeamRoles.HostCaptain;
 
-            _dbContext.Teams.Update(this);
             _dbContext.Scouts.Update(hostCaptain);
-            _dbContext.Hosts.Add(host);
             _dbContext.ScoutHost.Add(scoutHost);
             _dbContext.ScoutTeam.Update(scoutTeam);
             _dbContext.SaveChanges();
@@ -165,9 +172,12 @@ namespace moja_druzyna.Models​
             bool scoutIsCaptain = ScoutHasOneOfRoles(appointment.ScoutPesel, new() { TeamRoles.Captain });
             bool scoutIsNotInTheTeam = scoutRole == null;
 
+            if (scoutIsNotInTheTeam)
+                throw new UnauthorizedAccessException("void Appoint(Appointment appointment): the scouts pesel belongs to a scout not from this team");
+
 #warning temporarily hard locked changing team captains role
-            if (scoutIsCaptain || scoutIsNotInTheTeam)
-                return;
+            if (scoutIsCaptain || appointment.Role == TeamRoles.Captain)
+                throw new UnauthorizedAccessException("void Appoint(Appointment appointment): can't appoint team captain or to a team captain role");
 
             appointment.ScoutId = _dbContext.Scouts.Find(appointment.ScoutPesel).IdentityId;
 
@@ -179,10 +189,7 @@ namespace moja_druzyna.Models​
                 Host oldHost = GetScoutsHost(appointment.ScoutPesel);
 
                 if (oldHost != null)
-                {
-                    Host scoutsOldHost = GetScoutsHost(appointment.ScoutPesel);
-                    scoutsOldHost.RemoveScout(appointment.ScoutPesel);
-                }
+                    oldHost.RemoveScout(appointment.ScoutPesel);
 
                 Host host = GetHost(_dbContext, int.Parse(appointment.Host));
 
@@ -200,6 +207,7 @@ namespace moja_druzyna.Models​
             UpdateScoutRole(appointment.ScoutPesel, appointment.Role);
         }
 
+#warning how should layoff work when layoff role doesn't match scouts role in a team?
         public void Layoff(Layoff layoff)
         {
             CheckDbContextInstance("void Layoff(Layoff layoff)");
@@ -209,9 +217,15 @@ namespace moja_druzyna.Models​
             bool scoutIsCaptain = ScoutHasOneOfRoles(layoff.ScoutPesel, new() { TeamRoles.Captain });
             bool scoutIsNotInTheTeam = scoutRole == null;
 
+            if (scoutIsNotInTheTeam)
+                throw new UnauthorizedAccessException("void Layoff(Layoff layoff): the scouts pesel belongs to a scout not from this team");
+
 #warning temporarily hard locked changing team captains role
-            if (scoutIsCaptain || scoutIsNotInTheTeam)
-                return;
+            if (scoutIsCaptain)
+                throw new UnauthorizedAccessException("void Layoff(Layoff layoff): can't layoff team captain or to a team captain role");
+
+            if (scoutRole != layoff.Role)
+                throw new LayoffRoleMismatchException("void Layoff(Layoff layoff): layoff.Role doesn't match scouts role in the team");
 
             layoff.ScoutId = _dbContext.Scouts.Find(layoff.ScoutPesel).IdentityId;
 
@@ -222,7 +236,13 @@ namespace moja_druzyna.Models​
             {
                 Host host = GetHost(_dbContext, int.Parse(layoff.Host));
 
-                host.UpdateScoutRole(layoff.ScoutPesel, HostRoles.Scout);
+                try
+                {
+                    host.UpdateScoutRole(layoff.ScoutPesel, HostRoles.Scout);
+                }
+                catch(UnauthorizedAccessException)
+                {
+                }
             }
 
             UpdateScoutRole(layoff.ScoutPesel, TeamRoles.Scout);
@@ -235,7 +255,7 @@ namespace moja_druzyna.Models​
             Scout scout = GetScout(_dbContext, trialClosing.ScoutPesel);
 
             if (!GetScouts().Select(s => s.PeselScout).Contains(trialClosing.ScoutPesel))
-                return;
+                throw new UnauthorizedAccessException("void CloseATrial(TrialClosing trialClosing): the scouts pesel belongs to a scout not from this team");
 
             trialClosing.ScoutId = _dbContext.Scouts.Find(trialClosing.ScoutPesel).IdentityId;
 
@@ -329,13 +349,6 @@ namespace moja_druzyna.Models​
             return scoutsThatAreNotInAnyHostFromTheTeam;
         }
 
-        public List<Event> GetEvents()
-        {
-            CheckDbContextInstance("List<Event> GetEvents()");
-
-            return _dbContext.EventTeams.Where(et => et.TeamIdTeam == this.IdTeam).Select(et => et.Event).ToList();
-        }
-
         public List<Scout> GetScouts()
         {
             CheckDbContextInstance("List<Scout> GetScouts()");
@@ -387,24 +400,12 @@ namespace moja_druzyna.Models​
             _dbContext.SaveChanges();
         }
 
-        public void PutScoutInAHostAndAssignHimARole(string scoutPesel, string role, int hostId)
-        {
-            Host oldHost = GetScoutsHost(scoutPesel);
-
-            if (oldHost != null)
-                oldHost.RemoveScout(scoutPesel);
-
-            Host host = GetHost(_dbContext, hostId);
-            host.AddScout(scoutPesel);
-            host.UpdateScoutRole(scoutPesel, role);
-        }
-
         public void RemoveScout(string scoutPesel)
         {
             CheckDbContextInstance("void RemoveScout(string scoutPesel)");
 
             if (!ScoutTeam.Select(st => st.ScoutPeselScout).Contains(scoutPesel))
-                return;
+                throw new UnauthorizedAccessException("void RemoveScout(string scoutPesel): the scouts pesel belongs to a scout not from this team"); ;
 
 #warning temporarily hard locked removing team captain
             if (GetScoutRole(scoutPesel) == TeamRoles.Captain)
