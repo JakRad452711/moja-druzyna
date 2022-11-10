@@ -2,18 +2,33 @@
     filter: opacity(40%)
 }
 
+.highlightOnHover:not(:hover) {
+    filter: opacity(50%);
+}
+
+.highlightOnHover:hover {
+    filter: opacity(80%);
+    text-decoration: underline;
+}
+
 .width-1a {
-    width: 210px;
+    width: 30%;
+    
 }
 
 .width-1b {
-    width: 53px;
+    width: 60px;
 }
 
 .width-1c {
-    width: 120px;
+    width: 30%;
+    
 }
 
 .width-1d {
     width: 80px;
+}
+
+.width-2a {
+    width: 40%;
 }

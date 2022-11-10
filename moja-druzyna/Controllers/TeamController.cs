@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using moja_druzyna.Const;
 using moja_druzyna.Data;
 using moja_druzyna.Data.Session;
+using moja_druzyna.Lib.PeselModule;
 using moja_druzyna.Models;
 using moja_druzyna.ViewModels.Team;
 using System.Collections.Generic;
@@ -45,8 +46,9 @@ namespace moja_druzyna.Controllers
 
             ViewBag.UserRole = team.GetScoutRole(sessionAccesser.UserPesel);
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
+            ViewBag.TeamId = sessionAccesser.CurrentTeamId;
 
-            ICollection<TeamViewModel> scoutsInfo = new List<TeamViewModel>();
+            List<TeamViewModel.TeamViewModelEntry> entries = new List<TeamViewModel.TeamViewModelEntry>();
 
             foreach (string scoutPesel in scoutPesels)
             {
@@ -59,12 +61,13 @@ namespace moja_druzyna.Controllers
                 string pesel = scout.PeselScout;
                 string hostName = host == null ? "" : host.Name;
 
-                scoutsInfo.Add(new TeamViewModel() { Id = id, Title = title, Rank = rankName, Host = hostName, Pesel = pesel });
+                entries.Add(new TeamViewModel.TeamViewModelEntry() { Id = id, Title = title, Rank = rankName, Host = hostName, Pesel = pesel });
             }
 
-            scoutsInfo = scoutsInfo.OrderBy(si => si.Title).ToList();
+            entries = entries.OrderBy(si => si.Title).ToList();
+            TeamViewModel teamVM = new TeamViewModel(_dbContext, sessionAccesser.CurrentTeamId, entries);
 
-            return View(scoutsInfo);
+            return View(teamVM);
         }
 
         [HttpPost]
@@ -133,6 +136,7 @@ namespace moja_druzyna.Controllers
                     Surname = addScoutViewModel.Surname,
                     SecondName = addScoutViewModel.SecondName,
                     MembershipNumber = addScoutViewModel.MembershipNumber,
+                    DateOfBirth = new Pesel(addScoutViewModel.Pesel).GetBirthday(),
                     Nationality = addScoutViewModel.Nationality,
                     Ns = addScoutViewModel.Ns
                 };
