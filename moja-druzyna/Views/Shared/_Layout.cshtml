@@ -19,7 +19,15 @@
             </nav>
         </header>
         <div id="center-section-container" class="muddy-white">
-            <input type="checkbox" id="is-sb-collapsed" />
+            @{
+                if (TempData["isSidebarCollapsed"] == null)
+                    TempData["isSidebarCollapsed"] = false;
+
+                bool isCollapsed = (bool) TempData["isSidebarCollapsed"];
+                TempData.Keep("isSidebarCollapsed");
+
+                <input type="checkbox" id="is-sb-collapsed" checked=@isCollapsed />
+            }
             <label id="hamburger" for="is-sb-collapsed">
                 <img id="hamburger-icon" src="~/icons/navigation/nav-hamburger.svg" />
             </label>
@@ -138,3 +146,43 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+<script>
+    $(document).ready(function() {
+        // update is-sb-collapsed on tab open
+        $(document).focus(function() {
+            withIsSidebarCollapsed(function(result) {
+                document.getElementById("is-sb-collapsed").checked = result.value;
+            });
+        })
+
+        // toggle sidebar on click
+        $("#is-sb-collapsed").click(function() {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("ToggleIsSidebarCollapsed", "Api")",
+                dataType: "json",
+                success: function () {
+                    // success
+                },
+                error: function () {
+                    alert("_Layout.cshtml toggle sidebar on click: raised an error");
+                }
+            });
+        })
+
+        function withIsSidebarCollapsed(toExecute) {
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetIsSidebarCollapsed", "Api")",
+                dataType: "json",
+                success: function(result) { 
+                    toExecute(result); 
+                },
+                error: function(result) { 
+                    alert("_Layout.cshtml onSidebarCollapsed(f): raised an error"); 
+                }
+            });
+        };
+    })
+</script>

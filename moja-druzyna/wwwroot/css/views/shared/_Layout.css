@@ -159,30 +159,30 @@
 
 #is-sb-collapsed:checked ~ #sidebar {
     left: -257px;
-    transition: .2s;
+    transition: .4s;
 }
 
 #is-sb-collapsed:checked ~ #left-panel {
     width: 0px;
-    transition: .2s;
+    transition: .4s;
 }
 
 #is-sb-collapsed:checked ~ #hamburger {
     left: 0px;
-    transition: .2s;
+    transition: .4s;
 }
 
 #is-sb-collapsed:not(:checked) ~ #sidebar {
     left: 0px;
-    transition: .2s;
+    transition: .4s;
 }
 
 #is-sb-collapsed:not(:checked) ~ #left-panel {
     width: 256px;
-    transition: .2s;
+    transition: .4s;
 }
 
 #is-sb-collapsed:not(:checked) ~ #hamburger {
     left: 212px;
-    transition: .2s;
+    transition: .4s;
 }
