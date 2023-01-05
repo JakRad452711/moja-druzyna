@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.Linq;
 using moja_druzyna.Lib.Order;
+using moja_druzyna.Models;
 
 namespace moja_druzyna.Lib.PdfGeneration
 {
@@ -167,7 +168,7 @@ namespace moja_druzyna.Lib.PdfGeneration
 
             if (order.TrialClosings != null)
             {
-                page.Canvas.DrawString($"{mainCounter}.Zamkniecia prób",
+                page.Canvas.DrawString($"{mainCounter}.Zamknięcia prób",
                     trueTypeFont,
                     new PdfSolidBrush(Color.Black),
                     new PointF(50, posY));
@@ -224,7 +225,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                         posY = 50;
                         posX = 50;
                     }
-                    string text = $"{mainCounter}.{secondaryCounter}.Otwieram probę na {o.TrialType} {o.TrialName} dh. {o.ScoutName} {o.ScoutSurname}";
+                    string text = $"{mainCounter}.{secondaryCounter}.Otwieram próbę na {o.TrialType} {o.TrialName} dh. {o.ScoutName} {o.ScoutSurname}";
                     List<string> words = new List<string>();
                     words = text.Split(' ').ToList();
                     foreach (string word in words)
@@ -259,7 +260,7 @@ namespace moja_druzyna.Lib.PdfGeneration
 
             if (order.TrialClosings != null)
             {
-                page.Canvas.DrawString($"{mainCounter}.Przyznanie punktów za stopnie i sprawnosci",
+                page.Canvas.DrawString($"{mainCounter}.Przyznanie punktów za stopnie i sprawności",
                     trueTypeFont,
                     new PdfSolidBrush(Color.Black),
                     new PointF(50, posY));
@@ -532,5 +533,118 @@ namespace moja_druzyna.Lib.PdfGeneration
             doc.SaveToFile($"{order.OrderNumber}.pdf");
 
         }
+
+        public void GenerateEmptyList(List<Scout> team)
+        {
+            PdfDocument doc = new PdfDocument();
+            PdfPageBase page = doc.Pages.Add();
+            PdfTrueTypeFont trueTypeFont = new PdfTrueTypeFont(new Font(new FontFamily("Arial"), 13, FontStyle.Regular), true);
+            int posX = 50;
+            int posY = 170;
+            int lp = 1;
+
+            page.Canvas.DrawString("Lista obecności",
+                trueTypeFont,
+                new PdfSolidBrush(Color.Black),
+                new PointF(200, 50));
+
+            page.Canvas.DrawString("Wydarzenie: ......................................................................",
+                trueTypeFont,
+                new PdfSolidBrush(Color.Black),
+                new PointF(100, 80));
+
+            page.Canvas.DrawString("Data: .....................",
+                trueTypeFont,
+                new PdfSolidBrush(Color.Black),
+                new PointF(190, 110));
+
+            foreach (Scout scout in team)
+            {
+                if (posY > 700)
+                {
+                    page = doc.Pages.Add();
+                    posY = 50;
+                    posX = 50;
+                }
+                page.Canvas.DrawString($"{lp}. ",
+                    trueTypeFont,
+                    new PdfSolidBrush(Color.Black),
+                    new PointF(100, posY));
+                page.Canvas.DrawString($"{scout.Surname}",
+                    trueTypeFont,
+                    new PdfSolidBrush(Color.Black),
+                    new PointF(130, posY));
+                page.Canvas.DrawString($"{scout.Name}",
+                    trueTypeFont,
+                    new PdfSolidBrush(Color.Black),
+                    new PointF(250, posY));
+                page.Canvas.DrawString("|  |",
+                    trueTypeFont,
+                    new PdfSolidBrush(Color.Black),
+                    new PointF(370, posY));
+
+                posY = posY + 30;
+                lp = lp  +  1;
+
+            }
+            doc.SaveToFile("Lista_test_1.pdf");
+        }
+
+        public void GenerateEventList(Event ev, List<Scout> team, AttendanceList attlist)
+        {
+            PdfDocument doc = new PdfDocument();
+            PdfPageBase page = doc.Pages.Add();
+            PdfTrueTypeFont trueTypeFont = new PdfTrueTypeFont(new Font(new FontFamily("Arial"), 13, FontStyle.Regular), true);
+            int posX = 50;
+            int posY = 170;
+            int lp = 1;
+
+            page.Canvas.DrawString("Lista obecności",
+                trueTypeFont,
+                new PdfSolidBrush(Color.Black),
+                new PointF(200, 50));
+
+            page.Canvas.DrawString($"Wydarzenie: {ev.Type}, {ev.IdEvent}",
+                trueTypeFont,
+                new PdfSolidBrush(Color.Black),
+                new PointF(100, 80));
+
+            page.Canvas.DrawString($"Data: {ev.DateStartDateNotNullDateEnd}",
+                trueTypeFont,
+                new PdfSolidBrush(Color.Black),
+                new PointF(190, 110));
+
+            var attended = from s in team
+                           where s.PeselScout == attlist.ScoutIdScout
+                           select s;
+
+            foreach (Scout scout in attended)
+            {
+                if (posY > 700)
+                {
+                    page = doc.Pages.Add();
+                    posY = 50;
+                    posX = 50;
+                }
+                page.Canvas.DrawString($"{lp}. ",
+                    trueTypeFont,
+                    new PdfSolidBrush(Color.Black),
+                    new PointF(100, posY));
+                page.Canvas.DrawString($"{scout.Surname}",
+                    trueTypeFont,
+                    new PdfSolidBrush(Color.Black),
+                    new PointF(130, posY));
+                page.Canvas.DrawString($"{scout.Name}",
+                    trueTypeFont,
+                    new PdfSolidBrush(Color.Black),
+                    new PointF(250, posY));
+
+                posY = posY + 30;
+                lp = lp + 1;
+
+            }
+            doc.SaveToFile("Lista_test_2.pdf");
+        }
+
     }
 }
