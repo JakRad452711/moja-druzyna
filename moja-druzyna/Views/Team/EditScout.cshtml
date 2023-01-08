@@ -178,3 +178,16 @@
         </div>
     </form>
 </div>
+
+@section Scripts
+{
+    <script>
+        $(document).keypress(function (e) {
+            var keyCode = (window.event) ? e.which : e.keyCode;
+            if (keyCode && keyCode == 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+}

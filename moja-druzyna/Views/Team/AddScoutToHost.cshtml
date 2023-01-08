@@ -8,16 +8,19 @@
 <div class="text-center justify-content-center display-flex" style="min-width:900px;height:85vh">
     <form method="post" class="size100p">
         <input id="team-id" value="@ViewBag.TeamId" disabled hidden />
-        <div style="height:50px" class="text-left display-flex mt-16px">
-            <div class="paragraph2-regular ml-8px font-weight-light">
+        <div style="height:50px" class="text-left display-flex mt-16px position-relative">
+            <div class="paragraph2-regular ml-8px font-weight-light bring-to-top">
                 <a asp-action="team" class="font-muddy-black">
                     Harcerze
                 </a>
             </div>
-            <div class="paragraph2-regular ml-16px font-weight-light">
+            <div class="paragraph2-regular ml-16px font-weight-light bring-to-top">
                 <a asp-action="hosts" class="font-muddy-black">
                     Zastępy
                 </a>
+            </div>
+            <div class="position-absolute width100p text-center paragraph2-light font-weight-normal">
+                @ViewBag.HostName
             </div>
         </div>
 
@@ -40,7 +43,7 @@
             <div style="min-width:160px;width:99%" class="display-flex justify-content-center big-shadow">
                 <div style="width:96%">
                     <div class="paragraph2-light mb-16px">
-                        zastęp <span class="font-dark-green">@ViewBag.hostName</span> - dodawanie harcerza 
+                        dodawanie harcerza 
                     </div>
                     @if (ViewBag.hostWasAdded == true)
                     {

@@ -1,22 +1,118 @@
 ﻿@model moja_druzyna.ViewModels.Ranking.ScoresViewModel
 @using moja_druzyna.ViewModels.Ranking
 
-<div>
-    @foreach(ScoresViewModel.ScoreEntry score in Model.Scores)
-    {
-        <div class="display-flex">
-            <div>
-                <img src="~/icons/design/ranks/no-accents/rank-1.svg" class="rank-icon-size-1" />
-            </div>
-            <div>
-                @string.Format("{0} {1}", score.Name, score.Surname)
-            </div>
-            <div>
-                @score.HostName
-            </div>
-            <div>
-                @score.Points
+@{
+    ViewData["Title"] = "moje zastępy";
+}
+
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<div class="text-center justify-content-center display-flex" style="min-width:900px;height:85vh">
+    <form method="post" class="size100p">
+        <input id="team-id" value="@ViewBag.TeamId" disabled hidden />
+        <div style="height:50px" class="text-left display-flex mt-16px">
+            <div class="position-absolute width100p text-center paragraph2-light font-weight-normal" style="width:">
+                @ViewBag.TeamName
             </div>
         </div>
-    }
+
+        <!-- BUTTONS - Add host, ... -->
+        <div class="text-left" style="margin-bottom:43px">
+        </div>
+
+        @{
+            int i = 1;
+        }
+
+        <!-- MAIN PANEL -->
+        <div class="display-flex size100p justify-content-around">
+            <!-- LIST OF HOSTS IN THE TEAM -->
+            <div style="height:100%;min-width:160px;width:99%" class="display-flex justify-content-center big-shadow">
+                <div style="width:96%">
+                    <div class="display-flex width100p round-corners-12px large-light mb-4px justify-content-between">
+                        <div class="ml-8px" style="width:40px;position:relative">
+                        </div>
+                        <div style="width:50px">
+                            stopień
+                        </div>
+                        <div class="text-left" style="width:160px">
+                            godność
+                        </div>
+                        <div class="text-left" style="width:160px">
+                            zastęp
+                        </div>
+                        <div class="mr-8px" style="width:60px">
+                            punkty
+                        </div>
+                    </div> 
+                    @foreach (ScoresViewModel.ScoreEntry score in Model.Scores)
+                    {
+                        <div class="display-flex width100p clear-white small-shadow round-corners-12px large-light mb-4px list-item-height justify-content-between">
+                            <div class="ml-8px" style="width:40px;position:relative">
+                                @if(score.Points > 0)
+                                {
+                                    string laurel = "none";
+                                    laurel = i == 1 ? "gold_" : laurel;
+                                    laurel = i == 2 ? "silver_" : laurel;
+                                    laurel = i == 3 ? "bronze_" : laurel;
+
+                                    string laurelPath = @Url.Content(string.Format("~/icons/design/laurels/{0}laurels.svg", laurel));
+
+                                    <img src="@laurelPath" alt="" style="position:absolute;left:0px;bottom:8px">
+                                }
+                                <div class="mt-8px">
+                                    @i
+                                </div>
+                            </div>
+                            <div style="width:50px">
+                                <div class="mt-8px">
+                                    @if(score.Points > 0){
+                                        string accents = "no-accents";
+                                        accents = i == 1 ? "gold-accents" : accents;
+                                        accents = i == 2 ? "silver-accents" : accents;
+                                        accents = i == 3 ? "bronze-accents" : accents;
+
+                                        string rankPath = Url.Content(string.Format("~/icons/design/ranks/{0}/rank-{1}.svg", accents, score.Rank));
+
+                                        <img src="@rankPath" alt="" class="rank-icon-size-1" />
+                                    }
+                                </div>
+                            </div>
+                            <div style="width:160px">
+                                <div class="text-left mt-8px">
+                                    @string.Format("{0} {1}", score.Name, score.Surname)
+                                </div>
+                            </div>
+                            <div style="width:160px">
+                                <div class="text-left mt-8px">
+                                    @score.HostName
+                                </div>
+                            </div>
+                            <div class="mr-8px" style="width:60px">
+                                <div class="mt-8px display-flex justify-content-center">
+                                    @{
+                                        string gradient = "";
+
+                                        if(score.Points > 0)
+                                        {
+                                            gradient = i == 1 ? "gold-gradient" : gradient;
+                                            gradient = i == 2 ? "silver-gradient" : gradient;
+                                            gradient = i == 3 ? "bronze-gradient" : gradient;
+                                        }
+                                    }
+                                    <div class="size-fit-content pl-8px pr-8px @gradient" style="border-radius:25px">
+                                        @score.Points
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+
+                        i++;
+                    }
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
+
+
+

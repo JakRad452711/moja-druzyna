@@ -1,4 +1,5 @@
-﻿@using moja_druzyna.Lib.PeselModule
+﻿@using moja_druzyna.Const
+@using moja_druzyna.Lib.PeselModule
 @using moja_druzyna.ViewModels.Team
 @model moja_druzyna.ViewModels.Team.TeamViewModel
 
@@ -11,14 +12,17 @@
 <div class="text-center justify-content-center display-flex" style="min-width:900px;height:85vh">
     <form method="get" class="size100p">
         <input id="team-id" value="@ViewBag.TeamId" disabled hidden />
-        <div style="height:50px" class="text-left display-flex mt-16px">
-            <div class="paragraph2-regular ml-8px font-weight-light" style="text-decoration:underline">
+        <div style="height:50px" class="text-left display-flex mt-16px position-relative">
+            <div class="paragraph2-regular ml-8px font-weight-normal bring-to-top">
                 Harcerze
             </div>
-            <div class="paragraph2-regular ml-16px font-weight-light">
+            <div class="paragraph2-regular ml-16px font-weight-light bring-to-top">
                 <a asp-action="hosts" class="font-muddy-black">
                     Zastępy
                 </a>
+            </div>
+            <div class="position-absolute width100p text-center paragraph2-light font-weight-normal">
+                @ViewBag.TeamName
             </div>
         </div>
 
@@ -28,12 +32,16 @@
                 <img src="~/icons/managment/add.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
                 Dodaj harcerza
             </button>
+            <button asp-action="teamchangename" class="ml-8px pr-8px mb-16px round-corners-5px no-border text-white large-light" style="background-color:gray">
+                <img src="~/icons/managment/edit.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                Zmień nazwę drużyny
+            </button>
         </div>
 
         <!-- BOTH PANELS -->
         <div class="display-flex size100p justify-content-around">
             <!-- LIST OF SCOUTS IN THE TEAM (LEFT PANEL) -->
-            <div style="width:49%;height:100%;min-width:100px" class="display-flex justify-content-center big-shadow">
+            <div style="min-height:100%;width:49%;min-width:100px" class="height-fit-content display-flex justify-content-center big-shadow">
                 <div style="width:96%">
                     <div class="display-flex width-100p text-left medium-bold mb-4px">
                         <div class="display-flex justify-content-between width100p ml-64px">
@@ -55,7 +63,7 @@
                                             <img id="profile-picture" src="~/icons/design/profile picture.svg" class="icon-size-40 mr-16px" />
                                         </div>
                                         <div class="display-flex justify-content-between width100p text-left">
-                                            <div class="width-1a">
+                                            <div class="width-1a" style="overflow:hidden;white-space:nowrap">
                                                 <div class="mt-8px">@scoutEntry.Title</div>
                                             </div>
                                             <div class="width-1b mt-8px">
@@ -137,18 +145,18 @@
                             <div class="width-2a">Imię:</div>
                             @{
                                 string name = @Model.FirstScout.Name;
-                                        <div id="name" class="width-2a">
-                                            @(string.IsNullOrEmpty(name) ? "--" : name)
-                                        </div>
+                                <div id="name" class="width-2a">
+                                    @(string.IsNullOrEmpty(name) ? "--" : name)
+                                </div>
                             }
                         </div>
                         <div class="display-flex justify-content-between mt-4px">
                             <div class="width-2a">Nazwisko:</div>
                             @{
                                 string surname = @Model.FirstScout.Surname;
-                                        <div id="surname" class="width-2a">
-                                            @(string.IsNullOrEmpty(surname) ? "--" : surname)
-                                        </div>
+                                <div id="surname" class="width-2a">
+                                    @(string.IsNullOrEmpty(surname) ? "--" : surname)
+                                </div>
                             }
                         </div>
                         <div class="display-flex justify-content-between mt-4px">
@@ -168,27 +176,27 @@
                             <div class="width-2a">Drugie imię:</div>
                             @{
                                 string secondName = @Model.FirstScout.SecondName;
-                                        <div id="second-name" class="width-2a">
-                                            @(string.IsNullOrEmpty(secondName) ? "--" : secondName)
-                                        </div>
+                                <div id="second-name" class="width-2a">
+                                    @(string.IsNullOrEmpty(secondName) ? "--" : secondName)
+                                </div>
                             }
                         </div>
                         <div class="display-flex justify-content-between mt-4px">
                             <div class="width-2a">Pesel:</div>
                             @{
                                 string pesel = @Model.FirstScout.PeselScout;
-                                        <div id="pesel" class="width-2a">
-                                            @(string.IsNullOrEmpty(pesel) ? "--" : pesel)
-                                        </div>
+                                <div id="pesel" class="width-2a">
+                                    @(string.IsNullOrEmpty(pesel) ? "--" : pesel)
+                                </div>
                             }
                         </div>
                         <div class="display-flex justify-content-between mt-4px">
                             <div class="width-2a">Nr. członkowski:</div>
                             @{
                                 string membershipNumber = @Model.FirstScout.MembershipNumber;
-                                        <div id="membership-number" class="width-2a">
-                                            @(string.IsNullOrEmpty(membershipNumber) ? "--" : membershipNumber)
-                                        </div>
+                                <div id="membership-number" class="width-2a">
+                                    @(string.IsNullOrEmpty(membershipNumber) ? "--" : membershipNumber)
+                                </div>
                             }
                         </div>
                     </div>
@@ -205,9 +213,9 @@
                             <div class="width-2a">Funkcja:</div>
                             @{
                                 string role = @Model.FirstScoutTeamRole;
-                                        <div id="role" class="width-2a">
-                                            @moja_druzyna.Const.TeamRoles.TeamRolesTranslationsWithPolishLetters[(string.IsNullOrEmpty(role) ? "--" : role)]
-                                        </div>
+                                <div id="role" class="width-2a">
+                                    @(string.IsNullOrEmpty(role) || role == TeamRoles.Scout ? "--" : TeamRoles.TeamRolesTranslationsWithPolishLetters[role])
+                                </div>
                             }
                         </div>
                     </div>
@@ -221,9 +229,9 @@
                             <div class="width-2a">Zastęp:</div>
                             @{
                                 string hostName = @Model.FirstScoutHostName;
-                                        <div id="host" class="width-2a">
-                                            @(string.IsNullOrEmpty(hostName) ? "--" : hostName)
-                                        </div>
+                                <div id="host" class="width-2a">
+                                    @(string.IsNullOrEmpty(hostName) ? "--" : hostName)
+                                </div>
                             }
                         </div>
                     </div>
@@ -265,19 +273,19 @@
                                         <div class="display-flex justify-content-between width100p text-left ml-16px">
 
                                             <div class="width-1a mt-8px" style="white-space:nowrap">
-                                                @if (achievement.Type == moja_druzyna.Const.TrialTypes.Rank)
+                                                @if (achievement.Type == TrialTypes.Rank)
                                                 {
                                                     string rankUrl = string.Format("~/icons/design/ranks/no-accents/rank-{0}.svg", achievement.Rank);
 
                                                     <img src="@Url.Content(rankUrl)" class="rank-icon-size-1" />
                                                 }
-                                                else if (achievement.Type == moja_druzyna.Const.TrialTypes.Ability)
+                                                else if (achievement.Type == TrialTypes.Ability)
                                                 {
-                                                    <a>@moja_druzyna.Const.ScoutAbilities.ScoutAbilitiesTranslationWithPolishLetters[achievement.Achievement]</a>
+                                                    <a>@ScoutAbilities.ScoutAbilitiesTranslationWithPolishLetters[achievement.Achievement]</a>
                                                 }
                                             </div>
                                             <div class="width-1c">
-                                                <div class="mt-8px">@moja_druzyna.Const.TrialTypes.TrialTypesTranslationWithPolishLetters[achievement.Type]</div>
+                                                <div class="mt-8px">@TrialTypes.TrialTypesTranslationWithPolishLetters[achievement.Type]</div>
                                             </div>
                                             <div class="mt-8px" style="width:120px">
                                                 @achievement.AcquirementTime.ToString("dd.MM.yyyy HH:mm")
@@ -296,7 +304,7 @@
 </div>
 
 @section Scripts
-    {
+{
     <script>
         $(document).ready(function() {
             var selectedEntry = 0;
@@ -319,7 +327,7 @@
                 var entryId = $(this).val();
                 var scoutId = $("#scout-id-" + entryId).val();
                 var teamId = $("#team-id").val();
-                
+
                 $(".scout-entry").each(function() {
                     $("#scout-entry-" + $(this).val()).css("box-shadow", "none");
                 });
@@ -478,11 +486,11 @@
                             achievementsHtml += '<div class="display-flex justify-content-between width100p text-left ml-16px">\n';
                             achievementsHtml += '<div class="width-1a mt-8px" style="white-space:nowrap">\n';
 
-                            if (achievement.Type == "@moja_druzyna.Const.TrialTypes.Rank") {
+                            if (achievement.Type == "@TrialTypes.Rank") {
                                 var rankPath = '@Url.Content("~/icons/design/ranks/no-accents")' + "/rank-" + achievement.Rank + ".svg";
                                 var imgStr = '<img src="' + rankPath + '" class="rank-icon-size-1" />\n';
                                 achievementsHtml += imgStr;
-                            } else if (achievement.Type == "@moja_druzyna.Const.TrialTypes.Ability") {
+                            } else if (achievement.Type == "@TrialTypes.Ability") {
                                 achievementsHtml += '<a>' + achievement.Achievement + '</a>';
                             }
 
@@ -507,11 +515,11 @@
             }
 
             function translateTrialTypeToPL(trialType) {
-                if (trialType == "@moja_druzyna.Const.TrialTypes.Rank")
+                if (trialType == "@TrialTypes.Rank")
                     return 'stopień';
-                if (trialType == "@moja_druzyna.Const.TrialTypes.Ability")
+                if (trialType == "@TrialTypes.Ability")
                     return 'sprawność';
-                if (trialType == "@moja_druzyna.Const.TrialTypes.ScoutCross")
+                if (trialType == "@TrialTypes.ScoutCross")
                     return 'krzyż harcerski';
 
                 return null;

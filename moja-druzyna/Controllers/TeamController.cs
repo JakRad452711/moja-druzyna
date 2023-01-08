@@ -70,6 +70,18 @@ namespace moja_druzyna.Controllers
             return View(teamVM);
         }
 
+        public IActionResult TeamChangeName()
+        {
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
+
+            if (sessionAccesser.OperationFailed == true)
+                ViewBag.nameWasEmpty = true;
+
+            sessionAccesser.OperationFailed = false;
+
+            return View();
+        }
+
         [HttpPost]
         public IActionResult TeamChangeName(string newName)
         {
@@ -78,13 +90,17 @@ namespace moja_druzyna.Controllers
             if (!UserHasOneOfRoles(team, new() { TeamRoles.Captain }))
                 return Redirect(WebsiteAddresses.AccessDeniedAddress);
 
-            if (newName != null)
+            if (!string.IsNullOrEmpty(newName))
             {
                 team.UpdateName(newName);
                 sessionAccesser.CurrentTeamName = newName;
             }
+            else
+            {
+                sessionAccesser.OperationFailed = true;
+            }
 
-            return Redirect("team");
+            return Redirect("teamchangename");
         }
 
         [HttpPost]
@@ -127,7 +143,9 @@ namespace moja_druzyna.Controllers
             if (!UserHasOneOfRoles(team, new() { TeamRoles.Captain, TeamRoles.ViceCaptain }))
                 return Redirect(WebsiteAddresses.AccessDeniedAddress);
 
-            if (ModelState.IsValid)
+            bool peselIsAvailable = _dbContext.Scouts.Find(addScoutViewModel.Pesel) == null;
+
+            if (ModelState.IsValid && peselIsAvailable)
             {
                 Scout addedScout = new Scout
                 {
@@ -156,6 +174,9 @@ namespace moja_druzyna.Controllers
 
             sessionAccesser.ScoutWasAdded = false;
             ViewBag.scoutAdditionFailed = true;
+
+            if (!peselIsAvailable)
+                ViewBag.peselIsTaken = true;
 
             return View();
         }

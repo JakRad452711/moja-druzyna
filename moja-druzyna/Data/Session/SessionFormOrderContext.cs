@@ -16,6 +16,14 @@ namespace moja_druzyna.Data.Session
             ReprimendsAndPraises = new();
             Exclusions = new();
             Other = new();
+            LayoffsSaved = new();
+            AppointmentsSaved = new();
+            TrialClosingsSaved = new();
+            TrialOpeningsSaved = new();
+            GamePointsEntriesSaved = new();
+            ReprimendsAndPraisesSaved = new();
+            ExclusionsSaved = new();
+            OtherSaved = new();
         }
 
         public string Name { get; set; }

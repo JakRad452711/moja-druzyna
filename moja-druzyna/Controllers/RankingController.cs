@@ -34,6 +34,8 @@ namespace moja_druzyna.Controllers
             List<string> scoutPesels = team.GetScouts().Select(s => s.PeselScout).ToList();
             List<ScoresViewModel.ScoreEntry> scores = new();
 
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
+
             foreach(string pesel in scoutPesels)
             {
                 Scout scout = Scout.GetScout(_dbContext, pesel);

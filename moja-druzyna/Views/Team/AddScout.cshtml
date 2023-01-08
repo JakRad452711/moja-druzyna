@@ -9,16 +9,19 @@
 <div class="text-center justify-content-center display-flex" style="min-width:900px;height:85vh">
     <form method="post" class="size100p">
         <input id="team-id" value="@ViewBag.TeamId" disabled hidden />
-        <div style="height:50px" class="text-left display-flex mt-16px">
-            <div class="paragraph2-regular ml-8px font-weight-light">
+        <div style="height:50px" class="text-left display-flex mt-16px position-relative">
+            <div class="paragraph2-regular ml-8px font-weight-light bring-to-top">
                 <a asp-action="team" class="font-muddy-black">
                     Harcerze
                 </a>
             </div>
-            <div class="paragraph2-regular ml-16px font-weight-light">
+            <div class="paragraph2-regular ml-16px font-weight-light bring-to-top">
                 <a asp-action="hosts" class="font-muddy-black">
                     Zastępy
                 </a>
+            </div>
+            <div class="position-absolute width100p text-center paragraph2-light font-weight-normal">
+                @ViewBag.TeamName
             </div>
         </div>
 
@@ -68,6 +71,10 @@
                             <input asp-for="Pesel" class="width100p" /><br />
                             <div class="width100p" style="position:relative">
                                 <span asp-validation-for="Pesel" class="text-danger" style="position:absolute;left:0px"></span>
+                                @if(ViewBag.peselIsTaken == true)
+                                {
+                                    <span class="text-danger" style="position:absolute;left:0px">ten numer pesel jest zajęty</span>
+                                }
                             </div>
                         </div>
                         <div class="form-group" style="width:49%">
@@ -120,3 +127,15 @@
     </form>
 </div>
 
+@section Scripts
+{
+    <script>
+        $(document).keypress(function (e) {
+            var keyCode = (window.event) ? e.which : e.keyCode;
+            if (keyCode && keyCode == 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+}
