@@ -399,6 +399,24 @@
     line-height: 19px;
 }
 
+/* gradients */
+.gold-gradient {
+    background-image: linear-gradient(to bottom,#f8fd00,#faef3a,#f9e255,#f3d66a,#eacb7d);
+}
+
+.gold-gradient-diagonal {
+    background-image: linear-gradient(to right top, #f8fd00, #faef3a, #f9e255, #f3d66a, #eacb7d);
+}
+
+.silver-gradient {
+    background-image: linear-gradient(to bottom, #efefef, #e1e1e1, #d3d3d3, #c5c5c5, #b8b8b8);
+}
+
+.bronze-gradient {
+    background-image: linear-gradient(to bottom, #ffe7aa, #f4d18b, #eabb6e, #e0a452, #d78d37);
+}
+
+
 /* background colors */
 .clear-white {
     background-color: #FFFFFF;

@@ -55,7 +55,7 @@
                                             <img id="profile-picture" src="~/icons/design/profile picture.svg" class="icon-size-40 mr-16px" />
                                         </div>
                                         <div class="display-flex justify-content-between width100p text-left">
-                                            <div class="width-1a">
+                                            <div class="width-1a" style="overflow:hidden;white-space:nowrap">
                                                 <div class="mt-8px">@scoutEntry.Title</div>
                                             </div>
                                             <div class="width-1b mt-8px">
@@ -137,18 +137,18 @@
                             <div class="width-2a">Imię:</div>
                             @{
                                 string name = @Model.FirstScout.Name;
-                                        <div id="name" class="width-2a">
-                                            @(string.IsNullOrEmpty(name) ? "--" : name)
-                                        </div>
+                                <div id="name" class="width-2a">
+                                    @(string.IsNullOrEmpty(name) ? "--" : name)
+                                </div>
                             }
                         </div>
                         <div class="display-flex justify-content-between mt-4px">
                             <div class="width-2a">Nazwisko:</div>
                             @{
                                 string surname = @Model.FirstScout.Surname;
-                                        <div id="surname" class="width-2a">
-                                            @(string.IsNullOrEmpty(surname) ? "--" : surname)
-                                        </div>
+                                <div id="surname" class="width-2a">
+                                    @(string.IsNullOrEmpty(surname) ? "--" : surname)
+                                </div>
                             }
                         </div>
                         <div class="display-flex justify-content-between mt-4px">
@@ -168,27 +168,27 @@
                             <div class="width-2a">Drugie imię:</div>
                             @{
                                 string secondName = @Model.FirstScout.SecondName;
-                                        <div id="second-name" class="width-2a">
-                                            @(string.IsNullOrEmpty(secondName) ? "--" : secondName)
-                                        </div>
+                                <div id="second-name" class="width-2a">
+                                    @(string.IsNullOrEmpty(secondName) ? "--" : secondName)
+                                </div>
                             }
                         </div>
                         <div class="display-flex justify-content-between mt-4px">
                             <div class="width-2a">Pesel:</div>
                             @{
                                 string pesel = @Model.FirstScout.PeselScout;
-                                        <div id="pesel" class="width-2a">
-                                            @(string.IsNullOrEmpty(pesel) ? "--" : pesel)
-                                        </div>
+                                <div id="pesel" class="width-2a">
+                                    @(string.IsNullOrEmpty(pesel) ? "--" : pesel)
+                                </div>
                             }
                         </div>
                         <div class="display-flex justify-content-between mt-4px">
                             <div class="width-2a">Nr. członkowski:</div>
                             @{
                                 string membershipNumber = @Model.FirstScout.MembershipNumber;
-                                        <div id="membership-number" class="width-2a">
-                                            @(string.IsNullOrEmpty(membershipNumber) ? "--" : membershipNumber)
-                                        </div>
+                                <div id="membership-number" class="width-2a">
+                                    @(string.IsNullOrEmpty(membershipNumber) ? "--" : membershipNumber)
+                                </div>
                             }
                         </div>
                     </div>
@@ -205,9 +205,9 @@
                             <div class="width-2a">Funkcja:</div>
                             @{
                                 string role = @Model.FirstScoutTeamRole;
-                                        <div id="role" class="width-2a">
-                                            @moja_druzyna.Const.TeamRoles.TeamRolesTranslationsWithPolishLetters[(string.IsNullOrEmpty(role) ? "--" : role)]
-                                        </div>
+                                <div id="role" class="width-2a">
+                                    @(string.IsNullOrEmpty(role) ? "--" : moja_druzyna.Const.TeamRoles.TeamRolesTranslationsWithPolishLetters[role])
+                                </div>
                             }
                         </div>
                     </div>
@@ -221,9 +221,9 @@
                             <div class="width-2a">Zastęp:</div>
                             @{
                                 string hostName = @Model.FirstScoutHostName;
-                                        <div id="host" class="width-2a">
-                                            @(string.IsNullOrEmpty(hostName) ? "--" : hostName)
-                                        </div>
+                                <div id="host" class="width-2a">
+                                    @(string.IsNullOrEmpty(hostName) ? "--" : hostName)
+                                </div>
                             }
                         </div>
                     </div>
@@ -319,7 +319,7 @@
                 var entryId = $(this).val();
                 var scoutId = $("#scout-id-" + entryId).val();
                 var teamId = $("#team-id").val();
-                
+
                 $(".scout-entry").each(function() {
                     $("#scout-entry-" + $(this).val()).css("box-shadow", "none");
                 });
