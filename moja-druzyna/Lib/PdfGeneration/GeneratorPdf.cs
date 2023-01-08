@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.Linq;
 using moja_druzyna.Lib.Order;
+using moja_druzyna.Models;
 
 namespace moja_druzyna.Lib.PdfGeneration
 {
@@ -14,7 +15,7 @@ namespace moja_druzyna.Lib.PdfGeneration
         {
             Random generator = new Random();
             int mark = generator.Next();
-            
+
             PdfDocument doc = new PdfDocument();
 
             PdfPageBase page = doc.Pages.Add();
@@ -31,6 +32,7 @@ namespace moja_druzyna.Lib.PdfGeneration
         {
             PdfDocument doc = new PdfDocument();
             PdfPageBase page = doc.Pages.Add();
+            PdfTrueTypeFont trueTypeFont = new PdfTrueTypeFont(new Font(new FontFamily("Arial"), 13, FontStyle.Regular), true);
 
             int posX;
             int posY;
@@ -38,17 +40,17 @@ namespace moja_druzyna.Lib.PdfGeneration
             int secondaryCounter = 1;
 
             page.Canvas.DrawString($"ZHP, {order.TeamName}",
-                new PdfFont(PdfFontFamily.Helvetica, 13f),
-                new PdfSolidBrush(Color.Black),
-                new PointF(50, 50));
+            trueTypeFont,
+            new PdfSolidBrush(Color.Black),
+            new PointF(50, 50));
 
-            page.Canvas.DrawString($"{order.Location}, {order.CreationDate}",
-                new PdfFont(PdfFontFamily.Helvetica, 13f),
+            page.Canvas.DrawString($"{order.Location}, {order.CreationDate.Day}.{order.CreationDate.Month}.{order.CreationDate.Year}",
+                trueTypeFont,
                 new PdfSolidBrush(Color.Black),
-                new PointF(380 - (order.Location.Length*6), 50));
+                new PointF(380 - (order.Location.Length * 6), 50));
 
             page.Canvas.DrawString($"Rozkaz {order.OrderNumber}",
-                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                trueTypeFont,
                 new PdfSolidBrush(Color.Black),
                 new PointF(200, 80));
 
@@ -58,7 +60,7 @@ namespace moja_druzyna.Lib.PdfGeneration
             if (order.Layoffs != null)
             {
                 page.Canvas.DrawString($"{mainCounter}.Zwolnienia",
-                    new PdfFont(PdfFontFamily.Helvetica, 13f),
+                    trueTypeFont,
                     new PdfSolidBrush(Color.Black),
                     new PointF(50, posY));
 
@@ -76,19 +78,20 @@ namespace moja_druzyna.Lib.PdfGeneration
                     words = text.Split(' ').ToList();
                     foreach (string word in words)
                     {
-                        if(posX < 480 - (word.Length*6))
+                        if (posX < 480 - (word.Length * 6))
                         {
                             page.Canvas.DrawString(word,
-                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                trueTypeFont,
                                 new PdfSolidBrush(Color.Black),
                                 new PointF(posX, posY));
-                            posX = posX + 7*(word.Length + 1);
-                        } else
+                            posX = posX + 7 * (word.Length + 1);
+                        }
+                        else
                         {
                             posX = 50;
                             posY = posY + 20;
                             page.Canvas.DrawString(word,
-                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                trueTypeFont,
                                 new PdfSolidBrush(Color.Black),
                                 new PointF(posX, posY));
                             posX = posX + 7 * (word.Length + 1);
@@ -106,7 +109,7 @@ namespace moja_druzyna.Lib.PdfGeneration
             if (order.Appointments != null)
             {
                 page.Canvas.DrawString($"{mainCounter}.Mianowania",
-                    new PdfFont(PdfFontFamily.Helvetica, 13f),
+                    trueTypeFont,
                     new PdfSolidBrush(Color.Black),
                     new PointF(50, posY));
 
@@ -119,7 +122,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                         posY = 50;
                         posX = 50;
                     }
-                    string text = $"{mainCounter}.{secondaryCounter}.Mianuje dh. {app.ScoutName} {app.ScoutSurname} na funkcje {app.RoleName}.";
+                    string text = $"{mainCounter}.{secondaryCounter}.Mianuję dh. {app.ScoutName} {app.ScoutSurname} na funkcję {app.RoleName}.";
                     List<string> words = new List<string>();
                     words = text.Split(' ').ToList();
                     foreach (string word in words)
@@ -127,7 +130,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                         if (posX < 480 - (word.Length * 6))
                         {
                             page.Canvas.DrawString(word,
-                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                trueTypeFont,
                                 new PdfSolidBrush(Color.Black),
                                 new PointF(posX, posY));
                             posX = posX + 7 * (word.Length + 1);
@@ -137,7 +140,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                             posX = 50;
                             posY = posY + 20;
                             page.Canvas.DrawString(word,
-                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                trueTypeFont,
                                 new PdfSolidBrush(Color.Black),
                                 new PointF(posX, posY));
                             posX = posX + 7 * (word.Length + 1);
@@ -154,15 +157,15 @@ namespace moja_druzyna.Lib.PdfGeneration
 
             if (order.TrialClosings != null)
             {
-                page.Canvas.DrawString($"{mainCounter}.Zamkniecia prob",
-                    new PdfFont(PdfFontFamily.Helvetica, 13f),
+                page.Canvas.DrawString($"{mainCounter}.Zamknięcia prób",
+                    trueTypeFont,
                     new PdfSolidBrush(Color.Black),
                     new PointF(50, posY));
 
                 posY = posY + 20;
                 foreach (TrialClosing c in order.TrialClosings)
                 {
-                    string text = $"{mainCounter}.{secondaryCounter}.Zamykam probe i przyznaje {c.TrialType} {c.TrialName} dh. {c.ScoutName} {c.ScoutSurname}";
+                    string text = $"{mainCounter}.{secondaryCounter}.Zamykam próbę i przyznaję {c.TrialType} {c.TrialName} dh. {c.ScoutName} {c.ScoutSurname}";
                     List<string> words = new List<string>();
                     words = text.Split(' ').ToList();
                     foreach (string word in words)
@@ -170,7 +173,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                         if (posX < 480 - (word.Length * 6))
                         {
                             page.Canvas.DrawString(word,
-                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                trueTypeFont,
                                 new PdfSolidBrush(Color.Black),
                                 new PointF(posX, posY));
                             posX = posX + 7 * (word.Length + 1);
@@ -180,7 +183,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                             posX = 50;
                             posY = posY + 20;
                             page.Canvas.DrawString(word,
-                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                trueTypeFont,
                                 new PdfSolidBrush(Color.Black),
                                 new PointF(posX, posY));
                             posX = posX + 7 * (word.Length + 1);
@@ -197,8 +200,8 @@ namespace moja_druzyna.Lib.PdfGeneration
 
             if (order.TrialOpenings != null)
             {
-                page.Canvas.DrawString($"{mainCounter}.Otwarcia prob",
-                    new PdfFont(PdfFontFamily.Helvetica, 13f),
+                page.Canvas.DrawString($"{mainCounter}.Otwarcia prób",
+                    trueTypeFont,
                     new PdfSolidBrush(Color.Black),
                     new PointF(50, posY));
 
@@ -211,7 +214,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                         posY = 50;
                         posX = 50;
                     }
-                    string text = $"{mainCounter}.{secondaryCounter}.Otwieram probe na {o.TrialType} {o.TrialName} dh. {o.ScoutName} {o.ScoutSurname}";
+                    string text = $"{mainCounter}.{secondaryCounter}.Otwieram próbę na {o.TrialType} {o.TrialName} dh. {o.ScoutName} {o.ScoutSurname}";
                     List<string> words = new List<string>();
                     words = text.Split(' ').ToList();
                     foreach (string word in words)
@@ -219,7 +222,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                         if (posX < 480 - (word.Length * 6))
                         {
                             page.Canvas.DrawString(word,
-                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                trueTypeFont,
                                 new PdfSolidBrush(Color.Black),
                                 new PointF(posX, posY));
                             posX = posX + 7 * (word.Length + 1);
@@ -229,7 +232,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                             posX = 50;
                             posY = posY + 20;
                             page.Canvas.DrawString(word,
-                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                trueTypeFont,
                                 new PdfSolidBrush(Color.Black),
                                 new PointF(posX, posY));
                             posX = posX + 7 * (word.Length + 1);
@@ -246,8 +249,8 @@ namespace moja_druzyna.Lib.PdfGeneration
 
             if (order.TrialClosings != null)
             {
-                page.Canvas.DrawString($"{mainCounter}.Przyznanie punktow za stopnie i sprawnosci",
-                    new PdfFont(PdfFontFamily.Helvetica, 13f),
+                page.Canvas.DrawString($"{mainCounter}.Przyznanie punktów za stopnie i sprawności",
+                    trueTypeFont,
                     new PdfSolidBrush(Color.Black),
                     new PointF(50, posY));
 
@@ -262,17 +265,20 @@ namespace moja_druzyna.Lib.PdfGeneration
                     }
                     string text;
                     int points;
-                    if(c.TrialType == "sprawność"){
+                    if (c.TrialType == "sprawność")
+                    {
                         points = 25;
-                        text = $"{mainCounter}.{secondaryCounter}.Za zdobycie {c.TrialType} {c.TrialName} przyznaje dh. {c.ScoutName} {c.ScoutSurname} {points} punktow do wspolzawodnictwa.";
-                    } else if(c.TrialType == "krzyż")
+                        text = $"{mainCounter}.{secondaryCounter}.Za zdobycie {c.TrialType} {c.TrialName} przyznaję dh. {c.ScoutName} {c.ScoutSurname} {points} punktów do współzawodnictwa.";
+                    }
+                    else if (c.TrialType == "krzyż")
                     {
                         points = 50;
-                        text = $"{mainCounter}.{secondaryCounter}.Za zrealizowania proby harcerskiej przyznaje dh. {c.ScoutName} {c.ScoutSurname} {points} punktow do wspolzawodnictwa.";
-                    } else 
+                        text = $"{mainCounter}.{secondaryCounter}.Za zrealizowania próby harcerskiej przyznaję dh. {c.ScoutName} {c.ScoutSurname} {points} punktów do współzawodnictwa.";
+                    }
+                    else
                     {
                         points = 100;
-                        text = $"{mainCounter}.{secondaryCounter}.Za zdobycie {c.TrialType} {c.TrialName} przyznaje dh. {c.ScoutName} {c.ScoutSurname} {points} punktow do wspolzawodnictwa.";
+                        text = $"{mainCounter}.{secondaryCounter}.Za zdobycie {c.TrialType} {c.TrialName} przyznaję dh. {c.ScoutName} {c.ScoutSurname} {points} punktów do współzawodnictwa.";
                     }
                     List<string> words = new List<string>();
                     words = text.Split(' ').ToList();
@@ -281,7 +287,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                         if (posX < 480 - (word.Length * 6))
                         {
                             page.Canvas.DrawString(word,
-                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                trueTypeFont,
                                 new PdfSolidBrush(Color.Black),
                                 new PointF(posX, posY));
                             posX = posX + 7 * (word.Length + 1);
@@ -291,7 +297,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                             posX = 50;
                             posY = posY + 20;
                             page.Canvas.DrawString(word,
-                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                trueTypeFont,
                                 new PdfSolidBrush(Color.Black),
                                 new PointF(posX, posY));
                             posX = posX + 7 * (word.Length + 1);
@@ -308,8 +314,8 @@ namespace moja_druzyna.Lib.PdfGeneration
 
             if (order.Games != null)
             {
-                page.Canvas.DrawString($"{mainCounter}.Podsumowanie wspolzawodnictwa",
-                    new PdfFont(PdfFontFamily.Helvetica, 13f),
+                page.Canvas.DrawString($"{mainCounter}.Podsumowanie współzawodnictwa",
+                    trueTypeFont,
                     new PdfSolidBrush(Color.Black),
                     new PointF(50, posY));
 
@@ -322,7 +328,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                         posY = 50;
                         posX = 50;
                     }
-                    string text = $"{mainCounter}.{secondaryCounter}.Za wyniki w grze {g.GameName} przyznaje dh. {g.Person.Name} {g.Person.Surname} {g.Points} punktow do wspolzawodnictwa.";
+                    string text = $"{mainCounter}.{secondaryCounter}.Za wyniki w grze {g.GameName} przyznaję dh. {g.Person.Name} {g.Person.Surname} {g.Points} punktów do współzawodnictwa.";
                     List<string> words = new List<string>();
                     words = text.Split(' ').ToList();
                     foreach (string word in words)
@@ -330,7 +336,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                         if (posX < 480 - (word.Length * 6))
                         {
                             page.Canvas.DrawString(word,
-                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                trueTypeFont,
                                 new PdfSolidBrush(Color.Black),
                                 new PointF(posX, posY));
                             posX = posX + 7 * (word.Length + 1);
@@ -340,7 +346,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                             posX = 50;
                             posY = posY + 20;
                             page.Canvas.DrawString(word,
-                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                trueTypeFont,
                                 new PdfSolidBrush(Color.Black),
                                 new PointF(posX, posY));
                             posX = posX + 7 * (word.Length + 1);
@@ -357,8 +363,8 @@ namespace moja_druzyna.Lib.PdfGeneration
 
             if (order.ReprimendsAndPraises != null)
             {
-                page.Canvas.DrawString($"{mainCounter}.Pochwaly, wyroznienia i nagany",
-                    new PdfFont(PdfFontFamily.Helvetica, 13f),
+                page.Canvas.DrawString($"{mainCounter}.Pochwały, wyróżnienia i nagany",
+                    trueTypeFont,
                     new PdfSolidBrush(Color.Black),
                     new PointF(50, posY));
 
@@ -379,7 +385,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                         if (posX < 480 - (word.Length * 6))
                         {
                             page.Canvas.DrawString(word,
-                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                trueTypeFont,
                                 new PdfSolidBrush(Color.Black),
                                 new PointF(posX, posY));
                             posX = posX + 7 * (word.Length + 1);
@@ -389,7 +395,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                             posX = 50;
                             posY = posY + 20;
                             page.Canvas.DrawString(word,
-                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                trueTypeFont,
                                 new PdfSolidBrush(Color.Black),
                                 new PointF(posX, posY));
                             posX = posX + 7 * (word.Length + 1);
@@ -406,8 +412,8 @@ namespace moja_druzyna.Lib.PdfGeneration
 
             if (order.Exclusions != null)
             {
-                page.Canvas.DrawString($"{mainCounter}.Skreslenia z listy czlonkow",
-                    new PdfFont(PdfFontFamily.Helvetica, 13f),
+                page.Canvas.DrawString($"{mainCounter}.Skreślenia z listy członków",
+                    trueTypeFont,
                     new PdfSolidBrush(Color.Black),
                     new PointF(50, posY));
 
@@ -420,7 +426,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                         posY = 50;
                         posX = 50;
                     }
-                    string text = $"{mainCounter}.{secondaryCounter}.Z powodu {d.Reason} skreslam dh. {d.ScoutName} {d.ScoutSurname} z listy czlonkow druzyny.";
+                    string text = $"{mainCounter}.{secondaryCounter}.Z powodu {d.Reason} skreślam dh. {d.ScoutName} {d.ScoutSurname} z listy członków drużyny.";
                     List<string> words = new List<string>();
                     words = text.Split(' ').ToList();
                     foreach (string word in words)
@@ -428,7 +434,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                         if (posX < 480 - (word.Length * 6))
                         {
                             page.Canvas.DrawString(word,
-                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                trueTypeFont,
                                 new PdfSolidBrush(Color.Black),
                                 new PointF(posX, posY));
                             posX = posX + 7 * (word.Length + 1);
@@ -438,7 +444,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                             posX = 50;
                             posY = posY + 20;
                             page.Canvas.DrawString(word,
-                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                trueTypeFont,
                                 new PdfSolidBrush(Color.Black),
                                 new PointF(posX, posY));
                             posX = posX + 7 * (word.Length + 1);
@@ -456,7 +462,7 @@ namespace moja_druzyna.Lib.PdfGeneration
             if (order.Other != null && order.Other.Contents != null)
             {
                 page.Canvas.DrawString($"{mainCounter}.Inne",
-                    new PdfFont(PdfFontFamily.Helvetica, 13f),
+                    trueTypeFont,
                     new PdfSolidBrush(Color.Black),
                     new PointF(50, posY));
 
@@ -477,7 +483,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                         if (posX < 480 - (word.Length * 6))
                         {
                             page.Canvas.DrawString(word,
-                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                trueTypeFont,
                                 new PdfSolidBrush(Color.Black),
                                 new PointF(posX, posY));
                             posX = posX + 7 * (word.Length + 1);
@@ -487,7 +493,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                             posX = 50;
                             posY = posY + 20;
                             page.Canvas.DrawString(word,
-                                new PdfFont(PdfFontFamily.Helvetica, 13f),
+                                trueTypeFont,
                                 new PdfSolidBrush(Color.Black),
                                 new PointF(posX, posY));
                             posX = posX + 7 * (word.Length + 1);
@@ -508,16 +514,135 @@ namespace moja_druzyna.Lib.PdfGeneration
                 posY = 50;
             }
             page.Canvas.DrawString($"Czuwaj!",
-                    new PdfFont(PdfFontFamily.Helvetica, 13f),
+                    trueTypeFont,
                     new PdfSolidBrush(Color.Black),
-                    new PointF(350, posY+50));
-            page.Canvas.DrawString($"Druzynowy {order.TeamName}",
-                    new PdfFont(PdfFontFamily.Helvetica, 13f),
+                    new PointF(350, posY + 50));
+            page.Canvas.DrawString($"Drużynowy {order.TeamName}",
+                    trueTypeFont,
                     new PdfSolidBrush(Color.Black),
                     new PointF(300, posY + 70));
 
             doc.SaveToFile($"{order.OrderNumber}.pdf");
 
         }
+
+        public void GenerateEmptyList(List<Scout> team, Event evnt)
+        {
+            PdfDocument doc = new PdfDocument();
+            PdfPageBase page = doc.Pages.Add();
+            PdfTrueTypeFont trueTypeFont = new PdfTrueTypeFont(new Font(new FontFamily("Arial"), 13, FontStyle.Regular), true);
+            int posX = 50;
+            int posY = 170;
+            int lp = 1;
+
+            page.Canvas.DrawString("Lista obecności",
+                trueTypeFont,
+                new PdfSolidBrush(Color.Black),
+                new PointF(200, 50));
+
+            page.Canvas.DrawString($"Wydarzenie: {evnt.IdEvent} - {evnt.Type}",
+                trueTypeFont,
+                new PdfSolidBrush(Color.Black),
+                new PointF(170, 80));
+
+            page.Canvas.DrawString($"Data: {evnt.DateStartDateNotNullDateEnd}",
+                trueTypeFont,
+                new PdfSolidBrush(Color.Black),
+                new PointF(170, 110));
+
+            foreach (Scout scout in team)
+            {
+                if (posY > 700)
+                {
+                    page = doc.Pages.Add();
+                    posY = 50;
+                    posX = 50;
+                }
+                page.Canvas.DrawString($"{lp}. ",
+                    trueTypeFont,
+                    new PdfSolidBrush(Color.Black),
+                    new PointF(100, posY));
+                page.Canvas.DrawString($"{scout.Surname}",
+                    trueTypeFont,
+                    new PdfSolidBrush(Color.Black),
+                    new PointF(130, posY));
+                page.Canvas.DrawString($"{scout.Name}",
+                    trueTypeFont,
+                    new PdfSolidBrush(Color.Black),
+                    new PointF(250, posY));
+                page.Canvas.DrawString("|  |",
+                    trueTypeFont,
+                    new PdfSolidBrush(Color.Black),
+                    new PointF(370, posY));
+
+                posY = posY + 30;
+                lp = lp + 1;
+
+            }
+            doc.SaveToFile($"{evnt.IdEvent}_{evnt.Type}_lista_pusta.pdf");
+        }
+
+        public void GenerateEventList(Event ev, List<Scout> team)
+        {
+            PdfDocument doc = new PdfDocument();
+            PdfPageBase page = doc.Pages.Add();
+            PdfTrueTypeFont trueTypeFont = new PdfTrueTypeFont(new Font(new FontFamily("Arial"), 13, FontStyle.Regular), true);
+            int posX = 50;
+            int posY = 170;
+            int lp = 1;
+
+            page.Canvas.DrawString("Lista obecności",
+                trueTypeFont,
+                new PdfSolidBrush(Color.Black),
+                new PointF(200, 50));
+
+            page.Canvas.DrawString($"Wydarzenie: {ev.IdEvent} - {ev.Type}",
+                trueTypeFont,
+                new PdfSolidBrush(Color.Black),
+                new PointF(170, 80));
+
+            page.Canvas.DrawString($"Data: {ev.DateStartDateNotNullDateEnd}",
+                trueTypeFont,
+                new PdfSolidBrush(Color.Black),
+                new PointF(170, 110));
+
+            if (team.Count() == 0)
+            {
+                page.Canvas.DrawString("Na wydarzeniu nie było żadnych harcerzy",
+                    trueTypeFont,
+                    new PdfSolidBrush(Color.Black),
+                    new PointF(150, posY));
+            }
+            else
+            {
+                foreach (Scout scout in team)
+                {
+                    if (posY > 700)
+                    {
+                        page = doc.Pages.Add();
+                        posY = 50;
+                        posX = 50;
+                    }
+                    page.Canvas.DrawString($"{lp}. ",
+                        trueTypeFont,
+                        new PdfSolidBrush(Color.Black),
+                        new PointF(130, posY));
+                    page.Canvas.DrawString($"{scout.Surname}",
+                        trueTypeFont,
+                        new PdfSolidBrush(Color.Black),
+                        new PointF(160, posY));
+                    page.Canvas.DrawString($"{scout.Name}",
+                        trueTypeFont,
+                        new PdfSolidBrush(Color.Black),
+                        new PointF(280, posY));
+
+                    posY = posY + 30;
+                    lp = lp + 1;
+
+                }
+            }
+            doc.SaveToFile($"{ev.IdEvent}_{ev.Type}_lista.pdf");
+        }
+
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using moja_druzyna.Data;
 using moja_druzyna.Data.Session;
+using moja_druzyna.Lib.PdfGeneration;
 using moja_druzyna.Models;
 using moja_druzyna.ViewModels.Team;
 using System.Collections.Generic;

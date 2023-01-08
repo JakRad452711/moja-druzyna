@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using static moja_druzyna.ViewModels.DocumentsGenerators.AttendanceViewModel;
 using static moja_druzyna.ViewModels.DocumentsGenerators.OrdersViewModel;
 
 namespace moja_druzyna.Controllers
@@ -92,6 +93,151 @@ namespace moja_druzyna.Controllers
             }
 
             return Redirect("orders");
+        }
+
+        [Authorize(Roles = "captain,vice captain,host captain,ensign,quatermaster,chronicler,scout")]
+        public IActionResult Events()
+        {
+            ViewBag.UserRole = modelManager.GetScoutRoleInATeam(sessionAccesser.UserPesel, sessionAccesser.CurrentTeamId);
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
+
+            List<Event> events = _dbContext.EventTeams.Where(eventTeam => eventTeam.TeamIdTeam == sessionAccesser.CurrentTeamId).OrderByDescending(et => et.TeamIdTeam).Select(_eventTeam => _eventTeam.Event).ToList();
+
+            ViewBag.EventsList = events;
+
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "captain,vice captain,host captain,ensign,quatermaster,chronicler,scout")]
+        public IActionResult Events(Event evnt)
+        {
+            ViewBag.UserRole = modelManager.GetScoutRoleInATeam(sessionAccesser.UserPesel, sessionAccesser.CurrentTeamId);
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
+
+            _dbContext.Events.Add(evnt);
+            _dbContext.SaveChanges();
+
+            EventTeam et = new EventTeam
+            {
+                EventIdEvent = evnt.IdEvent,
+                TeamIdTeam = sessionAccesser.CurrentTeamId
+            };
+
+            _dbContext.EventTeams.Add(et);
+            _dbContext.SaveChanges();
+
+            List<Event> events = _dbContext.EventTeams.Where(eventTeam => eventTeam.TeamIdTeam == sessionAccesser.CurrentTeamId).Select(_eventTeam => _eventTeam.Event).ToList();
+
+            ViewBag.EventsList = events;
+
+            return RedirectToAction("events");
+        }
+
+        public IActionResult AttendanceListForm(int eventId)
+        {
+            ViewBag.UserRole = modelManager.GetScoutRoleInATeam(sessionAccesser.UserPesel, sessionAccesser.CurrentTeamId);
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
+
+            Event evnt = _dbContext.Events.Where(ev => ev.IdEvent == eventId).First();
+
+            ViewBag.Event = evnt;
+
+            ICollection<AttendanceViewModel> scoutsInfo = new List<AttendanceViewModel>();
+
+            int currentTeamId = sessionAccesser.CurrentTeamId;
+
+            List<Scout> scouts = _dbContext.ScoutTeam.Where(scoutTeam => scoutTeam.TeamIdTeam == currentTeamId).Select(_scoutTeam => _scoutTeam.Scout).ToList();
+
+            List<AttendanceViewModel_List> attendance = new List<AttendanceViewModel_List>();
+
+            foreach (Scout scout in scouts)
+            {
+                Host _host = modelManager.GetScoutsHostFromATeam(scout.PeselScout, sessionAccesser.CurrentTeamId);
+
+                attendance.Add(new AttendanceViewModel_List()
+                {
+                    IdScout = scout.PeselScout,
+                    Surname = scout.Surname,
+                    Name = scout.Name,
+                    Host = _host == null ? "" : _host.Name,
+                    EventId = eventId,
+                    IsPresent = _dbContext.AttendanceLists.Any(al => al.ScoutIdScout == scout.PeselScout && al.EventIdEvent == eventId)
+                });
+            }
+
+            AttendanceViewModel attendanceViewModel = new AttendanceViewModel() { AttendanceViewModel_Lists = attendance.OrderBy(at => at.Surname).ToList(), EventId = eventId };
+
+            return View("AttendanceListForm", attendanceViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult AttendanceListForm(AttendanceViewModel attendanceVM)
+        {
+            ViewBag.UserRole = modelManager.GetScoutRoleInATeam(sessionAccesser.UserPesel, sessionAccesser.CurrentTeamId);
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
+
+            Event evnt = _dbContext.Events.Where(ev => ev.IdEvent == attendanceVM.EventId).First();
+
+            ViewBag.Event = evnt;
+
+            foreach (var attendance in attendanceVM.AttendanceViewModel_Lists)
+            {
+                AttendanceList item = _dbContext.AttendanceLists.FirstOrDefault(al => al.EventIdEvent == attendance.EventId && al.ScoutIdScout == attendance.IdScout);
+
+                if (attendance.IsPresent && item == null)
+                {
+                    AttendanceList attendanceList = new AttendanceList();
+                    attendanceList.EventIdEvent = attendance.EventId;
+                    attendanceList.TeamIdTeam = sessionAccesser.CurrentTeamId;
+                    attendanceList.ScoutIdScout = attendance.IdScout;
+
+                    _dbContext.AttendanceLists.Add(attendanceList);                    
+                } else if (item != null)
+                {
+                    _dbContext.AttendanceLists.Remove(item);                  
+                }
+            }
+
+            _dbContext.SaveChanges();
+
+            return AttendanceListForm(attendanceVM.EventId);
+        }
+
+        [HttpPost]
+        public IActionResult GenerateEmptyListPdf(int idEvent)
+        {
+            Event evnt = _dbContext.Events.Where(ev => ev.IdEvent == idEvent).First();
+
+            int currentTeamId = sessionAccesser.CurrentTeamId;
+
+            List<Scout> scouts = _dbContext.ScoutTeam.Where(scoutTeam => scoutTeam.TeamIdTeam == currentTeamId).Select(_scoutTeam => _scoutTeam.Scout).ToList();
+
+            new GeneratorPdf().GenerateEmptyList(scouts, evnt);
+
+            return AttendanceListForm(idEvent);
+        }
+
+        [HttpPost]
+        public IActionResult GenerateListPdf(int idEvent)
+        {
+            Event evnt = _dbContext.Events.Where(ev => ev.IdEvent == idEvent).First();
+
+            int currentTeamId = sessionAccesser.CurrentTeamId;
+
+            List<Scout> attended = new List<Scout>();
+
+            List<AttendanceList> attendanceLists = _dbContext.AttendanceLists.Where(al => al.EventIdEvent == evnt.IdEvent).ToList();
+
+            foreach (var attendance in attendanceLists)
+            {
+                Scout scout = _dbContext.Scouts.Where(sc => sc.PeselScout == attendance.ScoutIdScout).First();
+                attended.Add(scout);
+            }
+
+            new GeneratorPdf().GenerateEventList(evnt, attended);
+
+            return AttendanceListForm(idEvent);
         }
 
         [Authorize(Roles = "captain")]
