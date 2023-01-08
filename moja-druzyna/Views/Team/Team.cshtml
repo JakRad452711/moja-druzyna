@@ -15,7 +15,7 @@
             <div class="paragraph2-regular ml-8px font-weight-light" style="text-decoration:underline">
                 Harcerze
             </div>
-            <div class="paragraph2-regular ml-16px font-weight-light highlightOnHover">
+            <div class="paragraph2-regular ml-16px font-weight-light">
                 <a asp-action="hosts" class="font-muddy-black">
                     Zastępy
                 </a>
@@ -24,7 +24,7 @@
 
         <!-- BUTTONS - Add scout, ... -->
         <div class="text-left">
-            <button asp-action="addscout" class="ml-8px mb-16px round-corners-5px no-border text-white large-light" style="background-color:yellowgreen">
+            <button asp-action="addscout" class="ml-8px pr-8px mb-16px round-corners-5px no-border text-white large-light" style="background-color:yellowgreen">
                 <img src="~/icons/managment/add.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
                 Dodaj harcerza
             </button>
@@ -365,7 +365,6 @@
                         $("#membership-number").html(scout.MembershipNumber);
                     },
                     error: function() {
-                        alert("Error in Team.cshtml: updateBasicInfo(scoutId)");
                     }
                 });
             }
@@ -410,7 +409,6 @@
                         $("#ranks-list").html(ranksHtml);
                     },
                     error: function() {
-                        alert("Error in Team.cshtml: updateRanks(scoutId)");
                     }
                 });
             }
@@ -425,7 +423,6 @@
                         $("#role").html((result.value == null ? "--" : result.value));
                     },
                     error: function() {
-                        alert("Error in Team.cshtml: updateRole(scoutId, teamId)");
                     }
                 });
             }
@@ -441,7 +438,6 @@
                         $("#host").html((host == null ? "--" : host.Name));
                     },
                     error: function() {
-                        alert("Error in Team.cshtml: updateHost(scoutId, teamId)");
                     }
                 });
             }
@@ -506,7 +502,6 @@
                         $("#achievements-list-content").html(achievementsHtml);
                     },
                     error: function() {
-                        alert("Error in Team.cshtml: updateAchievements(scoutId)");
                     }
                 });
             }

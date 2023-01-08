@@ -6,142 +6,175 @@
 
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/views/team/EditScout.css" asp-append-version="true" />
-<div class="display-flex justify-content-center text-center width100p min-width-fit-content">
-    <form asp-action="editscout" class="display-block">
-        <div class="display-flex justify-content-center width100p mb-32px">
-            <div class="mr-8px mt-4px">
-                <img src="~/icons/main/green/flag.svg" class="icon-size-32 mt-1px" />
+<div class="text-center justify-content-center display-flex" style="min-width:900px;height:85vh">
+    <form method="post" class="size100p">
+        <input id="team-id" value="@ViewBag.TeamId" disabled hidden />
+        <div style="height:50px" class="text-left display-flex mt-16px">
+            <div class="paragraph2-regular ml-8px font-weight-light">
+                <a asp-action="team" class="font-muddy-black">
+                    Harcerze
+                </a>
             </div>
-            <div class="font-dark-green header1-light">
-                Moja drużyna
-            </div>
-        </div>
-        <div class="list-item-width medium-light font-muddy-black mb-32px">
-            @ViewBag.TeamName <br />
-        </div>
-        <div class="clear-white big-shadow size-fit-content medium-light display-block">
-            <div class="large-light mb-16px">
-                edytowanie osoby
-            </div>
-            @if (ViewBag.scoutWasEdited == true)
-            {
-                <div class="font-dark-green mb-8px">
-                    edycja osoby powiodła się <br />
-                    <button asp-action="team" formmethod="get" class="round-corners-5px button-padding no-border mt-4px">wróć</button>
-                </div>
-            }
-            @if (ViewBag.scoutEditionFailed == true)
-            {
-                <div class="text-danger mb-8px">
-                    edycja osoby nie powiodła się
-                </div>
-            }
-            <div class="large-light mb-16px">
-                dane
-            </div>
-            <input asp-for="PeselScout" class="input-box-width" hidden /><br />
-            <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
-                <div class="form-group mr-8px">
-                    <label asp-for="Name" class="input-box-width text-left">imię</label> <br />
-                    <input asp-for="Name" class="input-box-width" /><br />
-                    <span asp-validation-for="Name" class="input-box-width text-left text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Surname" class="input-box-width text-left">nazwisko</label> <br />
-                    <input asp-for="Surname" class="input-box-width" /><br />
-                    <span asp-validation-for="Surname" class="input-box-width text-left text-danger"></span>
-                </div>
-            </div>
-            <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
-                <div class="form-group mr-8px">
-                    <label asp-for="SecondName" class="input-box-width text-left">drugie imię</label> <br />
-                    <input asp-for="SecondName" class="input-box-width" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Nationality" class="input-box-width text-left">obywatelstwo</label> <br />
-                    <input asp-for="Nationality" class="input-box-width" />
-                </div>
-            </div>
-            <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
-                <div class="form-group mr-8px">
-                    <label asp-for="DateOfEntry" class="input-box-width text-left">data wstąpienia do zhp</label> <br />
-                    <input asp-for="DateOfEntry" class="input-box-width" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="MembershipNumber" class="input-box-width text-left">numer członkowski</label> <br />
-                    <input asp-for="MembershipNumber" class="input-box-width" />
-                </div>
-            </div>
-            <div class="display-flex size-fit-content pt-4px pl-8px pr-8px">
-                <div class="form-group text-left float-left">
-                    <label asp-for="Ns" class="input-box-width mt-8px ">NS</label> <br />
-                    <input asp-for="Ns" type="checkbox" class="checkbox-size" /> <br /><br />
-                </div>
-            </div>
-            <div class="large-light mb-16px">
-                adres zamieszkania
-            </div>
-            <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
-                <div class="form-group mr-8px">
-                    <label asp-for="Adress.StreetZam" class="input-box-width text-left">ulica</label> <br />
-                    <input asp-for="Adress.StreetZam" class="input-box-width" /><br />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Adress.NumberHouseZam" class="input-box-width text-left">numer mieszkania</label> <br />
-                    <input asp-for="Adress.NumberHouseZam" class="input-box-width" />
-                </div>
-            </div>
-            <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
-                <div class="form-group mr-8px">
-                    <label asp-for="Adress.CityZam" class="input-box-width text-left">miasto</label> <br />
-                    <input asp-for="Adress.CityZam" class="input-box-width" /><br />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Adress.ZipZam" class="input-box-width text-left">kod pocztowy</label> <br />
-                    <input asp-for="Adress.ZipZam" class="input-box-width" />
-                </div>
-            </div>
-            <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
-                <div class="form-group mr-8px">
-                    <label asp-for="Adress.CountryZam" class="input-box-width text-left">kraj</label> <br />
-                    <input asp-for="Adress.CountryZam" class="input-box-width" /><br />
-                </div>
-            </div>
-            <div class="large-light mb-16px">
-                adres korespondencji
-            </div>
-            <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
-                <div class="form-group mr-8px">
-                    <label asp-for="Adress.StreetKor" class="input-box-width text-left">ulica</label> <br />
-                    <input asp-for="Adress.StreetKor" class="input-box-width" /><br />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Adress.NumberHouseKor" class="input-box-width text-left">numer mieszkania</label> <br />
-                    <input asp-for="Adress.NumberHouseKor" class="input-box-width" />
-                </div>
-            </div>
-            <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
-                <div class="form-group mr-8px">
-                    <label asp-for="Adress.CityKor" class="input-box-width text-left">miasto</label> <br />
-                    <input asp-for="Adress.CityKor" class="input-box-width" /><br />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Adress.ZipKor" class="input-box-width text-left">kod pocztowy</label> <br />
-                    <input asp-for="Adress.ZipKor" class="input-box-width" />
-                </div>
-            </div>
-            <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
-                <div class="form-group mr-8px">
-                    <label asp-for="Adress.CountryKor" class="input-box-width text-left">kraj</label> <br />
-                    <input asp-for="Adress.CountryKor" class="input-box-width" /><br />
-                </div>
-            </div>
-            <div class="display-flex p-8px justify-content-center">
-                <button type="submit" class="round-corners-5px font-dark-green border-dark-green button-padding mr-16px">edytuj</button>
-                <button asp-action="team" formmethod="get" class="round-corners-5px font-danger-red border-danger-red button-padding">anuluj</button>
+            <div class="paragraph2-regular ml-16px font-weight-light">
+                <a asp-action="hosts" class="font-muddy-black">
+                    Zastępy
+                </a>
             </div>
         </div>
-        <div style="height: 120px">
+
+        <!-- BUTTONS - Add host, ... -->
+        <div class="text-left">
+            <button asp-action="team" formmethod="get" class="ml-8px pr-8px mb-16px round-corners-5px no-border text-white large-light" style="background-color:gray">
+                <img src="~/icons/navigation/nav-left.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                Wróć
+            </button>
+        </div>
+
+        <!-- MAIN PANEL -->
+        <div class="display-flex size100p justify-content-around">
+            <!-- LIST OF HOSTS IN THE TEAM -->
+            <div style="min-width:160px;width:99%" class="display-flex height-fit-content justify-content-center big-shadow">
+                <div style="width:96%">
+                    <div class="paragraph2-light mb-16px">
+                        edycja harcerza
+                    </div>
+                    @if (ViewBag.scoutWasEdited == true)
+                    {
+                        <div class="font-dark-green mb-8px paragraph-light" style="position:relative">
+                            <span class="width100p text-center" style="position:absolute;left:0px;top:-6px">
+                                <img src="~/icons/managment/check_circle.svg" class="icon-size-24 mb-4px" style="filter: invert(30%) sepia(11%) saturate(2579%) hue-rotate(70deg) brightness(100%) contrast(84%);" />
+                                edycja osoby powiodła się
+                            </span>
+                        </div>
+                    }
+                    @if (ViewBag.scoutEditionFailed == true)
+                    {
+                        <div class="text-danger mb-8px paragraph-light" style="position:relative">
+                            <span class="width100p text-center" style="position:absolute;left:0px;top:-6px">
+                                <img src="~/icons/managment/cancel.svg" class="icon-size-24 mb-4px" style="filter: invert(47%) sepia(54%) saturate(701%) hue-rotate(314deg) brightness(86%) contrast(98%);" />
+                                edycja osoby nie powiodła się
+                            </span>
+                        </div>
+                    }
+                    <div class="display-flex p-8px" style="position:relative;z-index:1000">
+                        <button type="submit" class="mb-16px round-corners-5px no-border text-white large-light" style="background-color:yellowgreen">
+                            <img src="~/icons/managment/check_circle.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                            Zapisz zmiany
+                        </button>
+                    </div>
+                    <div style="display:none">
+                        <input asp-for="PeselScout" /><br />
+                    </div>
+                    <div class="large-light ml-8px mb-4px text-left">
+                        dane
+                    </div>
+                    <div class="display-flex width100p p-4px pl-8px pr-8px justify-content-between">
+                        <div class="form-group mr-8px" style="width:49%">
+                            <label asp-for="Name" class="width100p text-left">imię*</label> <br />
+                            <input asp-for="Name" class="width100p" /><br />
+                            <div class="width100p" style="position:relative">
+                                <span asp-validation-for="Name" class="width100p text-left text-danger" style="position:absolute;left:0px"></span>
+                            </div>
+                        </div>
+                        <div class="form-group" style="width:49%">
+                            <label asp-for="Surname" class="width100p text-left">nazwisko*</label> <br />
+                            <input asp-for="Surname" class="width100p" /><br />
+                            <div class="width100p" style="position:relative">
+                                <span asp-validation-for="Surname" class="input-box-width text-left text-danger" style="position:absolute;left:0px"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="display-flex width100p size-fit-content p-4px pl-8px pr-8px justify-content-between">
+                        <div class="form-group mr-8px" style="width:49%">
+                            <label asp-for="SecondName" class="width100p text-left">drugie imię</label> <br />
+                            <input asp-for="SecondName" class="width100p" />
+                        </div>
+                        <div class="form-group" style="width:49%">
+                            <label asp-for="Nationality" class="width100p text-left">obywatelstwo</label> <br />
+                            <input asp-for="Nationality" class="width100p" />
+                        </div>
+                    </div>
+                    <div class="display-flex width100p size-fit-content p-4px pl-8px pr-8px justify-content-between">
+                        <div class="form-group mr-8px" style="width:49%">
+                            <label asp-for="DateOfEntry" class="width100p text-left">data wstąpienia do zhp</label> <br />
+                            <input asp-for="DateOfEntry" type="date" class="width100p" />
+                        </div>
+                        <div class="form-group" style="width:49%">
+                            <label asp-for="MembershipNumber" class="width100p text-left">numer członkowski</label> <br />
+                            <input asp-for="MembershipNumber" class="width100p" />
+                        </div>
+                    </div>
+                    <div class="display-flex size-fit-content pt-4px pl-8px pr-8px">
+                        <div class="form-group text-left float-left">
+                            <label asp-for="Ns" class="input-box-width mt-8px ">NS</label> <br />
+                            <input asp-for="Ns" type="checkbox" class="checkbox-size" /> <br /><br />
+                        </div>
+                    </div>
+                    <div class="display-flex size-fit-content pl-8px">
+                        <label class="input-box-width text-left small-light">* - obowiązkowe</label>
+                    </div>
+                    <div class="large-light ml-8px mb-4px text-left">
+                        adres zamieszkania
+                    </div>
+                    <div class="display-flex width100p p-4px pl-8px pr-8px">
+                        <div class="form-group mr-8px" style="width:49%">
+                            <label asp-for="Adress.StreetZam" class="width100p text-left">ulica</label> <br />
+                            <input asp-for="Adress.StreetZam" class="width100p" /><br />
+                        </div>
+                        <div class="form-group" style="width:49%">
+                            <label asp-for="Adress.NumberHouseZam" class="width100p text-left">numer mieszkania</label> <br />
+                            <input asp-for="Adress.NumberHouseZam" class="width100p" />
+                        </div>
+                    </div>
+                    <div class="display-flex width100p size-fit-content p-4px pl-8px pr-8px" >
+                        <div class="form-group mr-8px" style="width:49%">
+                            <label asp-for="Adress.CityZam" class="width100p text-left">miasto</label> <br />
+                            <input asp-for="Adress.CityZam" class="width100p" /><br />
+                        </div>
+                        <div class="form-group" style="width:49%">
+                            <label asp-for="Adress.ZipZam" class="width100p text-left">kod pocztowy</label> <br />
+                            <input asp-for="Adress.ZipZam" class="width100p" />
+                        </div>
+                    </div>
+                    <div class="display-flex width100p size-fit-content p-4px pl-8px pr-8px">
+                        <div class="form-group mr-8px" style="width:49%">
+                            <label asp-for="Adress.CountryZam" class="width100p text-left">kraj</label> <br />
+                            <input asp-for="Adress.CountryZam" class="width100p" /><br />
+                        </div>
+                    </div>
+                    <div class="large-light mb-16px">
+                        adres korespondencji
+                    </div>
+                    <div class="display-flex width100p size-fit-content p-4px pl-8px pr-8px">
+                        <div class="form-group mr-8px" style="width:49%">
+                            <label asp-for="Adress.StreetKor" class="width100p text-left">ulica</label> <br />
+                            <input asp-for="Adress.StreetKor" class="width100p" /><br />
+                        </div>
+                        <div class="form-group" style="width:49%">
+                            <label asp-for="Adress.NumberHouseKor" class="width100p text-left">numer mieszkania</label> <br />
+                            <input asp-for="Adress.NumberHouseKor" class="width100p" />
+                        </div>
+                    </div>
+                    <div class="display-flex width100p size-fit-content p-4px pl-8px pr-8px">
+                        <div class="form-group mr-8px" style="width:49%">
+                            <label asp-for="Adress.CityKor" class="width100p text-left">miasto</label> <br />
+                            <input asp-for="Adress.CityKor" class="width100p" /><br />
+                        </div>
+                        <div class="form-group" style="width:49%">
+                            <label asp-for="Adress.ZipKor" class="width100p text-left">kod pocztowy</label> <br />
+                            <input asp-for="Adress.ZipKor" class="width100p" />
+                        </div>
+                    </div>
+                    <div class="display-flex width100p size-fit-content p-4px pl-8px pr-8px">
+                        <div class="form-group mr-8px" style="width:49%">
+                            <label asp-for="Adress.CountryKor" class="width100p text-left">kraj</label> <br />
+                            <input asp-for="Adress.CountryKor" class="width100p" /><br />
+                        </div>
+                    </div>
+                    <div style="height: 90px">
+                    </div>
+                </div>
+            </div>
         </div>
     </form>
 </div>

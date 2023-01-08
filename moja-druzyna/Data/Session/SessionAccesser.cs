@@ -5,7 +5,7 @@ using System.Security.Claims;
 
 namespace moja_druzyna.Data.Session
 {
-    public class SessionAccesser : ISessionUserContext, ISessionTeamContext, ISessionLayoutContext, ISessionAddHostContext, ISessionAddScoutContext
+    public class SessionAccesser : ISessionUserContext, ISessionTeamContext, ISessionLayoutContext, ISessionAddHostContext, ISessionAddScoutContext, ISessionOperationStatusContext
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -16,6 +16,7 @@ namespace moja_druzyna.Data.Session
         private readonly string sessionAddHostContextName = "AddHostContext";
         private readonly string sessionAddScoutContextName = "AddScoutContext";
         private readonly string sessionFormOrderContextName = "FormOrderContext";
+        private readonly string sessionOperationStatusContextName = "OperationStatusContext";
 
         public SessionAccesser(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor)
         {
@@ -36,6 +37,7 @@ namespace moja_druzyna.Data.Session
             InitializeSessionAddHostContext(httpContextAccessor);
             InitializeSessionAddScoutContext(httpContextAccessor);
             InitializeSessionFormOrderContext(httpContextAccessor);
+            InitializeSessionOperationStatusContext(httpContextAccessor);
         }
 
         public string UserId
@@ -275,6 +277,46 @@ namespace moja_druzyna.Data.Session
             }
         }
 
+        public bool OperationSucceeded
+        {
+            get
+            {
+                ISessionOperationStatusContext sessionOperationStatusContext = JsonConvert
+                    .DeserializeObject<SessionOperationStatusContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionOperationStatusContextName));
+
+                return sessionOperationStatusContext.OperationSucceeded;
+            }
+            set
+            {
+                ISessionOperationStatusContext sessionOperationStatusContext = JsonConvert
+                    .DeserializeObject<SessionOperationStatusContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionOperationStatusContextName));
+
+                sessionOperationStatusContext.OperationSucceeded = value;
+
+                _httpContextAccessor.HttpContext.Session.SetString(sessionOperationStatusContextName, JsonConvert.SerializeObject(sessionOperationStatusContext));
+            }
+        }
+
+        public bool OperationFailed
+        {
+            get
+            {
+                ISessionOperationStatusContext sessionOperationStatusContext = JsonConvert
+                    .DeserializeObject<SessionOperationStatusContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionOperationStatusContextName));
+
+                return sessionOperationStatusContext.OperationFailed;
+            }
+            set
+            {
+                ISessionOperationStatusContext sessionOperationStatusContext = JsonConvert
+                    .DeserializeObject<SessionOperationStatusContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionOperationStatusContextName));
+
+                sessionOperationStatusContext.OperationFailed = value;
+
+                _httpContextAccessor.HttpContext.Session.SetString(sessionOperationStatusContextName, JsonConvert.SerializeObject(sessionOperationStatusContext));
+            }
+        }
+
         public void InitializeSessionUserContext(IHttpContextAccessor httpContextAccessor)
         {
             if (httpContextAccessor.HttpContext.Session.GetString(sessionUserContextName) != null)
@@ -347,6 +389,14 @@ namespace moja_druzyna.Data.Session
                 return;
 
             httpContextAccessor.HttpContext.Session.SetString(sessionFormOrderContextName, JsonConvert.SerializeObject(new SessionFormOrderContext()));
+        }
+
+        public void InitializeSessionOperationStatusContext(IHttpContextAccessor httpContextAccessor)
+        {
+            if (httpContextAccessor.HttpContext.Session.GetString(sessionOperationStatusContextName) != null)
+                return;
+
+            httpContextAccessor.HttpContext.Session.SetString(sessionOperationStatusContextName, JsonConvert.SerializeObject(new SessionOperationStatusContext()));
         }
     }
 }

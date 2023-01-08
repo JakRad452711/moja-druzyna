@@ -21,6 +21,7 @@ namespace moja_druzyna.ViewModels.Team
         {
             public int HostId { get; set; }
             public string HostName { get; set; }
+            public int NumberOfScouts { get; set; }
             public string HostCaptainLabel { get; set; }
         }
     }
