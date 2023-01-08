@@ -312,7 +312,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                 secondaryCounter = 1;
             }
 
-            if (order.Games != null)
+            if (order.GamePointsEntries != null)
             {
                 page.Canvas.DrawString($"{mainCounter}.Podsumowanie współzawodnictwa",
                     trueTypeFont,
@@ -320,7 +320,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                     new PointF(50, posY));
 
                 posY = posY + 20;
-                foreach (Game g in order.Games)
+                foreach (GamePointsEntry g in order.GamePointsEntries)
                 {
                     if (posY > 700)
                     {
@@ -328,7 +328,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                         posY = 50;
                         posX = 50;
                     }
-                    string text = $"{mainCounter}.{secondaryCounter}.Za wyniki w grze {g.GameName} przyznaję dh. {g.Person.Name} {g.Person.Surname} {g.Points} punktów do współzawodnictwa.";
+                    string text = $"{mainCounter}.{secondaryCounter}.Za wyniki w grze {g.GameName} przyznaję dh. {g.ScoutName} {g.ScoutSurname} {g.Points} punktów do współzawodnictwa.";
                     List<string> words = new List<string>();
                     words = text.Split(' ').ToList();
                     foreach (string word in words)

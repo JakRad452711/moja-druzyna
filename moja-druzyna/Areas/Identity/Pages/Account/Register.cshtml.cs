@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -14,8 +7,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using moja_druzyna.Data;
+using moja_druzyna.Lib.PeselModule;
 using moja_druzyna.Models;
-using moja_druzyna.src;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 
 namespace moja_druzyna.Areas.Identity.Pages.Account
 {
@@ -25,7 +24,6 @@ namespace moja_druzyna.Areas.Identity.Pages.Account
         private readonly ApplicationDbContext _applicationDbContext;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
@@ -34,7 +32,6 @@ namespace moja_druzyna.Areas.Identity.Pages.Account
             ApplicationDbContext applicationDbContext,
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            RoleManager<IdentityRole> roleManager,
             ApplicationDbContext dbContext,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
@@ -42,7 +39,6 @@ namespace moja_druzyna.Areas.Identity.Pages.Account
             _applicationDbContext = applicationDbContext;
             _userManager = userManager;
             _signInManager = signInManager;
-            _roleManager = roleManager;
             _dbContext = dbContext;
             _logger = logger;
             _emailSender = emailSender;
@@ -112,7 +108,7 @@ namespace moja_druzyna.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-            if (ModelState.IsValid && modelManager.ScoutPrimaryKeyIsAvailable(Input.Pesel) && new Pesel(Input.Pesel).isValid())
+            if (ModelState.IsValid && modelManager.ScoutPrimaryKeyIsAvailable(Input.Pesel) && new Pesel(Input.Pesel).IsValid())
             {
                 var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -121,7 +117,8 @@ namespace moja_druzyna.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    Scout scout = new Scout() {
+                    Scout scout = new Scout()
+                    {
                         Identity = user,
                         IdentityId = user.Id,
                         PeselScout = Input.Pesel,
@@ -131,7 +128,7 @@ namespace moja_druzyna.Areas.Identity.Pages.Account
                         Nationality = Input.Nationality,
                         MembershipNumber = Input.MembershipNumber,
                         Ns = Input.Ns,
-                        DateOfBirth = new Pesel(Input.Pesel).getBirthday()
+                        DateOfBirth = new Pesel(Input.Pesel).GetBirthday()
                     };
 
                     modelManager.CreateScoutCaptainWithTeam(scout);
@@ -152,8 +149,6 @@ namespace moja_druzyna.Areas.Identity.Pages.Account
                         string emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                         await _userManager.ConfirmEmailAsync(user, emailConfirmationToken);
 
-                        await AddRole(user.Id, "captain");
-
                         return RedirectToPage("Login");
                     }
                     else
@@ -170,30 +165,6 @@ namespace moja_druzyna.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return Page();
-        }
-
-        public async Task<IActionResult> AddRole(string userId, string role)
-        {
-            await InitializeRoles();
-
-            IdentityUser user = await _userManager.FindByIdAsync(userId);
-
-            await _userManager.AddToRoleAsync(user, role);
-
-            return RedirectToAction("personaldata", "profilecontroller");
-        }
-
-        private async Task InitializeRoles()
-        {
-            foreach (var roleName in new List<string>() { "captain", "vice captain", "host captain", "quatermaster", "ensign", "chronicler", "scout", "parent" })
-            {
-                var roleExist = await _roleManager.RoleExistsAsync(roleName);
-
-                if (!roleExist)
-                {
-                    var roleResult = await _roleManager.CreateAsync(new IdentityRole(roleName));
-                }
-            }
         }
     }
 }

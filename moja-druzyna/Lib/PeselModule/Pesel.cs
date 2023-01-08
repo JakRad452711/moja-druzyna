@@ -1,7 +1,6 @@
 ﻿using System;
-using System.IO;
 
-namespace moja_druzyna.src
+namespace moja_druzyna.Lib.PeselModule
 {
     public class Pesel
     {
@@ -19,7 +18,7 @@ namespace moja_druzyna.src
             set { }
         }
 
-        public bool isPesel()
+        private bool IsPesel()
         {
             if (PESEL.Length != 11)
             {
@@ -27,13 +26,13 @@ namespace moja_druzyna.src
             }
             try
             {
-                long temp = System.Int64.Parse(PESEL);
+                long temp = long.Parse(PESEL);
                 return true;
             }
             catch { return false; }
         }
 
-        public int getDay()
+        public int GetDay()
         {
             /*
             char[] digits = new char[PESEL.Length];
@@ -47,22 +46,23 @@ namespace moja_druzyna.src
             return day;
         }
 
-        public int getMonth()
+        public int GetMonth()
         {
             int month;
             int d10 = PESEL[2] - '0';
             int d1 = PESEL[3] - '0';
             if (d10 > 1)
             {
-                month = 10 * d10 + d1 - 20;
-            } else
+                month = (10 * d10 + d1) % 20;
+            }
+            else
             {
                 month = 10 * d10 + d1;
-            } 
+            }
             return month;
         }
 
-        public int getYear()
+        public int GetYear()
         {
             int d1 = PESEL[1] - '0';
             int d10 = PESEL[0] - '0';
@@ -79,54 +79,54 @@ namespace moja_druzyna.src
             return year;
         }
 
-        public int summary()
+        private int Summary()
         {
             int sum = 0;
             for (int i = 0; i < 10; i++)
             {
-                sum = sum + ((PESEL[i] - '0') * multipliers[i]);
+                sum = sum + (PESEL[i] - '0') * multipliers[i];
             }
             return sum % 10;
         }
 
-        public bool isValid()
+        public bool IsValid()
         {
             bool valid = true;
-            if (!isPesel())
+            if (!IsPesel())
             {
                 valid = false;
             }
             else
             {
-                int rest = summary();
-                if (rest == 0 & (PESEL[10] - '0') != 0)
+                int rest = Summary();
+                if (rest == 0 & PESEL[10] - '0' != 0)
                 {
                     valid = false;
                 }
-                else if ((PESEL[10] - '0') != 10 - rest)
+                else if (PESEL[10] - '0' != 10 - rest)
                 {
                     valid = false;
                 }
-                else if (getDay() > 31 | getMonth() > 12)
+                else if (GetDay() > 31 | GetMonth() > 12)
                 {
                     valid = false;
                 }
-                else if (getMonth() == 4 | (getMonth() == 6 | (getMonth() == 9 | getMonth() == 11)))
+                else if (GetMonth() == 4 | GetMonth() == 6 | GetMonth() == 9 | GetMonth() == 11)
                 {
-                    if (getDay() == 31)
+                    if (GetDay() == 31)
                     {
                         valid = false;
                     }
                 }
-                else if (getMonth() == 2)
+                else if (GetMonth() == 2)
                 {
-                    if (getDay() == 31 | getDay() == 30)
+                    if (GetDay() == 31 | GetDay() == 30)
                     {
                         valid = false;
                     }
-                    else if (getDay() == 29)
+                    else if (GetDay() == 29)
                     {
-                        if (getYear() % 4 != 0)
+                        if (GetYear() % 4 != 0)
                         {
                             valid = false;
                         }
@@ -136,15 +136,14 @@ namespace moja_druzyna.src
             return valid;
         }
 
-        public DateTime getBirthday()
+        public DateTime GetBirthday()
         {
             DateTime birthday = new DateTime();
-            birthday = new DateTime(getYear(), getMonth(), getDay());
-            //string birthday = $"{getDay()}.{getMonth()}.{getYear()}";
+            birthday = new DateTime(GetYear(), GetMonth(), GetDay());
             return birthday;
         }
 
-        public bool isMale()
+        public bool IsMale()
         {
             if ((PESEL[9] - '0') % 2 != 0)
             {
@@ -155,6 +154,5 @@ namespace moja_druzyna.src
                 return false;
             }
         }
-
     }
 }

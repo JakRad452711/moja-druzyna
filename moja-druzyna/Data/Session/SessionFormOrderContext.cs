@@ -12,6 +12,7 @@ namespace moja_druzyna.Data.Session
             Appointments = new();
             TrialClosings = new();
             TrialOpenings = new();
+            GamePointsEntries = new();
             ReprimendsAndPraises = new();
             Exclusions = new();
             Other = new();
@@ -29,6 +30,8 @@ namespace moja_druzyna.Data.Session
         public List<TrialClosing> TrialClosingsSaved { get; set; }
         public List<TrialOpening> TrialOpenings { get; set; }
         public List<TrialOpening> TrialOpeningsSaved { get; set; }
+        public List<GamePointsEntry> GamePointsEntries { get; set; }
+        public List<GamePointsEntry> GamePointsEntriesSaved { get; set; }
         public List<ReprimendsAndPraises> ReprimendsAndPraises { get; set; }
         public List<ReprimendsAndPraises> ReprimendsAndPraisesSaved { get; set; }
         public List<Exclusion> Exclusions { get; set; }

@@ -11,6 +11,7 @@ namespace moja_druzyna.Lib.Order
             Appointments = new();
             TrialClosings = new();
             TrialOpenings = new();
+            GamePointsEntries = new();
             ReprimendsAndPraises = new();
             Exclusions = new();
             Other = new();
@@ -25,8 +26,8 @@ namespace moja_druzyna.Lib.Order
         public List<Appointment> Appointments { get; set; }
         public List<TrialClosing> TrialClosings { get; set; }
         public List<TrialOpening> TrialOpenings { get; set; }
+        public List<GamePointsEntry> GamePointsEntries { get; set; }
         public List<ReprimendsAndPraises> ReprimendsAndPraises { get; set; }
-        public List<Game> Games { get; set; }
         public List<Exclusion> Exclusions { get; set; }
         public Other Other { get; set; }
     }
