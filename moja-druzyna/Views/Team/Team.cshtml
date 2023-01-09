@@ -1,4 +1,5 @@
-﻿@using moja_druzyna.Lib.PeselModule
+﻿@using moja_druzyna.Const
+@using moja_druzyna.Lib.PeselModule
 @using moja_druzyna.ViewModels.Team
 @model moja_druzyna.ViewModels.Team.TeamViewModel
 
@@ -206,7 +207,7 @@
                             @{
                                 string role = @Model.FirstScoutTeamRole;
                                 <div id="role" class="width-2a">
-                                    @(string.IsNullOrEmpty(role) ? "--" : moja_druzyna.Const.TeamRoles.TeamRolesTranslationsWithPolishLetters[role])
+                                    @(string.IsNullOrEmpty(role) || role == TeamRoles.Scout ? "--" : moja_druzyna.Const.TeamRoles.TeamRolesTranslationsWithPolishLetters[role])
                                 </div>
                             }
                         </div>
