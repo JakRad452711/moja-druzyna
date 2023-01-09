@@ -1,8 +1,103 @@
-﻿@{
+﻿@model ICollection<moja_druzyna.ViewModels.Profile.RolesViewModel>
+
+@{
     ViewData["Title"] = "role";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Moje role</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center" justify-content-center display-flex" style="min-width:650px">
+    <h1 class="display-4">Role w mojej drużynie</h1>
+
+    <div class="display-flex list-item-width text-left medium-bold mb-4px">
+            <div class="display-flex justify-content-between width100p ml-64px">
+                <span class="width-1a">godność</span>
+                <span class="width-1d mr-16px"></span>
+                <span class="width-1d mr-16px">rola</span>
+
+            </div>
+        </div>
+
+    <div class="text-center justify-content-center" style="min-width:650px" align="center">
+    @foreach (var roleVM in Model)
+    {
+     
+        <div class="display-flex list-item-size clear-white small-shadow round-corners-12px large-light mb-4px">
+                <div class="mt-4px ml-8px">
+                    <img id="profile-picture" src="~/icons/design/profile picture.svg" class="icon-size-40 mr-16px" />
+                </div>
+                <div class="display-flex justify-content-between width100p text-left">
+                    <div class="width-1a">
+                        <div class="mt-8px">@roleVM.ScoutName</div>
+                    </div>
+                    @*<div class="width-1b mt-8px">
+                        @if (teamVM.Rank == "1")
+                        {
+                            <img src="~/icons/design/ranks/no-accents/rank-1.svg" class="rank-icon-size-1" />
+                        }
+                        else if (teamVM.Rank == "2")
+                        {
+                            <img src="~/icons/design/ranks/no-accents/rank-2.svg" class="rank-icon-size-1" />
+                        }
+                        else if (teamVM.Rank == "3")
+                        {
+                            <img src="~/icons/design/ranks/no-accents/rank-3.svg" class="rank-icon-size-1" />
+                        }
+                        else if (teamVM.Rank == "4")
+                        {
+                            <img src="~/icons/design/ranks/no-accents/rank-4.svg" class="rank-icon-size-1" />
+                        }
+                        else if (teamVM.Rank == "5")
+                        {
+                            <img src="~/icons/design/ranks/no-accents/rank-5.svg" class="rank-icon-size-1" />
+                        }
+                        else if (teamVM.Rank == "6")
+                        {
+                            <img src="~/icons/design/ranks/no-accents/rank-6.svg" class="rank-icon-size-1" />
+                        }
+                    </div>*@
+                    <div class="width-1c mt-8px">
+                        @roleVM.RoleName
+                    </div>
+                    @*<div class="width-1c mt-8px">
+                        @roleVM.RoleName
+                    </div>*@
+                    @*<div class="display-flex width-1d mt-8px mr-16px">
+                        <button id="manage-icon" name="scoutId" asp-controller="team" asp-action="scoutdata" formmethod="post" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px">
+                            <img src="~/icons/managment/show.svg" class="icon-size-24" />
+                        </button>
+                        @if (ViewBag.UserRole == "captain")
+                        {
+                            <button id="manage-icon" name="scoutId" asp-controller="team" asp-action="editscout" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px">
+                                <img src="~/icons/managment/edit.svg" class="icon-size-24" />
+                            </button>
+                            <button id="manage-icon" name="scoutId" asp-controller="team" asp-action="removescout" formmethod="post" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px">
+                                <img src="~/icons/managment/delete.svg" class="icon-size-24" />
+                            </button>
+                        }
+                        else if (ViewBag.UserRole == "vice captain")
+                        {
+                            <button id="manage-icon" name="scoutId" asp-controller="team" asp-action="editscout" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px ">
+                                <img src="~/icons/managment/edit.svg" class="icon-size-24" />
+                            </button>
+                            <button name="scoutId" asp-controller="team" asp-action="removescout" formmethod="post" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px inactive" disabled>
+                                <img src="~/icons/managment/delete.svg" class="icon-size-24" />
+                            </button>
+                        }
+                        else
+                        {
+                            <button name="scoutId" asp-controller="team" asp-action="editscout" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px inactive" disabled>
+                                <img src="~/icons/managment/edit.svg" class="icon-size-24" />
+                            </button>
+                            <button name="scoutId" asp-controller="team" asp-action="removescout" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px inactive" disabled>
+                                <img src="~/icons/managment/delete.svg" class="icon-size-24" />
+                            </button>
+                        }
+                    </div>*@
+                </div>
+            </div>
+
+    }
+    </div>
+    <div style="height: 60px">
+        </div>
+
 </div>

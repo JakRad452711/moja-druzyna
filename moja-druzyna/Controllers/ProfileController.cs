@@ -4,7 +4,12 @@ using Microsoft.Extensions.Logging;
 using moja_druzyna.Data;
 using moja_druzyna.Data.Session;
 using moja_druzyna.Models;
+using moja_druzyna.ViewModels.Profile;
+using static moja_druzyna.Models.Rank;
+using static moja_druzyna.Models.Role;
+using static moja_druzyna.Models.ScoutRank;
 using System.Diagnostics;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace moja_druzyna.Controllers
@@ -59,7 +64,33 @@ namespace moja_druzyna.Controllers
         {
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
-            return View();
+            Rank rank = GetRanks(_dbContext, sessionAccesser.UserPesel, sessionAccesser.UserId);
+
+            ICollection<ScoutRank> ranks = rank.ScoutRanks;
+
+            ICollection<RankViewModel> scoutRanks = new List<RankViewModel>();
+
+            foreach (ScoutRank temp in ranks)
+            {
+
+                string temp_rank = temp.RankName;
+                string date_aquirement = temp.DateAcquirement.ToString();
+                string is_current = temp.IsCurrent.ToString();
+
+                scoutRanks.Add(new RankViewModel()
+                {
+                    Rank = temp_rank,
+                    IsCurrent = is_current,
+                    DateAquirement = date_aquirement
+                }
+                );
+
+
+            }
+
+            scoutRanks = scoutRanks.OrderBy(x => x.DateAquirement).ToList();
+
+            return View(scoutRanks);
         }
 
         public IActionResult Achievments()
@@ -73,7 +104,42 @@ namespace moja_druzyna.Controllers
         {
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
-            return View();
+            var roles = GetRoles(_dbContext, sessionAccesser.CurrentTeamId);
+
+            ICollection<RolesViewModel> rolesVM = new List<RolesViewModel>();
+
+            foreach (KeyValuePair<string, string> role in roles)
+            {
+                var temp = "";
+
+                if (role.Value == "scout")
+                {
+                    temp = "";// "Harcerz";
+                }
+                else
+                {
+                    temp = moja_druzyna.Const.TeamRoles.TeamRolesTranslations[role.Value];
+                }
+
+                rolesVM.Add(new RolesViewModel()
+                
+                {
+                    ScoutName = role.Key,
+
+                    
+                    RoleName = temp
+                }
+                );
+
+                //var d = moja_druzyna.Const.TeamRoles.[role.Value];
+
+
+            }
+
+            rolesVM = rolesVM.OrderBy(x => x.ScoutName).ToList();
+
+
+            return View(rolesVM);
         }
 
         public IActionResult CoursesAndPermissions()
