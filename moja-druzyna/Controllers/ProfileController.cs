@@ -33,6 +33,11 @@ namespace moja_druzyna.Controllers
             }
         }
 
+        public FileResult Gimmie()
+        {
+            return File("simple_file.pdf", "text/plain", "coolfile.pdf");
+        }
+
         public IActionResult PersonalData()
         {
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
