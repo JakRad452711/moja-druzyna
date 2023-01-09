@@ -53,6 +53,19 @@ namespace moja_druzyna.Models​
             return host;
         }
 
+        public Host GetShallowCopy()
+        {
+            Host host = new()
+            {
+                IdHost = this.IdHost,
+                Name = this.Name,
+                TeamIdTeam = this.TeamIdTeam,
+                IsDefaultHost = this.IsDefaultHost
+            };
+
+            return host;
+        }
+
         public void AddScout(string scoutPesel)
         {
             CheckDbContextInstance("void AddScout(string scoutPesel)");

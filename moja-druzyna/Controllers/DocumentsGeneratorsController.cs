@@ -457,7 +457,7 @@ namespace moja_druzyna.Controllers
                 .ToList();
 
             List<Scout> scoutsThatCanBeAdded =
-                scoutsInTheTeam.Where(s => !peselsOfScoutsThatAreAlreadyInTheAppointment.Contains(s.PeselScout) && s.PeselScout != sessionAccesser.UserPesel).ToList();
+                scoutsInTheTeam.Where(s => !peselsOfScoutsThatAreAlreadyInTheAppointment.Contains(s.PeselScout)).ToList();
 
             List<Host> hostsFromTheTeam = team.Hosts.ToList();
 

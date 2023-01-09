@@ -13,6 +13,7 @@ namespace moja_druzyna.ViewModels.Team
             Scouts = new List<HostViewModel_Scout>();
         }
 
+        public int HostId { get; set; }
         public string AddedScoutPesel { get; set; }
         public List<HostViewModel_Scout> Scouts { get; set; }
 

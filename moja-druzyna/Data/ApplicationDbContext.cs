@@ -9,6 +9,7 @@ namespace moja_druzyna.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+            this.ChangeTracker.LazyLoadingEnabled = false;
         }
 
         public virtual DbSet<Achievement> Achievements { get; set; }

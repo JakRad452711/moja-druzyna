@@ -1,4 +1,6 @@
-﻿@model ICollection<moja_druzyna.ViewModels.Team.TeamViewModel>
+﻿@using moja_druzyna.Lib.PeselModule
+@using moja_druzyna.ViewModels.Team
+@model moja_druzyna.ViewModels.Team.TeamViewModel
 
 @{
     ViewData["Title"] = "moja drużyna";
@@ -6,127 +8,514 @@
 
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/views/team/Team.css" asp-append-version="true" />
-<div class="text-center justify-content-center display-flex" style="min-width:650px">
-    <form method="get">
-        <div class="list-item-width display-flex justify-content-center mb-32px">
-            <div class="mr-8px mt-4px">
-                <img src="~/icons/main/green/flag.svg" class="icon-size-32 mt-1px" />
+<div class="text-center justify-content-center display-flex" style="min-width:900px;height:85vh">
+    <form method="get" class="size100p">
+        <input id="team-id" value="@ViewBag.TeamId" disabled hidden />
+        <div style="height:50px" class="text-left display-flex mt-16px">
+            <div class="paragraph2-regular ml-8px font-weight-light" style="text-decoration:underline">
+                Harcerze
             </div>
-            <div class="font-dark-green header1-light">
-                Moja drużyna
+            <div class="paragraph2-regular ml-16px font-weight-light">
+                <a asp-action="hosts" class="font-muddy-black">
+                    Zastępy
+                </a>
             </div>
         </div>
-        <div class="list-item-width medium-light font-muddy-black mb-32px">
-            @ViewBag.TeamName
-        </div>
-        @if (ViewBag.UserRole == "captain")
-        {
-            <div class="display-flex justify-content-center">
-                <div class="clear-white big-shadow size-fit-content medium-light display-block mb-32px">
-                    <div class="large-light mb-8px">
-                        zmień nazwę drużyny
-                    </div>
-                    <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
-                        <div class="form-group">
-                            <label class="input-box-width text-left">nazwa drużyny</label> <br />
-                            <input name="newName" class="input-box-width" /><br />
-                        </div>
-                    </div>
-                    <div class="display-flex pb-8px pt-2px justify-content-center width-100p">
-                        <button asp-action="teamchangename" asp-controller="team" formmethod="post" class="round-corners-5px font-muddy-black button-padding">zmień</button>
-                    </div>
-                </div>
-            </div>
-        }
-        <div class="list-item-width height-fit-content mb-16px">
-            <button asp-controller="team" asp-action="addscout" class="medium-light p-8px pt-2px pb-2px no-border round-corners-5px">
-                <img src="~/icons/managment/add.svg" style="width:18px;height:18px;margin-top:-2px" />
-                dodaj nową osobę do drużyny
+
+        <!-- BUTTONS - Add scout, ... -->
+        <div class="text-left">
+            <button asp-action="addscout" class="ml-8px pr-8px mb-16px round-corners-5px no-border text-white large-light" style="background-color:yellowgreen">
+                <img src="~/icons/managment/add.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                Dodaj harcerza
             </button>
         </div>
-        <div class="display-flex list-item-width text-left medium-bold mb-4px">
-            <div class="display-flex justify-content-between width100p ml-64px">
-                <span class="width-1a">godność</span>
-                <span class="width-1b text-center">stopień</span>
-                <span class="width-1c">zastęp</span>
-                <span class="width-1d mr-16px"></span>
-            </div>
-        </div>
-        @foreach (var teamVM in Model)
-        {
-            <div class="display-flex list-item-size clear-white small-shadow round-corners-12px large-light mb-4px">
-                <div class="mt-4px ml-8px">
-                    <img id="profile-picture" src="~/icons/design/profile picture.svg" class="icon-size-40 mr-16px" />
-                </div>
-                <div class="display-flex justify-content-between width100p text-left">
-                    <div class="width-1a">
-                        <div class="mt-8px">@teamVM.Title</div>
+
+        <!-- BOTH PANELS -->
+        <div class="display-flex size100p justify-content-around">
+            <!-- LIST OF SCOUTS IN THE TEAM (LEFT PANEL) -->
+            <div style="width:49%;height:100%;min-width:100px" class="display-flex justify-content-center big-shadow">
+                <div style="width:96%">
+                    <div class="display-flex width-100p text-left medium-bold mb-4px">
+                        <div class="display-flex justify-content-between width100p ml-64px">
+                            <span class="width-1a">godność</span>
+                            <span class="width-1b text-center">stopień</span>
+                            <span class="width-1c">zastęp</span>
+                            <span class="width-1d mr-16px"></span>
+                        </div>
                     </div>
-                    <div class="width-1b mt-8px">
-                        @if (teamVM.Rank == "1")
+                    <ol class="m-0 p-0" style="list-style-type:none">
+                        @for (int i = 0; i < Model.Entries.Count(); i++)
                         {
-                            <img src="~/icons/design/ranks/no-accents/rank-1.svg" class="rank-icon-size-1" />
+                            var scoutEntry = Model.Entries[i];
+                            <li class="scout-entry" value=@i>
+                                <input id=@("scout-id-" + i.ToString()) value="@scoutEntry.Id" hidden disabled />
+                                <div class="display-flex list-item-height clear-white small-shadow large-light mb-4px">
+                                    <div id=@("scout-entry-" + i.ToString()) class="display-flex size100p">
+                                        <div class="mt-4px ml-8px">
+                                            <img id="profile-picture" src="~/icons/design/profile picture.svg" class="icon-size-40 mr-16px" />
+                                        </div>
+                                        <div class="display-flex justify-content-between width100p text-left">
+                                            <div class="width-1a" style="overflow:hidden;white-space:nowrap">
+                                                <div class="mt-8px">@scoutEntry.Title</div>
+                                            </div>
+                                            <div class="width-1b mt-8px">
+                                                <img src="@Url.Content(string.Format("~/icons/design/ranks/no-accents/rank-{0}.svg", scoutEntry.Rank))" alt="" class="rank-icon-size-1" />
+                                            </div>
+                                            <div class="width-1c mt-8px">
+                                                @scoutEntry.Host
+                                            </div>
+                                            <div class="display-flex width-1d mt-8px mr-16px">
+                                                <button id="manage-icon" name="scoutId" asp-controller="team" asp-action="scoutdata" formmethod="post" value=@scoutEntry.Id class="no-border size-fit-content clear-white round-corners-5px">
+                                                    <img src="~/icons/managment/show.svg" class="icon-size-24" />
+                                                </button>
+                                                @if (ViewBag.UserRole == "captain")
+                                                {
+                                                    <button id="manage-icon" name="scoutId" asp-controller="team" asp-action="editscout" value=@scoutEntry.Id class="no-border size-fit-content clear-white round-corners-5px">
+                                                        <img src="~/icons/managment/edit.svg" class="icon-size-24" />
+                                                    </button>
+                                                    <button id="manage-icon" name="scoutId" asp-controller="team" asp-action="removescout" formmethod="post" value=@scoutEntry.Id class="no-border size-fit-content clear-white round-corners-5px">
+                                                        <img src="~/icons/managment/delete.svg" class="icon-size-24" />
+                                                    </button>
+                                                }
+                                                else if (ViewBag.UserRole == "vice captain")
+                                                {
+                                                    <button id="manage-icon" name="scoutId" asp-controller="team" asp-action="editscout" value=@scoutEntry.Id class="no-border size-fit-content clear-white round-corners-5px ">
+                                                        <img src="~/icons/managment/edit.svg" class="icon-size-24" />
+                                                    </button>
+                                                    <button name="scoutId" asp-controller="team" asp-action="removescout" formmethod="post" value=@scoutEntry.Id class="no-border size-fit-content clear-white round-corners-5px inactive" disabled>
+                                                        <img src="~/icons/managment/delete.svg" class="icon-size-24" />
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <button name="scoutId" asp-controller="team" asp-action="editscout" value=@scoutEntry.Id class="no-border size-fit-content clear-white round-corners-5px inactive" disabled>
+                                                        <img src="~/icons/managment/edit.svg" class="icon-size-24" />
+                                                    </button>
+                                                    <button name="scoutId" asp-controller="team" asp-action="removescout" value=@scoutEntry.Id class="no-border size-fit-content clear-white round-corners-5px inactive" disabled>
+                                                        <img src="~/icons/managment/delete.svg" class="icon-size-24" />
+                                                    </button>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
                         }
-                        else if (teamVM.Rank == "2")
-                        {
-                            <img src="~/icons/design/ranks/no-accents/rank-2.svg" class="rank-icon-size-1" />
-                        }
-                        else if (teamVM.Rank == "3")
-                        {
-                            <img src="~/icons/design/ranks/no-accents/rank-3.svg" class="rank-icon-size-1" />
-                        }
-                        else if (teamVM.Rank == "4")
-                        {
-                            <img src="~/icons/design/ranks/no-accents/rank-4.svg" class="rank-icon-size-1" />
-                        }
-                        else if (teamVM.Rank == "5")
-                        {
-                            <img src="~/icons/design/ranks/no-accents/rank-5.svg" class="rank-icon-size-1" />
-                        }
-                        else if (teamVM.Rank == "6")
-                        {
-                            <img src="~/icons/design/ranks/no-accents/rank-6.svg" class="rank-icon-size-1" />
-                        }
-                    </div>
-                    <div class="width-1c mt-8px">
-                        @teamVM.Host
-                    </div>
-                    <div class="display-flex width-1d mt-8px mr-16px">
-                        <button id="manage-icon" name="scoutId" asp-controller="team" asp-action="scoutdata" formmethod="post" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px">
-                            <img src="~/icons/managment/show.svg" class="icon-size-24" />
-                        </button>
-                        @if (ViewBag.UserRole == "captain")
-                        {
-                            <button id="manage-icon" name="scoutId" asp-controller="team" asp-action="editscout" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px">
-                                <img src="~/icons/managment/edit.svg" class="icon-size-24" />
-                            </button>
-                            <button id="manage-icon" name="scoutId" asp-controller="team" asp-action="removescout" formmethod="post" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px">
-                                <img src="~/icons/managment/delete.svg" class="icon-size-24" />
-                            </button>
-                        }
-                        else if (ViewBag.UserRole == "vice captain")
-                        {
-                            <button id="manage-icon" name="scoutId" asp-controller="team" asp-action="editscout" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px ">
-                                <img src="~/icons/managment/edit.svg" class="icon-size-24" />
-                            </button>
-                            <button name="scoutId" asp-controller="team" asp-action="removescout" formmethod="post" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px inactive" disabled>
-                                <img src="~/icons/managment/delete.svg" class="icon-size-24" />
-                            </button>
-                        }
-                        else
-                        {
-                            <button name="scoutId" asp-controller="team" asp-action="editscout" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px inactive" disabled>
-                                <img src="~/icons/managment/edit.svg" class="icon-size-24" />
-                            </button>
-                            <button name="scoutId" asp-controller="team" asp-action="removescout" value=@teamVM.Id class="no-border size-fit-content clear-white round-corners-5px inactive" disabled>
-                                <img src="~/icons/managment/delete.svg" class="icon-size-24" />
-                            </button>
-                        }
-                    </div>
+                    </ol>
                 </div>
             </div>
-        }
-        <div style="height: 60px">
+
+            <!-- SELECTED SCOUT (RIGHT PANEL) -->
+            <div style="width:49%;height:100%;" class="big-shadow">
+                <div class="mt-16px" style="margin-left:calc(6% - 25px)">
+                    <div class="paragraph2-regular font-dark-green text-left">
+                        <div id="scout-title" class="mr-16px mb-16px">@string.Format("{0} {1}", @Model.FirstScout.Name, @Model.FirstScout.Surname)</div>
+
+                        <!-- RANKS OF SELECTED SCOUT -->
+                        @if (Model.FirstScout.ScoutRanks.FirstOrDefault() != null)
+                        {
+                            <div id="ranks-header" class="mr-16px paragraph-regular">Posiadane stopnie</div>
+                            <div id="ranks-list" class="display-flex ml-n3">
+                                @foreach (ScoutRank rank in Model.FirstScout.ScoutRanks.OrderByDescending(sr => sr.RankName))
+                                {
+                                    string rankUrl = string.Format("~/icons/design/ranks/no-accents/rank-{0}.svg", rank.RankName);
+                                    <img src="@Url.Content(rankUrl)" class="mt-32px mb-8px mr-4px" style="height:30px;transform:rotate(270deg)" />
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- BASIC INFORMATION ABOUT SELECTED SCOUT -->
+                <div class="text-left display-flex justify-content-center large-light">
+                    <div class="mt-16px overflow-hidden text-nowrap" style="width:44%">
+                        <div class="paragraph-regular font-dark-green display-flex justify-content-between mb-16px">
+                            <div class="width-2a">Podstawowe dane</div>
+                            <div class="width-2a"></div>
+                        </div>
+                        <div class="display-flex justify-content-between mt-4px">
+                            <div class="width-2a">Imię:</div>
+                            @{
+                                string name = @Model.FirstScout.Name;
+                                <div id="name" class="width-2a">
+                                    @(string.IsNullOrEmpty(name) ? "--" : name)
+                                </div>
+                            }
+                        </div>
+                        <div class="display-flex justify-content-between mt-4px">
+                            <div class="width-2a">Nazwisko:</div>
+                            @{
+                                string surname = @Model.FirstScout.Surname;
+                                <div id="surname" class="width-2a">
+                                    @(string.IsNullOrEmpty(surname) ? "--" : surname)
+                                </div>
+                            }
+                        </div>
+                        <div class="display-flex justify-content-between mt-4px">
+                            <div class="width-2a">Data urodzenia:</div>
+                            <div id="birthday" class="width-2a">
+                                @(new Pesel(Model.FirstScout.PeselScout).GetBirthday().ToString("dd.MM.yyyy"))
+                            </div>
+                        </div>
+                    </div>
+                    <div style="width:50px;filter:opacity(0%)">.</div>
+                    <div class="mt-16px text-nowrap overflow-hidden" style="width:44%">
+                        <div class="paragraph-regular font-dark-green display-flex justify-content-between mb-16px">
+                            <div class="width-2a" style="filter:opacity(0%)">.</div>
+                            <div class="width-2a"> </div>
+                        </div>
+                        <div class="display-flex justify-content-between mt-4px">
+                            <div class="width-2a">Drugie imię:</div>
+                            @{
+                                string secondName = @Model.FirstScout.SecondName;
+                                <div id="second-name" class="width-2a">
+                                    @(string.IsNullOrEmpty(secondName) ? "--" : secondName)
+                                </div>
+                            }
+                        </div>
+                        <div class="display-flex justify-content-between mt-4px">
+                            <div class="width-2a">Pesel:</div>
+                            @{
+                                string pesel = @Model.FirstScout.PeselScout;
+                                <div id="pesel" class="width-2a">
+                                    @(string.IsNullOrEmpty(pesel) ? "--" : pesel)
+                                </div>
+                            }
+                        </div>
+                        <div class="display-flex justify-content-between mt-4px">
+                            <div class="width-2a">Nr. członkowski:</div>
+                            @{
+                                string membershipNumber = @Model.FirstScout.MembershipNumber;
+                                <div id="membership-number" class="width-2a">
+                                    @(string.IsNullOrEmpty(membershipNumber) ? "--" : membershipNumber)
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SELECTED SCOUT ROLE AND HOST -->
+                <div id="role-and-host" class="text-left display-flex justify-content-center large-light">
+                    <div class="mt-16px overflow-hidden text-nowrap" style="width:44%">
+                        <div class="paragraph-regular font-dark-green display-flex justify-content-between mb-16px">
+                            <div class="width-2a">Funkcja i zastęp</div>
+                            <div class="width-2a"></div>
+                        </div>
+                        <div class="display-flex justify-content-between mt-4px">
+                            <div class="width-2a">Funkcja:</div>
+                            @{
+                                string role = @Model.FirstScoutTeamRole;
+                                <div id="role" class="width-2a">
+                                    @(string.IsNullOrEmpty(role) ? "--" : moja_druzyna.Const.TeamRoles.TeamRolesTranslationsWithPolishLetters[role])
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div style="width:50px;filter:opacity(0%)">.</div>
+                    <div class="mt-16px text-nowrap overflow-hidden" style="width:44%">
+                        <div class="paragraph-regular font-dark-green display-flex justify-content-between mb-16px">
+                            <div class="width-2a" style="filter:opacity(0%)">.</div>
+                            <div class="width-2a"> </div>
+                        </div>
+                        <div class="display-flex justify-content-between mt-4px">
+                            <div class="width-2a">Zastęp:</div>
+                            @{
+                                string hostName = @Model.FirstScoutHostName;
+                                <div id="host" class="width-2a">
+                                    @(string.IsNullOrEmpty(hostName) ? "--" : hostName)
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                @if (Model.Achievements.Any())
+                {
+                    <!-- ACHIEVEMENTS - HEADER -->
+                    <div id="achievements-header" class="text-left display-flex justify-content-center large-light">
+                        <div class="mt-16px overflow-hidden text-nowrap" style="width:44%">
+                            <div class="paragraph-regular font-dark-green display-flex justify-content-between mb-16px">
+                                <div class="width-2a">Osiągnięcia</div>
+                                <div class="width-2a"></div>
+                            </div>
+                        </div>
+                        <div style="width:50px;filter:opacity(0%)">.</div>
+                        <div class="mt-16px text-nowrap overflow-hidden" style="width:44%">
+                            <div class="paragraph-regular font-dark-green display-flex justify-content-between mb-16px">
+                                <div class="width-2a" style="filter:opacity(0%)">.</div>
+                                <div class="width-2a"> </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ACHIEVEMENTS - LIST -->
+                    <div id="achievements-list" class="display-flex justify-content-center">
+                        <div style="width:96%">
+                            <div class="display-flex width-100p text-left medium-bold mb-4px">
+                                <div class="display-flex justify-content-between width100p ml-16px">
+                                    <span class="width-1a">osiągnięcie</span>
+                                    <span class="width-1c">typ</span>
+                                    <span style="width:120px">data nabycia</span>
+                                </div>
+                            </div>
+                            <div id="achievements-list-content">
+                                @foreach (TeamViewModel.ScoutAchievementsViewModel achievement in Model.Achievements)
+                                {
+                                    <div class="display-flex list-item-height clear-white small-shadow large-light mb-4px">
+                                        <div class="display-flex justify-content-between width100p text-left ml-16px">
+
+                                            <div class="width-1a mt-8px" style="white-space:nowrap">
+                                                @if (achievement.Type == moja_druzyna.Const.TrialTypes.Rank)
+                                                {
+                                                    string rankUrl = string.Format("~/icons/design/ranks/no-accents/rank-{0}.svg", achievement.Rank);
+
+                                                    <img src="@Url.Content(rankUrl)" class="rank-icon-size-1" />
+                                                }
+                                                else if (achievement.Type == moja_druzyna.Const.TrialTypes.Ability)
+                                                {
+                                                    <a>@moja_druzyna.Const.ScoutAbilities.ScoutAbilitiesTranslationWithPolishLetters[achievement.Achievement]</a>
+                                                }
+                                            </div>
+                                            <div class="width-1c">
+                                                <div class="mt-8px">@moja_druzyna.Const.TrialTypes.TrialTypesTranslationWithPolishLetters[achievement.Type]</div>
+                                            </div>
+                                            <div class="mt-8px" style="width:120px">
+                                                @achievement.AcquirementTime.ToString("dd.MM.yyyy HH:mm")
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div style="height:80px;filter:opacity(0%)">.</div>
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
     </form>
 </div>
+
+@section Scripts
+    {
+    <script>
+        $(document).ready(function() {
+            var selectedEntry = 0;
+
+            $(".scout-entry").mouseenter(function() {
+                if ($(this).val() != selectedEntry) {
+                    $("#scout-entry-" + $(this).val()).css("box-shadow", "inset 4px 0 0 rgba(154, 205, 50, 0.4)")
+                }
+            });
+
+            $(".scout-entry").mouseleave(function() {
+                if ($(this).val() != selectedEntry) {
+                    $("#scout-entry-" + $(this).val()).css("box-shadow", "none")
+                }
+            });
+
+            $("#scout-entry-0").css("box-shadow", "inset 4px 0 0 yellowgreen");
+
+            $(".scout-entry").click(function() {
+                var entryId = $(this).val();
+                var scoutId = $("#scout-id-" + entryId).val();
+                var teamId = $("#team-id").val();
+
+                $(".scout-entry").each(function() {
+                    $("#scout-entry-" + $(this).val()).css("box-shadow", "none");
+                });
+                $("#scout-entry-" + $(this).val()).css("box-shadow", "inset 4px 0 0 yellowgreen");
+
+                selectedEntry = entryId;
+
+                updateBasicInfo(scoutId);
+                updateRanks(scoutId);
+                updateRole(scoutId, teamId);
+                updateHost(scoutId, teamId);
+                updateAchievements(scoutId);
+            });
+
+            function updateBasicInfo(scoutId) {
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("GetScoutJson", "Api")",
+                    dataType: "json",
+                    data: { id: scoutId },
+                    success: function(result) {
+                        // update title
+                        var scout = JSON.parse(result.value);
+                        $("#scout-title").html(scout.Name + ' ' + scout.Surname);
+
+                        // update ranks
+
+                        // update name
+                        $("#name").html(scout.Name);
+                        // update surname
+                        $("#surname").html(scout.Surname);
+                        // update birthday
+                        var birthday = '';
+                        if (scout.DateOfBirth != null) {
+                            birthday = scout.DateOfBirth.substring(8, 10) + '.' + scout.DateOfBirth.substring(5, 7) + '.' + scout.DateOfBirth.substring(0, 4);
+                        }
+                        $("#birthday").html(birthday);
+                        // update second name
+                        $("#second-name").html(scout.SecondName == null ? '--' : scout.SecondName);
+                        // update pesel
+                        $("#pesel").html(scout.PeselScout);
+                        // update membership number
+                        $("#membership-number").html(scout.MembershipNumber);
+                    },
+                    error: function() {
+                    }
+                });
+            }
+
+            function updateRanks(scoutId) {
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("GetScoutRanksJson", "Api")",
+                    dataType: "json",
+                    data: { id: scoutId },
+                    success: function(result) {
+                        var ranks = JSON.parse(result.value);
+                        var didShowUp = false;
+
+                        // show/hide ranks section
+                        if (ranks.length == 0) {
+                            $("#ranks-header").slideUp({ duration: 300 });
+                            $("#ranks-list").slideUp({ duration: 300 });
+
+                            return;
+                        } else {
+                            if (document.getElementById("ranks-header").style.display == "none") {
+                                $("#ranks-header").slideDown({ duration: 300 });
+                                $("#ranks-list").slideDown({ duration: 300 });
+
+                                didShowUp = true;
+                            }
+                        }
+
+                        // update ranks section
+                        var ranksHtml = "";
+
+                        for (let i = 0; i < ranks.length; i++) {
+
+                            var rank = ranks[i];
+                            var rankPath = '@Url.Content("~/icons/design/ranks/no-accents")' + "/rank-" + rank + ".svg";
+
+                            var imgStr = '<img src=\"' + rankPath + '" class="mt-32px mb-8px mr-4px" style="height:30px;transform:rotate(270deg)" />\n'
+                            ranksHtml += imgStr;
+                        }
+
+                        $("#ranks-list").html(ranksHtml);
+                    },
+                    error: function() {
+                    }
+                });
+            }
+
+            function updateRole(scoutId, teamId) {
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("GetScoutRoleJsonPL", "Api")",
+                    dataType: "json",
+                    data: { id: scoutId, teamId: teamId },
+                    success: function(result) {
+                        $("#role").html((result.value == null ? "--" : result.value));
+                    },
+                    error: function() {
+                    }
+                });
+            }
+
+            function updateHost(scoutId, teamId) {
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("GetScoutHostJson", "Api")",
+                    dataType: "json",
+                    data: { id: scoutId, teamId: teamId },
+                    success: function(result) {
+                        var host = JSON.parse(result.value);
+                        $("#host").html((host == null ? "--" : host.Name));
+                    },
+                    error: function() {
+                    }
+                });
+            }
+
+            function updateAchievements(scoutId) {
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("GetAchievementsAndRankAchievementsJsonPL", "Api")",
+                    dataType: "json",
+                    data: { id: scoutId },
+                    success: function(result) {
+                        var achievements = JSON.parse(result.value);
+                        var didShowUp = false;
+
+                        // show/hide achievements section
+                        if (achievements.length == 0) {
+                            $("#achievements-header").slideUp({ duration: 350 });
+                            $("#achievements-list").slideUp({ duration: 350 });
+
+                            return;
+                        } else {
+                            if (document.getElementById("achievements-header").style.display == "none") {
+                                $("#achievements-header").slideDown({ duration: 350 });
+                                $("#achievements-list").slideDown({ duration: 350 });
+
+                                didShowUp = true;
+                            }
+                        }
+
+                        // update ranks section
+                        var achievementsHtml = "";
+
+                        for (let i = 0; i < achievements.length; i++) {
+
+                            var achievement = achievements[i];
+
+                            achievementsHtml += '<div class="display-flex list-item-height clear-white small-shadow large-light mb-4px">\n';
+                            achievementsHtml += '<div class="display-flex justify-content-between width100p text-left ml-16px">\n';
+                            achievementsHtml += '<div class="width-1a mt-8px" style="white-space:nowrap">\n';
+
+                            if (achievement.Type == "@moja_druzyna.Const.TrialTypes.Rank") {
+                                var rankPath = '@Url.Content("~/icons/design/ranks/no-accents")' + "/rank-" + achievement.Rank + ".svg";
+                                var imgStr = '<img src="' + rankPath + '" class="rank-icon-size-1" />\n';
+                                achievementsHtml += imgStr;
+                            } else if (achievement.Type == "@moja_druzyna.Const.TrialTypes.Ability") {
+                                achievementsHtml += '<a>' + achievement.Achievement + '</a>';
+                            }
+
+                            achievementsHtml += '</div>\n';
+                            achievementsHtml += '<div class="width-1c">\n';
+                            achievementsHtml += '<div class="mt-8px">' + translateTrialTypeToPL(achievement.Type) + '</div>\n';
+                            achievementsHtml += '</div>\n';
+                            achievementsHtml += '<div class="mt-8px" style="width:120px">\n';
+                            var time = achievement.AcquirementTime.substring(8, 10) + '.' + achievement.AcquirementTime.substring(5, 7) + '.' + achievement.AcquirementTime.substring(0, 4);
+                            time += ' ' + achievement.AcquirementTime.substring(11, 16);
+                            achievementsHtml += time;
+                            achievementsHtml += '</div>\n';
+                            achievementsHtml += '</div>\n';
+                            achievementsHtml += '</div>\n';
+                        }
+
+                        $("#achievements-list-content").html(achievementsHtml);
+                    },
+                    error: function() {
+                    }
+                });
+            }
+
+            function translateTrialTypeToPL(trialType) {
+                if (trialType == "@moja_druzyna.Const.TrialTypes.Rank")
+                    return 'stopień';
+                if (trialType == "@moja_druzyna.Const.TrialTypes.Ability")
+                    return 'sprawność';
+                if (trialType == "@moja_druzyna.Const.TrialTypes.ScoutCross")
+                    return 'krzyż harcerski';
+
+                return null;
+            }
+        })
+    </script>
+}

@@ -1,0 +1,91 @@
+﻿@model moja_druzyna.ViewModels.Team.HostViewModel
+
+@{
+    ViewData["Title"] = "dodawanie nowej osoby do drużyny";
+}
+
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<div class="text-center justify-content-center display-flex" style="min-width:900px;height:85vh">
+    <form method="post" class="size100p">
+        <input id="team-id" value="@ViewBag.TeamId" disabled hidden />
+        <div style="height:50px" class="text-left display-flex mt-16px">
+            <div class="paragraph2-regular ml-8px font-weight-light">
+                <a asp-action="team" class="font-muddy-black">
+                    Harcerze
+                </a>
+            </div>
+            <div class="paragraph2-regular ml-16px font-weight-light">
+                <a asp-action="hosts" class="font-muddy-black">
+                    Zastępy
+                </a>
+            </div>
+        </div>
+
+        <!-- BUTTONS - Return, ... -->
+        <div class="text-left">
+            <button asp-action="host" formmethod="get" class="ml-8px pr-8px mb-16px round-corners-5px no-border text-white large-light" style="background-color:gray">
+                <img src="~/icons/navigation/nav-left.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                Wróć
+            </button>
+        </div>
+
+        <!-- HOST ID -->
+        <div style="display:none">
+            <input asp-for="HostId" hidden />
+        </div>
+
+        <!-- MAIN PANEL -->
+        <div class="display-flex size100p justify-content-around">
+            <!-- ADD HOST FORM -->
+            <div style="min-width:160px;width:99%" class="display-flex justify-content-center big-shadow">
+                <div style="width:96%">
+                    <div class="paragraph2-light mb-16px">
+                        zastęp <span class="font-dark-green">@ViewBag.hostName</span> - dodawanie harcerza 
+                    </div>
+                    @if (ViewBag.hostWasAdded == true)
+                    {
+                        <div class="font-dark-green mb-8px paragraph-light" style="position:relative">
+                            <span class="width100p text-center" style="position:absolute;left:0px;top:-6px">
+                                <img src="~/icons/managment/check_circle.svg" class="icon-size-24 mb-4px" style="filter: invert(30%) sepia(11%) saturate(2579%) hue-rotate(70deg) brightness(100%) contrast(84%);" />
+                                dodawanie harcerza do zastępu powiodło się
+                            </span>
+                        </div>
+                    }
+                    @if (ViewBag.numberOfScoutsToAdd != 0)
+                    {
+                        <div class="display-flex p-8px" style="position:relative;z-index:1000">
+                            <button type="submit" class="mb-16px round-corners-5px no-border text-white large-light" style="background-color:yellowgreen">
+                                <img src="~/icons/managment/check_circle.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                                Dodaj harcerza
+                            </button>
+                        </div>
+                        <div class="large-light ml-8px mb-4px text-left">
+                            dane
+                        </div>
+                        <div class="display-flex width100p p-4px pl-8px pr-8px justify-content-between">
+                            <div class="form-group width100p">
+                                <label asp-for="AddedScoutPesel" class="width100p text-left">dodawany harcerz</label> <br />
+                                <select asp-for="AddedScoutPesel" class="width100p" asp-items="@ViewBag.DropDownList_Scouts"></select>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="display-flex p-8px" style="position:relative;z-index:1000">
+                            <button type="submit" class="mb-16px round-corners-5px no-border text-white large-light" style="background-color:yellowgreen" disabled>
+                                <img src="~/icons/managment/check_circle.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                                Dodaj harcerza
+                            </button>
+                        </div>
+                        <div class="text-danger mb-8px paragraph-light" style="position:relative">
+                            <span class="width100p text-center paragraph2-light" style="position:absolute;left:0px;top:-6px">
+                                <img src="~/icons/managment/cancel.svg" class="icon-size-32 mb-4px" style="filter: invert(47%) sepia(54%) saturate(701%) hue-rotate(314deg) brightness(86%) contrast(98%);" />
+                                nie ma harcerzy do dodania
+                            </span>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

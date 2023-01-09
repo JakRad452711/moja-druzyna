@@ -24,5 +24,15 @@ namespace moja_druzyna.Const
             { Chronicler, "Kronikarz" },
             { Quatermaster, "Kwatermistrz" }
         };
+
+        public readonly static Dictionary<string, string> TeamRolesTranslationsWithPolishLetters = new()
+        {
+            { Captain, "drużynowy" },
+            { ViceCaptain, "przyboczny" },
+            { HostCaptain, "zastępowy" },
+            { Ensign, "chorąży drużyny" },
+            { Chronicler, "kronikarz" },
+            { Quatermaster, "kwatermistrz" }
+        };
     }
 }

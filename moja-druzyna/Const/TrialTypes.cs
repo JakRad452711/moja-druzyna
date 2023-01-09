@@ -9,5 +9,12 @@ namespace moja_druzyna.Const
         public static readonly string ScoutCross = "scout cross";
 
         public static readonly List<string> TrialTypesList = new() { Rank, Ability, ScoutCross };
+
+        public static readonly Dictionary<string, string> TrialTypesTranslationWithPolishLetters = new()
+        {
+            { Rank, "stopień" },
+            { Ability, "sprawność" },
+            { ScoutCross, "krzyż harcerski" }
+        };
     }
 }
