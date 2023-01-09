@@ -216,7 +216,7 @@ namespace moja_druzyna.Controllers
 
             new GeneratorPdf().GenerateEmptyList(scouts, evnt);
 
-            return File(string.Format("{0}_{1}_lista_pusta.pdf", evnt.IdEvent, evnt.Type), "text/plain", string.Format("{0}_{1}_lista_pusta.pdf", evnt.IdEvent, evnt.Type)); ;
+            return File("file.pdf", "text/plain", string.Format("{0}_{1}_lista_pusta.pdf", evnt.IdEvent, evnt.Type)); ;
         }
 
         [HttpPost]
@@ -238,7 +238,7 @@ namespace moja_druzyna.Controllers
 
             new GeneratorPdf().GenerateEventList(evnt, attended);
 
-            return File(string.Format("{0}_{1}_lista.pdf", evnt.IdEvent, evnt.Type), "text/plain", string.Format("{0}_{1}_lista.pdf", evnt.IdEvent, evnt.Type));
+            return File("file.pdf", "text/plain", string.Format("{0}_{1}_lista.pdf", evnt.IdEvent, evnt.Type));
         }
 
         public IActionResult OrderGenerator()
@@ -441,7 +441,7 @@ namespace moja_druzyna.Controllers
 
             new GeneratorPdf().GenerateOrder(formOrder);
 
-            return File(string.Format("{0}.pdf", formOrder.OrderNumber), "text/plain", string.Format("{0}.pdf", formOrder.OrderNumber));
+            return File("file.pdf", "text/plain", string.Format("{0}.pdf", formOrder.OrderNumber));
         }
 
         public IActionResult Appointments()
