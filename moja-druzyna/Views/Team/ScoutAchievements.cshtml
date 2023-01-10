@@ -2,12 +2,17 @@
 
 @{
     ViewData["Title"] = "osiągnięcia";
-    Layout = "_NoSidebarLayout";
+    Layout = "_Layout";
 }
 
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/views/team/ScoutAchievements.css" asp-append-version="true" />
 <div class="text-center justify-content-center display-flex" style="min-width:650px">
+
+    <a id="go-back" class="nav-link text-dark" asp-controller="Team" asp-action="ScoutData">
+        <img src="~/icons/navigation/nav-left.svg" style="position:initial; width: 40px; height: 40px; left: 0px; top: 0px; " />
+    </a>
+
     <form>
         <div class="list-item-width display-flex justify-content-center mb-32px mt-32px">
             <div class="mr-8px mt-4px">
