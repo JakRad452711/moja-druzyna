@@ -2,7 +2,7 @@
 @using static moja_druzyna.ViewModels.DocumentsGenerators.AttendanceViewModel;
 
 @{
-    ViewData["Title"] = "lista obecności";
+    ViewData["Title"] = "Lista obecności";
 }
 
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -27,21 +27,21 @@
         <div class="list-item-width height-fit-content mb-16px">
             <button type="submit" asp-controller="documentsgenerators" asp-action="attendancelistform" formmethod="post" class="medium-light p-8px pt-2px pb-2px no-border round-corners-5px">
                 <img src="~/icons/managment/add.svg" style="width:18px;height:18px;margin-top:-2px" />
-                zapisz listę obecności
+                Zapisz listę obecności
             </button>
         </div>
 
         <div class="list-item-width height-fit-content mb-16px">
             <button asp-controller="documentsgenerators" asp-action="generatelistpdf" name="idEvent" value=@Model.EventId formmethod="post" class="no-border size-fit-content clear-white round-corners-5px">
                 <img src="~/icons/managment/download-pdf.svg" class="width:18px;height:18px;margin-top:-2px" />
-                generuj listę obecności w PDF
+                Generuj listę obecności w PDF
             </button>
         </div>
 
         <div class="list-item-width height-fit-content mb-16px">
             <button asp-controller="documentsgenerators" asp-action="generateemptylistpdf" name="idEvent" value=@Model.EventId formmethod="post" class="no-border size-fit-content clear-white round-corners-5px">
                 <img src="~/icons/managment/download-pdf.svg" class="width:18px;height:18px;margin-top:-2px" />
-                generuj pustą listę obecności
+                Generuj pustą listę obecności
             </button>
         </div>
 

@@ -1,5 +1,5 @@
 ﻿<div style="display: flex;">
-    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@User.Identity.Name</a>
+    <a class="nav-link text-dark"  title="Manage">@User.Identity.Name</a>
     <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("PersonalData", "Profile", new { area = "" })">
         <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
     </form>

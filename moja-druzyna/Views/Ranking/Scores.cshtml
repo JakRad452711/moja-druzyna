@@ -2,7 +2,7 @@
 @using moja_druzyna.ViewModels.Ranking
 
 @{
-    ViewData["Title"] = "moje zastępy";
+    ViewData["Title"] = "Moje zastępy";
 }
 
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -32,16 +32,16 @@
                         <div class="ml-8px" style="width:40px;position:relative">
                         </div>
                         <div style="width:50px">
-                            stopień
+                            Stopień
                         </div>
                         <div class="text-left" style="width:160px">
-                            godność
+                            Godność
                         </div>
                         <div class="text-left" style="width:160px">
-                            zastęp
+                            Zastęp
                         </div>
                         <div class="mr-8px" style="width:60px">
-                            punkty
+                            Punkty
                         </div>
                     </div> 
                     @foreach (ScoresViewModel.ScoreEntry score in Model.Scores)
