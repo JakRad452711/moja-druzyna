@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -207,7 +206,7 @@ namespace moja_druzyna.Controllers
         }
 
         [HttpPost]
-        public IActionResult GenerateEmptyListPdf(int idEvent)
+        public FileResult GenerateEmptyListPdf(int idEvent)
         {
             Event evnt = _dbContext.Events.Where(ev => ev.IdEvent == idEvent).First();
 
@@ -217,11 +216,11 @@ namespace moja_druzyna.Controllers
 
             new GeneratorPdf().GenerateEmptyList(scouts, evnt);
 
-            return AttendanceListForm(idEvent);
+            return File("file.pdf", "text/plain", string.Format("{0}_{1}_lista_pusta.pdf", evnt.IdEvent, evnt.Type));
         }
 
         [HttpPost]
-        public IActionResult GenerateListPdf(int idEvent)
+        public FileResult GenerateListPdf(int idEvent)
         {
             Event evnt = _dbContext.Events.Where(ev => ev.IdEvent == idEvent).First();
 
@@ -239,10 +238,9 @@ namespace moja_druzyna.Controllers
 
             new GeneratorPdf().GenerateEventList(evnt, attended);
 
-            return AttendanceListForm(idEvent);
+            return File("file.pdf", "text/plain", string.Format("{0}_{1}_lista.pdf", evnt.IdEvent, evnt.Type));
         }
 
-        [Authorize(Roles = "captain")]
         public IActionResult OrderGenerator()
         {
             Team team = GetTeam(_dbContext, sessionAccesser.CurrentTeamId);
@@ -329,7 +327,7 @@ namespace moja_druzyna.Controllers
         }
 
         [HttpPost]
-        public IActionResult GenerateOrderPdf(int orderId)
+        public FileResult GenerateOrderPdf(int orderId)
         {
             OrderInfo orderInfo = _dbContext.OrderInfos.Find(orderId);
             Order order = _dbContext.Orders.Find(orderInfo.OrderId);
@@ -450,7 +448,7 @@ namespace moja_druzyna.Controllers
 
             new GeneratorPdf().GenerateOrder(formOrder);
 
-            return Redirect("orders");
+            return File("file.pdf", "text/plain", string.Format("{0}.pdf", formOrder.OrderNumber));
         }
 
         public IActionResult Appointments()
