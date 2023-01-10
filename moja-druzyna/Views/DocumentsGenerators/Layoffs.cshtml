@@ -1,4 +1,5 @@
-﻿@model moja_druzyna.ViewModels.DocumentsGenerators.LayoffsViewModel
+﻿@using moja_druzyna.Const
+@model moja_druzyna.ViewModels.DocumentsGenerators.LayoffsViewModel
 
 @{
     ViewData["Title"] = "rozkazy - zwolnienia";
@@ -6,95 +7,112 @@
 
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/views/documents-generators/Orders.css" asp-append-version="true" />
-<div class="text-center justify-content-center display-flex" style="min-width:650px">
-    <form asp-action="layoffs">
-        <div class="display-flex justify-content-center mb-32px">
-            <div class="mr-4px mt-4px">
-                <img src="~/icons/main/green/sticky note.svg" class="icon-size-32 mt-1px" />
-            </div>
-            <div class="font-dark-green header1-light">
-                @ViewBag.OrderName - zwolnienia
+<div class="text-center justify-content-center display-flex" style="min-width:900px;height:85vh">
+    <form method="post" class="size100p">
+        <div style="height:50px" class="text-left display-flex mt-16px position-relative">
+            <div class="position-absolute width100p text-center paragraph2-light font-weight-normal">
+                @ViewBag.TeamName
             </div>
         </div>
-        <div class="medium-light font-muddy-black mb-32px">
-            @ViewBag.TeamName <br />
+
+        <!-- BUTTONS - Add host, ... -->
+        <div class="text-left">
+            <button asp-action="ordergenerator" formmethod="post" class="ml-8px mb-16px round-corners-5px no-border text-white large-light" style="background-color:gray">
+                <img src="~/icons/navigation/nav-left.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                Wróć
+            </button>
         </div>
-        <div class="display-flex justify-content-center">
-            <div class="clear-white big-shadow size-fit-content medium-light display-block mb-32px pr-16px pl-16px">
-                @if (ViewBag.AreThereScoutsToAdd == true)
-                {
-                    <div class="size-fit-content pl-16px pr-16px mb-16px">
-                        <div class="justify-content-center text-center list-item-width">
-                            <div class="large-light mb-16px">
-                                zwolnienienia
-                            </div>
-                            <div class="display-flex width-fit-content align-items-end list-item-width">
-                                <div class="display-flex justify-content-center">
-                                    <div class="form-group">
-                                        <label class="input-box-width text-left">osoba</label> <br />
-                                        <select asp-for="AddedScoutId" class="input-box-width" asp-items="@ViewBag.DropDownList_Scouts"></select>
+
+        <!-- MAIN PANEL -->
+        <div class="display-flex size100p justify-content-around">
+            <div style="min-height:100%;min-width:160px;width:99%" class="height-fit-content display-flex justify-content-center big-shadow">
+                <div style="width:96%">
+                    <div class="paragraph2-light mb-16px">
+                        zwolnienia
+                    </div>
+                    <div class="display-flex p-8px pb-0 text-left justify-content-start" style="position:relative;z-index:1000">
+                        <div class="form-group size-fit-content">
+                            <label class="width100p text-left" style="max-width:260px">harcerze</label> <br />
+                            <select asp-for="AddedScoutId" class="input-box-width" asp-items="@ViewBag.DropDownList_Scouts"></select>
+                        </div>
+                        <div class="height100p ml-16px">
+                            @if(ViewBag.AreThereScoutsToAdd){
+                                <button asp-action="layoffsadd" class="mt-32px round-corners-5px no-border text-white large-light" style="background-color:yellowgreen;width:215px" >
+                                    <img src="~/icons/managment/add.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                                    Dodaj zwolnienie harcerza
+                                </button>
+                            }
+                            else
+                            {
+                                <button asp-action="layoffsadd" class="mt-32px round-corners-5px no-border text-white large-light" style="background-color:gray;width:270px" disabled>
+                                    <img src="~/icons/managment/cancel.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                                    Nie ma więcej harcerzy do dodania
+                                </button>
+                            }
+                        </div>
+                        <div class="height100p ml-16px">
+                            <button type="submit" class="mt-32px round-corners-5px no-border text-white large-light" style="background-color:yellowgreen;width:130px">
+                                <img src="~/icons/managment/check_circle.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                                Zapisz zmiany
+                            </button>
+                        </div>
+                    </div>
+                    @for (int i = Model.Layoffs.Count() - 1; i >= 0; i--)
+                    {
+                        <div class="muddy-white-2 small-shadow medium-light display-block mb-16px pr-16px pl-16px width100p">
+                            <div class="justify-content-center text-left width100p">
+                                <div class="display-flex">
+                                    <div class="large-light mb-8px mt-8px min-width-fit-content">
+                                        @string.Format("{0} {1}", Model.Layoffs[i].ScoutName, Model.Layoffs[i].ScoutSurname)
+                                        @{
+                                            string role = Model.Layoffs[i].Role;
+                                            string rolePL = TeamRoles.TeamRolesTranslationsWithPolishLetters[role];
+
+                                            <span>
+                                                zwolniony(a) z roli @rolePL
+                                            </span>
+                                            @if (role == TeamRoles.HostCaptain)
+                                            {
+                                                <span>
+                                                    zastępu: @ViewBag.hostNames[i]
+                                                </span>
+                                            }
+                                        }
+                                    </div>
+                                    <div class="width100p height-fit-content mt-4px" style="margin-right:-8px">
+                                        <div class="float-right mt-2px">
+                                            <button asp-action="layoffsremove" name="scoutId" value=@Model.Layoffs[i].ScoutId class="no-border muddy-white-2 round-corners-5px">
+                                                <img src="~/icons/managment/remove.svg" class="icon-size-24" />
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="display-flex p-8px justify-content-center height-fit-content mb-8px">
-                                    <button asp-action="layoffsadd" class="round-corners-5px font-muddy-black no-border button-padding">dodaj zwolnienie</button>
+                                <div class="display-flex justify-content-between">
+                                    <input asp-for=@Model.Layoffs[i].ScoutId class="input-box-width" hidden />
+                                    <input asp-for=@Model.Layoffs[i].ScoutPesel class="input-box-width" hidden />
+                                    <input asp-for=@Model.Layoffs[i].ScoutName class="input-box-width" hidden />
+                                    <input asp-for=@Model.Layoffs[i].ScoutSurname class="input-box-width" hidden />
+                                    <input asp-for=@Model.Layoffs[i].Role class="input-box-width" hidden />
+                                    <input asp-for=@Model.Layoffs[i].Host class="input-box-width" hidden />
                                 </div>
                             </div>
                         </div>
-                    </div>
-                }
-                else
-                {
-                    <div class="display-flex justify-content-center mt-8px">
-                        <div class="muddy-white-2 small-shadow size-fit-content medium-light display-block mb-32px button-padding">
-                            <div class="b-4px">
-                                wszystkim osobom jakim można było został dodany wpis
-                            </div>
-                        </div>
-                    </div>
-                }
-                @for (int i = Model.Layoffs.Count() - 1; i >= 0; i--)
-                {
-                    <div class="muddy-white-2 small-shadow size-fit-content medium-light display-block mb-16px pr-16px pl-16px">
-                        <div class="justify-content-center text-left list-item-width">
-                            <div class="display-flex">
-                                <div class="large-light mb-8px min-width-fit-content">
-                                    @string.Format("{0} {1}", Model.Layoffs[i].ScoutName, Model.Layoffs[i].ScoutSurname)
-                                </div>
-                                <div class="width100p height-fit-content mt-2px" style="margin-right:-8px">
-                                    <div class="float-right">
-                                        <button asp-action="layoffsremove" name="scoutId" value=@Model.Layoffs[i].ScoutId class="no-border muddy-white-2 round-corners-5px">
-                                            <img src="~/icons/managment/remove.svg" class="icon-size-24" />
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="display-flex justify-content-between">
-                                <input asp-for=@Model.Layoffs[i].ScoutId class="input-box-width" hidden />
-                                <input asp-for=@Model.Layoffs[i].ScoutPesel class="input-box-width" hidden />
-                                <input asp-for=@Model.Layoffs[i].ScoutName class="input-box-width" hidden />
-                                <input asp-for=@Model.Layoffs[i].ScoutSurname class="input-box-width" hidden />
-                                <div class="form-group">
-                                    <label class="input-box-width text-left">funkcja</label> <br />
-                                    <select asp-for=@Model.Layoffs[i].Role class="input-box-width" asp-items=@ViewBag.DropDownList_Roles></select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="input-box-width text-left">zastęp*</label> <br />
-                                    <select asp-for=@Model.Layoffs[i].Host class="input-box-width" asp-items=@ViewBag.DropDownList_Hosts></select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-                <div class="display-flex p-8px pb-2px justify-content-center height-fit-content">
-                    <button type="submit" class="round-corners-5px button-padding font-dark-green border-dark-green mr-8px">zapisz</button>
-                    <button asp-action="layoffsrevert" class="round-corners-5px button-padding font-danger-red border-danger-red">przywróć ostatni zapis</button>
-                </div>
-                <div class="display-flex p-8px justify-content-center height-fit-content mb-8px">
-                    <button asp-action="ordergenerator" class="round-corners-5px button-padding no-border" style="width:216px">wróć do edytora rozkazu</button>
+                    }
                 </div>
             </div>
-        </div>
-        <div style="height: 60px">
         </div>
     </form>
 </div>
+
+@section Scripts
+    {
+    <script>
+        $(document).keypress(function(e) {
+            var keyCode = (window.event) ? e.which : e.keyCode;
+            if (keyCode && keyCode == 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+}

@@ -522,7 +522,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                     new PdfSolidBrush(Color.Black),
                     new PointF(300, posY + 70));
 
-            doc.SaveToFile($"{order.OrderNumber}.pdf");
+            doc.SaveToFile($"wwwroot/file.pdf");
 
         }
 
@@ -579,7 +579,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                 lp = lp + 1;
 
             }
-            doc.SaveToFile($"{evnt.IdEvent}_{evnt.Type}_lista_pusta.pdf");
+            doc.SaveToFile($"wwwroot/file.pdf");
         }
 
         public void GenerateEventList(Event ev, List<Scout> team)
@@ -641,7 +641,7 @@ namespace moja_druzyna.Lib.PdfGeneration
 
                 }
             }
-            doc.SaveToFile($"{ev.IdEvent}_{ev.Type}_lista.pdf");
+            doc.SaveToFile($"wwwroot/file.pdf");
         }
 
     }

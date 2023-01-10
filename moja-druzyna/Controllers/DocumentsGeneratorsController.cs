@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -207,7 +206,7 @@ namespace moja_druzyna.Controllers
         }
 
         [HttpPost]
-        public IActionResult GenerateEmptyListPdf(int idEvent)
+        public FileResult GenerateEmptyListPdf(int idEvent)
         {
             Event evnt = _dbContext.Events.Where(ev => ev.IdEvent == idEvent).First();
 
@@ -217,11 +216,11 @@ namespace moja_druzyna.Controllers
 
             new GeneratorPdf().GenerateEmptyList(scouts, evnt);
 
-            return AttendanceListForm(idEvent);
+            return File("file.pdf", "text/plain", string.Format("{0}_{1}_lista_pusta.pdf", evnt.IdEvent, evnt.Type));
         }
 
         [HttpPost]
-        public IActionResult GenerateListPdf(int idEvent)
+        public FileResult GenerateListPdf(int idEvent)
         {
             Event evnt = _dbContext.Events.Where(ev => ev.IdEvent == idEvent).First();
 
@@ -239,10 +238,9 @@ namespace moja_druzyna.Controllers
 
             new GeneratorPdf().GenerateEventList(evnt, attended);
 
-            return AttendanceListForm(idEvent);
+            return File("file.pdf", "text/plain", string.Format("{0}_{1}_lista.pdf", evnt.IdEvent, evnt.Type));
         }
 
-        [Authorize(Roles = "captain")]
         public IActionResult OrderGenerator()
         {
             Team team = GetTeam(_dbContext, sessionAccesser.CurrentTeamId);
@@ -250,11 +248,18 @@ namespace moja_druzyna.Controllers
             if (!UserHasOneOfRoles(team, new() { TeamRoles.Captain }))
                 return Redirect(WebsiteAddresses.AccessDeniedAddress);
 
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
+
             return View();
         }
 
-        public IActionResult OrderForm_Submit()
+        public IActionResult OrderForm_Submit(string orderNumber)
         {
+            if (string.IsNullOrEmpty(orderNumber))
+            {
+                return Redirect("ordergenerator");
+            }
+
             Team team = GetTeam(_dbContext, sessionAccesser.CurrentTeamId);
 
             if (!UserHasOneOfRoles(team, new() { TeamRoles.Captain }))
@@ -302,7 +307,7 @@ namespace moja_druzyna.Controllers
             {
                 CreationDate = sessionAccesser.FormOrder.CreationDate,
                 Location = sessionAccesser.FormOrder.CreationPlace,
-                OrderNumber = sessionAccesser.FormOrder.Name,
+                OrderNumber = orderNumber,
                 TrialClosings = sessionAccesser.FormOrder.TrialClosingsSaved,
                 Appointments = sessionAccesser.FormOrder.AppointmentsSaved,
                 Exclusions = sessionAccesser.FormOrder.ExclusionsSaved,
@@ -322,7 +327,7 @@ namespace moja_druzyna.Controllers
         }
 
         [HttpPost]
-        public IActionResult GenerateOrderPdf(int orderId)
+        public FileResult GenerateOrderPdf(int orderId)
         {
             OrderInfo orderInfo = _dbContext.OrderInfos.Find(orderId);
             Order order = _dbContext.Orders.Find(orderInfo.OrderId);
@@ -443,7 +448,7 @@ namespace moja_druzyna.Controllers
 
             new GeneratorPdf().GenerateOrder(formOrder);
 
-            return Redirect("orders");
+            return File("file.pdf", "text/plain", string.Format("{0}.pdf", formOrder.OrderNumber));
         }
 
         public IActionResult Appointments()
@@ -673,21 +678,15 @@ namespace moja_druzyna.Controllers
                 .Select(l => l.ScoutPesel)
                 .ToList();
 
-            List<Scout> scoutsThatCanBeAdded =
-                scoutsInTheTeam.Where(s => !peselsOfScoutsThatAreAlreadyInTheLayoffs.Contains(s.PeselScout) && s.PeselScout != sessionAccesser.UserPesel).ToList();
+            List<Scout> scoutsThatCanBeAdded = scoutsInTheTeam
+                .Where(s => !peselsOfScoutsThatAreAlreadyInTheLayoffs.Contains(s.PeselScout) && s.PeselScout != sessionAccesser.UserPesel)
+                .Where(s => team.GetScoutRole(s.PeselScout) != TeamRoles.Scout)
+                .ToList();
 
             List<Host> hostsFromTheTeam = team.Hosts.ToList();
 
             List<SelectListItem> dropDownList_Scouts = new List<SelectListItem>();
-            List<SelectListItem> dropDownList_Roles = new List<SelectListItem>()
-            {
-                new() {Text = "przyboczny", Value = TeamRoles.ViceCaptain},
-                new() {Text = "chorąży drużyny", Value = TeamRoles.Ensign},
-                new() {Text = "kwatermistrz", Value = TeamRoles.Quatermaster},
-                new() {Text = "kronikarz", Value = TeamRoles.Chronicler},
-                new() {Text = "zastępowy", Value = TeamRoles.HostCaptain}
-            };
-            List<SelectListItem> dropDownList_Hosts = new List<SelectListItem>();
+            List<string> hostNames = new();
 
             foreach (Scout scout in scoutsThatCanBeAdded)
             {
@@ -698,22 +697,18 @@ namespace moja_druzyna.Controllers
                 });
             }
 
-            foreach (Host host in hostsFromTheTeam)
+            foreach(string pesel in sessionAccesser.FormOrder.Layoffs.Select(l => l.ScoutPesel))
             {
-                dropDownList_Hosts.Add(new SelectListItem()
-                {
-                    Text = host.Name,
-                    Value = host.IdHost.ToString()
-                });
+                string name = team.GetScoutsHost(pesel)?.Name;
+                hostNames.Add(string.IsNullOrEmpty(name) ? "EMPTY" : name);
             }
 
             int numberOfScoutsInTheTeam = scoutsInTheTeam.Count();
 
             ViewBag.DropDownList_Scouts = dropDownList_Scouts;
-            ViewBag.DropDownList_Roles = dropDownList_Roles;
-            ViewBag.DropDownList_Hosts = dropDownList_Hosts;
+            ViewBag.hostNames = hostNames;
 
-            ViewBag.AreThereScoutsToAdd = !(peselsOfScoutsThatAreAlreadyInTheLayoffs.Count() == (numberOfScoutsInTheTeam - 1));
+            ViewBag.AreThereScoutsToAdd = scoutsThatCanBeAdded.Any();
             ViewBag.OrderName = sessionAccesser.FormOrder.Name;
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
@@ -748,6 +743,7 @@ namespace moja_druzyna.Controllers
         [HttpPost]
         public IActionResult LayoffsAdd(LayoffsViewModel layoffsViewModel)
         {
+            Team team = GetTeam(_dbContext, sessionAccesser.CurrentTeamId);
             SessionFormOrderContext formOrder = sessionAccesser.FormOrder;
 
             List<Layoff> layoffs = AddScoutEntryToFormOrderViewModel(layoffsViewModel, formOrder.Layoffs.ConvertAll(x => (IOrderElement)x))
@@ -755,6 +751,9 @@ namespace moja_druzyna.Controllers
 
             if (layoffs != null)
             {
+                layoffs.Last().Role = team.GetScoutRole(layoffs.Last().ScoutPesel);
+                layoffs.Last().Host = team.GetScoutsHost(layoffs.Last().ScoutPesel)?.IdHost.ToString();
+
                 formOrder.Layoffs = layoffs;
                 sessionAccesser.FormOrder = formOrder;
             }

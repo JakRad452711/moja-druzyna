@@ -5,16 +5,18 @@ using System.Security.Claims;
 
 namespace moja_druzyna.Data.Session
 {
-    public class SessionAccesser : ISessionUserContext, ISessionTeamContext, ISessionAddHostContext, ISessionAddScoutContext
+    public class SessionAccesser : ISessionUserContext, ISessionTeamContext, ISessionLayoutContext, ISessionAddHostContext, ISessionAddScoutContext, ISessionOperationStatusContext
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         private readonly string sessionUserContextName = "UserContext";
         private readonly string sessionTeamContextName = "TeamContext";
+        private readonly string sessionLayoutContextName = "LayoutContext";
         private readonly string sessionAddHostContextName = "AddHostContext";
         private readonly string sessionAddScoutContextName = "AddScoutContext";
         private readonly string sessionFormOrderContextName = "FormOrderContext";
+        private readonly string sessionOperationStatusContextName = "OperationStatusContext";
 
         public SessionAccesser(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor)
         {
@@ -31,9 +33,11 @@ namespace moja_druzyna.Data.Session
         {
             InitializeSessionUserContext(httpContextAccessor);
             InitializeSessionTeamContext(httpContextAccessor);
+            InitializeSessionLayoutContext(httpContextAccessor);
             InitializeSessionAddHostContext(httpContextAccessor);
             InitializeSessionAddScoutContext(httpContextAccessor);
             InitializeSessionFormOrderContext(httpContextAccessor);
+            InitializeSessionOperationStatusContext(httpContextAccessor);
         }
 
         public string UserId
@@ -176,6 +180,26 @@ namespace moja_druzyna.Data.Session
             }
         }
 
+        public bool IsSidebarCollapsed
+        {
+            get
+            {
+                ISessionLayoutContext sessionLayoutContext = JsonConvert
+                    .DeserializeObject<SessionLayoutContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionLayoutContextName));
+
+                return sessionLayoutContext.IsSidebarCollapsed;
+            }
+            set
+            {
+                ISessionLayoutContext sessionLayoutContext = JsonConvert
+                    .DeserializeObject<SessionLayoutContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionLayoutContextName));
+
+                sessionLayoutContext.IsSidebarCollapsed = value;
+
+                _httpContextAccessor.HttpContext.Session.SetString(sessionLayoutContextName, JsonConvert.SerializeObject(sessionLayoutContext));
+            }
+        }
+
         public string AddedHostName
         {
             get
@@ -253,6 +277,46 @@ namespace moja_druzyna.Data.Session
             }
         }
 
+        public bool OperationSucceeded
+        {
+            get
+            {
+                ISessionOperationStatusContext sessionOperationStatusContext = JsonConvert
+                    .DeserializeObject<SessionOperationStatusContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionOperationStatusContextName));
+
+                return sessionOperationStatusContext.OperationSucceeded;
+            }
+            set
+            {
+                ISessionOperationStatusContext sessionOperationStatusContext = JsonConvert
+                    .DeserializeObject<SessionOperationStatusContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionOperationStatusContextName));
+
+                sessionOperationStatusContext.OperationSucceeded = value;
+
+                _httpContextAccessor.HttpContext.Session.SetString(sessionOperationStatusContextName, JsonConvert.SerializeObject(sessionOperationStatusContext));
+            }
+        }
+
+        public bool OperationFailed
+        {
+            get
+            {
+                ISessionOperationStatusContext sessionOperationStatusContext = JsonConvert
+                    .DeserializeObject<SessionOperationStatusContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionOperationStatusContextName));
+
+                return sessionOperationStatusContext.OperationFailed;
+            }
+            set
+            {
+                ISessionOperationStatusContext sessionOperationStatusContext = JsonConvert
+                    .DeserializeObject<SessionOperationStatusContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionOperationStatusContextName));
+
+                sessionOperationStatusContext.OperationFailed = value;
+
+                _httpContextAccessor.HttpContext.Session.SetString(sessionOperationStatusContextName, JsonConvert.SerializeObject(sessionOperationStatusContext));
+            }
+        }
+
         public void InitializeSessionUserContext(IHttpContextAccessor httpContextAccessor)
         {
             if (httpContextAccessor.HttpContext.Session.GetString(sessionUserContextName) != null)
@@ -290,6 +354,19 @@ namespace moja_druzyna.Data.Session
             httpContextAccessor.HttpContext.Session.SetString(sessionTeamContextName, JsonConvert.SerializeObject(sessionTeamContext));
         }
 
+        public void InitializeSessionLayoutContext(IHttpContextAccessor httpContextAccessor)
+        {
+            if (httpContextAccessor.HttpContext.Session.GetString(sessionLayoutContextName) != null)
+                return;
+
+            ISessionLayoutContext sessionLayoutContext = new SessionLayoutContext()
+            {
+                IsSidebarCollapsed = false
+            };
+
+            httpContextAccessor.HttpContext.Session.SetString(sessionLayoutContextName, JsonConvert.SerializeObject(sessionLayoutContext));
+        }
+
         public void InitializeSessionAddHostContext(IHttpContextAccessor httpContextAccessor)
         {
             if (httpContextAccessor.HttpContext.Session.GetString(sessionAddHostContextName) != null)
@@ -312,6 +389,14 @@ namespace moja_druzyna.Data.Session
                 return;
 
             httpContextAccessor.HttpContext.Session.SetString(sessionFormOrderContextName, JsonConvert.SerializeObject(new SessionFormOrderContext()));
+        }
+
+        public void InitializeSessionOperationStatusContext(IHttpContextAccessor httpContextAccessor)
+        {
+            if (httpContextAccessor.HttpContext.Session.GetString(sessionOperationStatusContextName) != null)
+                return;
+
+            httpContextAccessor.HttpContext.Session.SetString(sessionOperationStatusContextName, JsonConvert.SerializeObject(new SessionOperationStatusContext()));
         }
     }
 }

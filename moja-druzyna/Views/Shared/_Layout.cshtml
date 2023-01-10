@@ -19,7 +19,15 @@
             </nav>
         </header>
         <div id="center-section-container" class="muddy-white">
-            <input type="checkbox" id="is-sb-collapsed" />
+            @{
+                if (TempData["isSidebarCollapsed"] == null)
+                    TempData["isSidebarCollapsed"] = false;
+
+                bool isCollapsed = (bool) TempData["isSidebarCollapsed"];
+                TempData.Keep("isSidebarCollapsed");
+
+                <input type="checkbox" id="is-sb-collapsed" checked=@isCollapsed />
+            }
             <label id="hamburger" for="is-sb-collapsed">
                 <img id="hamburger-icon" src="~/icons/navigation/nav-hamburger.svg" />
             </label>
@@ -44,47 +52,19 @@
                                     Dane
                                 </a>
                             </div>
-                            <div id="navigations-item-next">
-                                <a class="text-dark" asp-controller="profile" asp-action="servicehistory">
-                                    Historia służby
-                                </a>
-                            </div>
-                            <div id="navigations-item-next">
-                                <a class="text-dark" asp-controller="profile" asp-action="ranks">
-                                    Stopnie
-                                </a>
-                            </div>
-                            <div id="navigations-item-next">
-                                <a class="text-dark" asp-controller="profile" asp-action="achievments">
-                                    Osiągnięcia
-                                </a>
-                            </div>
-                            <div id="navigations-item-next">
-                                <a class="text-dark" asp-controller="profile" asp-action="roles">
-                                    Role
-                                </a>
-                            </div>
-                            <div id="navigations-item-next">
-                                <a class="text-dark" asp-controller="profile" asp-action="coursesandpermissions">
-                                    Kursy szkoleniowe i uprawnienia
-                                </a>
-                            </div>
-                            <div id="navigations-item-next">
-                                <a class="text-dark" asp-controller="profile" asp-action="gdprconsents">
-                                    Zgody RODO
-                                </a>
-                            </div>
                         </div>
                         <div id="sidebar-reports" class="muddy-white-2 pb-8px small-shadow">
                             <div id="sidebar-section-header" class="light-gray paragraph-regular small-shadow">
                                 <img src="~/icons/main/sticky note.svg" id="navigations-icon" />
                                 <div id="sidebar-section-header-text">
-                                    Raporty
+                                    <a class="text-dark" asp-controller="documentsgenerators" asp-action="orders">
+                                        Raporty
+                                    </a>
                                 </div>
                             </div>
                             <div id="navigations-item-first">
                                 <a class="text-dark" asp-controller="documentsgenerators" asp-action="orders">
-                                        Rozkazy
+                                    Rozkazy
                                 </a>
                             </div>
                             <div id="navigations-item-next">
@@ -104,12 +84,12 @@
                             </div>
                             <div id="navigations-item-first">
                                 <a class="text-dark" asp-controller="team" asp-action="team">
-                                    Moja drużyna
+                                    Harcerze
                                 </a>
                             </div>
                             <div id="navigations-item-next">
                                 <a class="text-dark" asp-controller="team" asp-action="hosts">
-                                    Moje zastępy
+                                    Zastępy
                                 </a>
                             </div>
                         </div>
@@ -117,16 +97,15 @@
                             <div id="sidebar-section-header" class="light-gray paragraph-regular small-shadow">
                                 <img src="~/icons/main/cup.svg" id="navigations-icon" />
                                 <div id="sidebar-section-header-text">
-                                    Ranking
+                                    <a class="text-dark" asp-controller="ranking" asp-action="scores">
+                                        Ranking
+                                    </a>
                                 </div>
                             </div>
                             <div id="navigations-item-first">
                                 <a class="text-dark" asp-controller="ranking" asp-action="scores">
                                     Punktacje
                                 </a>
-                            </div>
-                            <div id="navigations-item-next">
-                                Zasady
                             </div>
                         </div>
                     </div>
@@ -145,3 +124,43 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+<script>
+    $(document).ready(function() {
+        // update is-sb-collapsed on tab open
+        $(document).focus(function() {
+            withIsSidebarCollapsed(function(result) {
+                document.getElementById("is-sb-collapsed").checked = result.value;
+            });
+        })
+
+        // toggle sidebar on click
+        $("#is-sb-collapsed").click(function() {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("ToggleIsSidebarCollapsed", "Api")",
+                dataType: "json",
+                success: function () {
+                    // success
+                },
+                error: function () {
+                    alert("_Layout.cshtml toggle sidebar on click: raised an error");
+                }
+            });
+        })
+
+        function withIsSidebarCollapsed(toExecute) {
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetIsSidebarCollapsed", "Api")",
+                dataType: "json",
+                success: function(result) { 
+                    toExecute(result); 
+                },
+                error: function(result) { 
+                    alert("_Layout.cshtml onSidebarCollapsed(f): raised an error"); 
+                }
+            });
+        };
+    })
+</script>
