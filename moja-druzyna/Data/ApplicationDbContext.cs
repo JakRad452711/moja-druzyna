@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using moja_druzyna.Models;
 
@@ -36,7 +35,7 @@ namespace moja_druzyna.Data
         public virtual DbSet<ScoutTeam> ScoutTeam { get; set; }
         public virtual DbSet<Team> Teams { get; set; }
         public virtual DbSet<TrainingCourse> TrainingCourses { get; set; }
-        public virtual DbSet <Points> Points { get; set; }
+        public virtual DbSet<Points> Points { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -55,48 +54,30 @@ namespace moja_druzyna.Data
 
             modelBuilder.Entity<Achievement>(entity =>
             {
-         
                 entity.ToTable("achievement");
-
-
             });
 
             modelBuilder.Entity<Address>(entity =>
             {
-
-
                 entity.ToTable("address");
 
                 entity.HasKey(e => new { e.ParentPesel, e.ScoutPeselScout })
                 .HasName("PK_adresss_quicksolve");
-
-
-
             });
 
             modelBuilder.Entity<Agreement>(entity =>
             {
-       
-
                 entity.ToTable("agreement");
-
             });
 
             modelBuilder.Entity<AttendanceList>(entity =>
             {
-               
                 entity.ToTable("attendance_list");
-
-
             });
 
             modelBuilder.Entity<Collection>(entity =>
             {
-         
-
                 entity.ToTable("collection");
-
-
             });
 
             modelBuilder.Entity<DutyHistory>(entity =>
@@ -104,17 +85,11 @@ namespace moja_druzyna.Data
                 entity.HasKey(e => new { e.ScoutPeselScout, e.Team, e.Host, e.DateStart, e.Banner });
 
                 entity.ToTable("duty_history");
-
-
             });
 
             modelBuilder.Entity<Event>(entity =>
             {
-               
-
                 entity.ToTable("event");
-
-
             });
 
             modelBuilder.Entity<EventTeam>(entity =>
@@ -123,51 +98,34 @@ namespace moja_druzyna.Data
                     .HasName("PK__event_te__FD53622128F556BD");
 
                 entity.ToTable("event_team");
-
-
             });
 
             modelBuilder.Entity<Host>(entity =>
             {
-               
-
                 entity.ToTable("host");
-
-
             });
 
             modelBuilder.Entity<Parent>(entity =>
             {
-
                 entity.ToTable("parent");
-
-
             });
+
             modelBuilder.Entity<Points>(entity =>
             {
-
                 entity.ToTable("Points");
 
-                entity.HasKey(e => new { e.DateAcquirement,e.OrderId,e.ScoutPeselScout })
+                entity.HasKey(e => new { e.DateAcquirement, e.OrderId, e.ScoutPeselScout })
                .HasName("PK__points__FD53622128F556BD");
-
-
             });
 
             modelBuilder.Entity<Rank>(entity =>
             {
-               
-
                 entity.ToTable("rank");
-
             });
 
             modelBuilder.Entity<Scout>(entity =>
             {
-                
-
                 entity.ToTable("scout");
-
             });
 
             modelBuilder.Entity<ScoutAchievement>(entity =>
@@ -176,7 +134,6 @@ namespace moja_druzyna.Data
                     .HasName("PK__scout_achievement__14C192AA7E8B153B");
 
                 entity.ToTable("scout_achievement");
-
             });
 
             modelBuilder.Entity<ScoutAgreement>(entity =>
@@ -185,7 +142,6 @@ namespace moja_druzyna.Data
                     .HasName("PK__scout_ag__14C192AA7E8B153B");
 
                 entity.ToTable("scout_agreement");
-
             });
 
             modelBuilder.Entity<ScoutCollection>(entity =>
@@ -194,8 +150,6 @@ namespace moja_druzyna.Data
                     .HasName("PK__scout_co__EDEC6AB95EAAD616");
 
                 entity.ToTable("scout_collection");
-
-
             });
 
             modelBuilder.Entity<ScoutCourse>(entity =>
@@ -205,16 +159,12 @@ namespace moja_druzyna.Data
 
                 entity.ToTable("scout_course");
 
-
-
                 modelBuilder.Entity<ScoutEvent>(entity =>
                 {
                     entity.HasKey(e => new { e.ScoutPeselScout, e.EventIdEvent })
                         .HasName("PK__scout_ev__A6050A5886C962DC");
 
                     entity.ToTable("scout_event");
-
-
                 });
 
                 modelBuilder.Entity<ScoutRank>(entity =>
@@ -223,8 +173,6 @@ namespace moja_druzyna.Data
                         .HasName("PK__scout_ra__F838FC8F4D9C216B");
 
                     entity.ToTable("scout_rank");
-
-
                 });
 
                 modelBuilder.Entity<ScoutHost>(entity =>
@@ -233,8 +181,6 @@ namespace moja_druzyna.Data
                         .HasName("PK__scout_host__84F25C26A6B4D35B");
 
                     entity.ToTable("scout_host");
-
-
                 });
                 modelBuilder.Entity<ScoutTeam>(entity =>
                 {
@@ -242,22 +188,14 @@ namespace moja_druzyna.Data
                         .HasName("PK__scout_team__84F25C26A6B4D35B");
 
                     entity.ToTable("scout_team");
-
-
                 });
 
                 modelBuilder.Entity<Team>(entity =>
                 {
-                    
-
                 });
 
                 modelBuilder.Entity<TrainingCourse>(entity =>
                 {
-                   
-
-
-
                 });
             });
         }

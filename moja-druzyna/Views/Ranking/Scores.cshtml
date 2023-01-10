@@ -1,0 +1,22 @@
+﻿@model moja_druzyna.ViewModels.Ranking.ScoresViewModel
+@using moja_druzyna.ViewModels.Ranking
+
+<div>
+    @foreach(ScoresViewModel.ScoreEntry score in Model.Scores)
+    {
+        <div class="display-flex">
+            <div>
+                <img src="~/icons/design/ranks/no-accents/rank-1.svg" class="rank-icon-size-1" />
+            </div>
+            <div>
+                @string.Format("{0} {1}", score.Name, score.Surname)
+            </div>
+            <div>
+                @score.HostName
+            </div>
+            <div>
+                @score.Points
+            </div>
+        </div>
+    }
+</div>

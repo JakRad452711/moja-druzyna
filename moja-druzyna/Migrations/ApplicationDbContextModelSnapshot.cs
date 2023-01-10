@@ -689,9 +689,6 @@ namespace moja_druzyna.Migrations
 
                     b.HasIndex("AchievementIdAchievement");
 
-                    b.HasIndex("ScoutPeselScout")
-                        .IsUnique();
-
                     b.ToTable("scout_achievement");
                 });
 
@@ -1094,8 +1091,8 @@ namespace moja_druzyna.Migrations
                         .IsRequired();
 
                     b.HasOne("moja_druzyna.Models.Scout", "Scout")
-                        .WithOne("ScoutAchievement")
-                        .HasForeignKey("moja_druzyna.Models.ScoutAchievement", "ScoutPeselScout")
+                        .WithMany("ScoutAchievements")
+                        .HasForeignKey("ScoutPeselScout")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1292,7 +1289,7 @@ namespace moja_druzyna.Migrations
 
                     b.Navigation("Points");
 
-                    b.Navigation("ScoutAchievement");
+                    b.Navigation("ScoutAchievements");
 
                     b.Navigation("ScoutAgreements");
 

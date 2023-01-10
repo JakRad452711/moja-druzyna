@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace moja_druzyna.src
+﻿namespace moja_druzyna.Lib.PeselModule
 {
     public class Test_Pesel
     {
@@ -9,19 +6,21 @@ namespace moja_druzyna.src
         {
             string output;
             Pesel p = new Pesel(data);
-            if (p.isValid())
+            if (p.IsValid())
             {
                 output = $"PESEL {data} jest poprawny.";
-                output = output + $"Data urodzenia: {p.getBirthday()}";
-                bool male = p.isMale();
+                output = output + $"Data urodzenia: {p.GetBirthday()}";
+                bool male = p.IsMale();
                 if (male == true)
                 {
-                    output  = output + "Płeć: Mężczyzna";
-                } else
+                    output = output + "Płeć: Mężczyzna";
+                }
+                else
                 {
                     output = output + "Płeć: Kobieta";
                 }
-            } else
+            }
+            else
             {
                 output = $"PESEL {data} jest niepoprawny!";
             }

@@ -5,16 +5,17 @@ using System.Security.Claims;
 
 namespace moja_druzyna.Data.Session
 {
-    public class SessionAccesser : ISessionUserContext, ISessionTeamContext, ISessionAddHostContext
+    public class SessionAccesser : ISessionUserContext, ISessionTeamContext, ISessionAddHostContext, ISessionAddScoutContext
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         private readonly string sessionUserContextName = "UserContext";
         private readonly string sessionTeamContextName = "TeamContext";
-        private readonly string sessionFormOrderContextName = "FormOrderContext";
         private readonly string sessionAddHostContextName = "AddHostContext";
-        
+        private readonly string sessionAddScoutContextName = "AddScoutContext";
+        private readonly string sessionFormOrderContextName = "FormOrderContext";
+
         public SessionAccesser(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor)
         {
             if(httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
@@ -30,8 +31,9 @@ namespace moja_druzyna.Data.Session
         {
             InitializeSessionUserContext(httpContextAccessor);
             InitializeSessionTeamContext(httpContextAccessor);
-            InitializeSessionFormOrderContext(httpContextAccessor);
             InitializeSessionAddHostContext(httpContextAccessor);
+            InitializeSessionAddScoutContext(httpContextAccessor);
+            InitializeSessionFormOrderContext(httpContextAccessor);
         }
 
         public string UserId
@@ -214,6 +216,26 @@ namespace moja_druzyna.Data.Session
             }
         }
 
+        public bool ScoutWasAdded 
+        {
+            get 
+            {
+                ISessionAddScoutContext sessionAddScoutContext = JsonConvert
+                    .DeserializeObject<SessionAddScoutContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionAddScoutContextName));
+
+                return sessionAddScoutContext.ScoutWasAdded;
+            }
+            set
+            {
+                ISessionAddScoutContext sessionAddScoutContext = JsonConvert
+                    .DeserializeObject<SessionAddScoutContext>(_httpContextAccessor.HttpContext.Session.GetString(sessionAddScoutContextName));
+
+                sessionAddScoutContext.ScoutWasAdded = value;
+
+                _httpContextAccessor.HttpContext.Session.SetString(sessionAddScoutContextName, JsonConvert.SerializeObject(sessionAddScoutContext));
+            }
+        }
+
         public SessionFormOrderContext FormOrder
         {
             get
@@ -273,9 +295,15 @@ namespace moja_druzyna.Data.Session
             if (httpContextAccessor.HttpContext.Session.GetString(sessionAddHostContextName) != null)
                 return;
 
-            ISessionAddHostContext sessionAddHostContext = new SessionAddHostContext();
+            httpContextAccessor.HttpContext.Session.SetString(sessionAddHostContextName, JsonConvert.SerializeObject(new SessionAddHostContext()));
+        }
 
-            httpContextAccessor.HttpContext.Session.SetString(sessionAddHostContextName, JsonConvert.SerializeObject(sessionAddHostContext));
+        public void InitializeSessionAddScoutContext(IHttpContextAccessor httpContextAccessor)
+        {
+            if (httpContextAccessor.HttpContext.Session.GetString(sessionAddScoutContextName) != null)
+                return;
+
+            httpContextAccessor.HttpContext.Session.SetString(sessionAddScoutContextName, JsonConvert.SerializeObject(new SessionAddScoutContext()));
         }
 
         public void InitializeSessionFormOrderContext(IHttpContextAccessor httpContextAccessor)

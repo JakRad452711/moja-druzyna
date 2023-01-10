@@ -1,4 +1,4 @@
-﻿@using moja_druzyna.src
+﻿@using moja_druzyna.Lib.PeselModule
 @model moja_druzyna.Models.Scout
 
 @{
@@ -51,7 +51,7 @@
                     else
                     { <a>@Model.SecondName</a>} <br />
                     @Html.DisplayFor(user => user.Surname) <br />
-                    @if (new Pesel(Model.PeselScout).isMale())
+                    @if (new Pesel(Model.PeselScout).IsMale())
                     {
                         <a>Mężczyzna</a>
                     } else

@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using moja_druzyna.Data;
 using moja_druzyna.Data.Session;
 using moja_druzyna.Models;
-using moja_druzyna.ViewModels;
 using System.Diagnostics;
 using System.Linq;
 
@@ -17,7 +16,7 @@ namespace moja_druzyna.Controllers
 
         private readonly SessionAccesser sessionAccesser;
 
-        private static AFormViewModel aFormViewModel = new AFormViewModel();
+        private static bool initializedDb = false;
 
         public ProfileController(ApplicationDbContext dbContext, ILogger<ProfileController> logger, IHttpContextAccessor httpContextAccessor)
         {
@@ -25,6 +24,13 @@ namespace moja_druzyna.Controllers
             _logger = logger;
 
             sessionAccesser = new SessionAccesser(dbContext, httpContextAccessor);
+
+            if (!initializedDb)
+            {
+                ModelManager modelManager = new ModelManager(_dbContext);
+                modelManager.InitializeDbValues();
+                initializedDb = true;
+            }
         }
 
         public IActionResult PersonalData()
@@ -32,11 +38,11 @@ namespace moja_druzyna.Controllers
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
             Scout userData = _dbContext.Scouts.Find(sessionAccesser.UserPesel);
-            bool hasAddress = _dbContext.Adresses.Where(address => address.ScoutPeselScout == sessionAccesser.UserPesel).Any();
+            bool hasAddress = _dbContext.Adresses.Where(a => a.ScoutPeselScout == sessionAccesser.UserPesel).Any();
 
-            if(hasAddress)
+            if (hasAddress)
             {
-                userData.Adress = _dbContext.Adresses.Where(address => address.ScoutPeselScout == sessionAccesser.UserPesel).First();
+                userData.Adress = _dbContext.Adresses.Where(a => a.ScoutPeselScout == sessionAccesser.UserPesel).First();
             }
 
             return View(userData);
