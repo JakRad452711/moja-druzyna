@@ -7,6 +7,8 @@ using moja_druzyna.Models;
 using moja_druzyna.ViewModels.Profile;
 using static moja_druzyna.Models.Rank;
 using static moja_druzyna.Models.Role;
+using static moja_druzyna.Models.ScoutAchievement;
+using static moja_druzyna.Models.Achievement;
 using static moja_druzyna.Models.ScoutRank;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -97,7 +99,22 @@ namespace moja_druzyna.Controllers
         {
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
-            return View();
+            var achievements = GetScoutAchievements(_dbContext, sessionAccesser.UserPesel);
+
+            ICollection<AchievementsViewModel> achievementsViewModels = new List<AchievementsViewModel>();
+            
+            foreach (KeyValuePair<string, string> achievement in achievements)
+            {
+                achievementsViewModels.Add(new AchievementsViewModel()
+                {
+                    AchievementDate = achievement.Key,
+                    AchievementType = achievement.Value
+                });
+            }
+
+            achievementsViewModels = achievementsViewModels.OrderBy(x => x.AchievementDate).ToList();
+
+            return View(achievementsViewModels);
         }
 
         public IActionResult Roles()

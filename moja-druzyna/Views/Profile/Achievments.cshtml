@@ -1,8 +1,44 @@
-﻿@{
+﻿@model ICollection<moja_druzyna.ViewModels.Profile.AchievementsViewModel>
+
+@{
     ViewData["Title"] = "osiągnięcia";
 }
 
-<div class="text-center">
+<div class="text-center" justify-content-center display-flex" style="min-width:650px">
     <h1 class="display-4">Moje osiągnięcia</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    
+    <div class="display-flex list-item-width text-left medium-bold mb-4px">
+        <div class="display-flex justify-content-between width100p ml-64px">
+            <span class="width-1a">osiągnięcie</span>
+            <span class="width-1d mr-16px"></span>
+            <span class="width-1d mr-16px">data otrzymania</span>
+
+        </div>
+    </div>
+
+    <div class="text-center justify-content-center" style="min-width:650px" align="center">
+
+        @foreach (var achievementsVM in Model)
+        {
+            <div class="display-flex list-item-size clear-white small-shadow round-corners-12px large-light mb-4px">
+
+                <div class="display-flex justify-content-between width100p text-left">
+
+                    <div class="width-1a">
+                        <div class="mt-8px">@achievementsVM.AchievementType</div>
+                    </div>
+                    <div class="width-1c mt-8px">
+                        @achievementsVM.AchievementDate
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+    <div style="height: 60px">
+
+    </div>
+
 </div>
