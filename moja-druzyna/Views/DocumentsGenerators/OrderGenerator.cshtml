@@ -26,20 +26,26 @@
                     <div class="paragraph2-light mb-16px">
                         wydawanie rozkazu
                     </div>
-                    <div class="display-flex p-8px pb-0 text-left justify-content-start" style="position:relative;z-index:1000">
+                    <div class="display-flex p-8px pb-8px text-left justify-content-start" style="position:relative;z-index:1000;margin-bottom:-8px">
                         <div class="form-group size-fit-content">
                             <label class="width100p text-left" style="max-width:260px">numer rozkazu</label> <br />
                             <input name="orderNumber" class="width100p" style="max-width:260px" />
+                            @if (ViewBag.SubmittingOrderFailed == true)
+                            {
+                                <div class="height100p text-danger text-left position-absolute" style="margin-top:1px">
+                                    wypełnij numer rozkazu!
+                                </div>
+                            }
                         </div>
                         <div class="height100p ml-16px" style="margin-top:1px">
-                            <button asp-action="orderform_submit" type="submit" class="mt-32px round-corners-5px no-border text-white large-light" style="background-color:yellowgreen;width:120px">
+                            <button asp-action="orderform_submit" type="submit" class="mt-32px round-corners-5px no-border text-white large-light" style="background-color:yellowgreen;width:130px">
                                 <img src="~/icons/managment/check_circle.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
                                 Wydaj rozkaz
                             </button>
                         </div>
+                        
                     </div>
                     <div class="display-flex width100p p-4px pl-8px pr-8px justify-content-between">
-                        
                     </div>
                     <div class="display-flex width100p pl-8px pr-8px text-left">
                         <div class="form-group width100p">
@@ -113,6 +119,8 @@
                             </button>
                         </div>
                     </div>
+                    <div style="height:60px">
+                    </div>
                 </div>
             </div>
         </div>
@@ -120,9 +128,9 @@
 </div>
 
 @section Scripts
-{
+    {
     <script>
-        $(document).keypress(function (e) {
+        $(document).keypress(function(e) {
             var keyCode = (window.event) ? e.which : e.keyCode;
             if (keyCode && keyCode == 13) {
                 e.preventDefault();

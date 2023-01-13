@@ -9,7 +9,7 @@
 
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/views/team/Team.css" asp-append-version="true" />
-<div class="text-center justify-content-center display-flex" style="min-width:900px;height:85vh">
+<div class="text-center justify-content-center display-flex" style="min-width:900px;min-height:85vh;height:fit-content">
     <form method="get" class="size100p">
         <input id="team-id" value="@ViewBag.TeamId" disabled hidden />
         <div style="height:50px" class="text-left display-flex mt-16px position-relative">
@@ -41,7 +41,7 @@
         <!-- BOTH PANELS -->
         <div class="display-flex size100p justify-content-around">
             <!-- LIST OF SCOUTS IN THE TEAM (LEFT PANEL) -->
-            <div style="min-height:100%;width:49%;min-width:100px" class="height-fit-content display-flex justify-content-center big-shadow">
+            <div style="min-height:100%;width:49%;min-width:100px;height:initial;min-height:86vh" class="display-flex justify-content-center big-shadow">
                 <div style="width:96%">
                     <div class="display-flex width-100p text-left medium-bold mb-4px">
                         <div class="display-flex justify-content-between width100p ml-64px">
@@ -110,11 +110,13 @@
                             </li>
                         }
                     </ol>
+                    <div style="height:70px">
+                    </div>
                 </div>
             </div>
 
             <!-- SELECTED SCOUT (RIGHT PANEL) -->
-            <div style="width:49%;height:100%;" class="big-shadow">
+            <div style="width:49%;height:initial" class="big-shadow">
                 <div class="mt-16px" style="margin-left:calc(6% - 25px)">
                     <div class="paragraph2-regular font-dark-green text-left">
                         <div id="scout-title" class="mr-16px mb-16px">@string.Format("{0} {1}", @Model.FirstScout.Name, @Model.FirstScout.Surname)</div>
@@ -130,6 +132,11 @@
                                     <img src="@Url.Content(rankUrl)" class="mt-32px mb-8px mr-4px" style="height:30px;transform:rotate(270deg)" />
                                 }
                             </div>
+                        }
+                        else
+                        {
+                            <div id="ranks-header" class="mr-16px paragraph-regular"></div>
+                            <div id="ranks-list" class="display-flex ml-n3"></div>
                         }
                     </div>
                 </div>
@@ -298,13 +305,48 @@
                         </div>
                     </div>
                 }
+                else
+                {
+                    <!-- ACHIEVEMENTS - HEADER -->
+                    <div id="achievements-header" class="text-left display-flex justify-content-center large-light">
+                        <div class="mt-16px overflow-hidden text-nowrap" style="width:44%">
+                            <div class="paragraph-regular font-dark-green display-flex justify-content-between mb-16px">
+                                <div id="achievements-header-achievements" class="width-2a"></div>
+                                <div class="width-2a"></div>
+                            </div>
+                        </div>
+                        <div style="width:50px;filter:opacity(0%)">.</div>
+                        <div class="mt-16px text-nowrap overflow-hidden" style="width:44%">
+                            <div class="paragraph-regular font-dark-green display-flex justify-content-between mb-16px">
+                                <div class="width-2a" style="filter:opacity(0%)">.</div>
+                                <div class="width-2a"> </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ACHIEVEMENTS - LIST -->
+                    <div id="achievements-list" class="display-flex justify-content-center">
+                        <div style="width:96%">
+                            <div class="display-flex width-100p text-left medium-bold mb-4px">
+                                <div class="display-flex justify-content-between width100p ml-16px">
+                                    <span id="achievements-list-achievement" class="width-1a"></span>
+                                    <span id="achievements-list-type" class="width-1c"></span>
+                                    <span id="achievements-list-date" style="width:120px"></span>
+                                </div>
+                            </div>
+                            <div id="achievements-list-content">
+                            </div>
+                            <div style="height:80px;filter:opacity(0%)">.</div>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </form>
 </div>
 
 @section Scripts
-{
+    {
     <script>
         $(document).ready(function() {
             var selectedEntry = 0;
@@ -385,7 +427,12 @@
                     data: { id: scoutId },
                     success: function(result) {
                         var ranks = JSON.parse(result.value);
-                        var didShowUp = false;
+
+                        if ($("#ranks-header").html() == "") {
+                            $("#ranks-header").html("Posiadane stopnie");
+                            $("#ranks-header").toggle()
+                            $("#ranks-list").toggle()
+                        }
 
                         // show/hide ranks section
                         if (ranks.length == 0) {
@@ -394,11 +441,9 @@
 
                             return;
                         } else {
-                            if (document.getElementById("ranks-header").style.display == "none") {
+                            if ($("#ranks-header").css("display") == "none") {
                                 $("#ranks-header").slideDown({ duration: 300 });
                                 $("#ranks-list").slideDown({ duration: 300 });
-
-                                didShowUp = true;
                             }
                         }
 
@@ -458,7 +503,15 @@
                     data: { id: scoutId },
                     success: function(result) {
                         var achievements = JSON.parse(result.value);
-                        var didShowUp = false;
+
+                        if ($("#achievements-header-achievements").html() == "") {
+                            $("#achievements-header-achievements").html("Osiągnięcia");
+                            $("#achievements-list-achievement").html("osiągnięcie");
+                            $("#achievements-list-type").html("typ");
+                            $("#achievements-list-date").html("data nabycia");
+                            $("#achievements-header").toggle();
+                            $("#achievements-list").toggle();
+                        }
 
                         // show/hide achievements section
                         if (achievements.length == 0) {
@@ -467,11 +520,9 @@
 
                             return;
                         } else {
-                            if (document.getElementById("achievements-header").style.display == "none") {
+                            if ($("#achievements-header").css("display") == "none") {
                                 $("#achievements-header").slideDown({ duration: 350 });
                                 $("#achievements-list").slideDown({ duration: 350 });
-
-                                didShowUp = true;
                             }
                         }
 

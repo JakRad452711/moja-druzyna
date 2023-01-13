@@ -74,6 +74,9 @@
                                 @if(ViewBag.peselIsTaken == true)
                                 {
                                     <span class="text-danger" style="position:absolute;left:0px">ten numer pesel jest zajęty</span>
+                                } else if(ViewBag.peselIsInvalid == true)
+                                {
+                                    <span class="text-danger" style="position:absolute;left:0px">ten numer pesel jest nieprawidłowy</span>
                                 }
                             </div>
                         </div>
@@ -111,7 +114,7 @@
                     <div class="display-flex width100p p-4px pl-8px pr-8px justify-content-between">
                         <div class="form-group mr-8px" style="width:49%">
                             <label asp-for="DateOfEntry" class="width100p text-left">data wstąpienia do zhp</label> <br />
-                            <input asp-for="DateOfEntry" class="width100p" />
+                            <input asp-for="DateOfEntry" class="width100p" type="date" />
                         </div>
                         <div class="form-group text-left float-left" style="width:49%">
                             <label asp-for="Ns" class="width100p mt-8px ">NS</label> <br />

@@ -46,11 +46,11 @@
         </div>
 
         <div class="display-flex list-item-width text-left medium-bold mb-4px">
-            <div class="display-flex justify-content-between width100p ml-64px">
+            <div class="display-flex justify-content-between width100p ml-64px mr-16px">
                 <span class="width-1a">nazwisko</span>
-                <span class="width-1b text-center">imię</span>
+                <span class="width-1b">imię</span>
                 <span class="width-1c">zastęp</span>
-                <span class="width-1d mr-16px">obecność</span>
+                <span class="width-1d text-right">obecność</span>
             </div>
         </div>
         <input asp-for=EventId hidden />
@@ -66,7 +66,7 @@
                         <div class="mt-8px">@Model.AttendanceViewModel_Lists[i].Surname</div>
                         <input asp-for=AttendanceViewModel_Lists[i].Surname hidden />
                     </div>
-                    <div class="width-1b mt-8px">
+                    <div class="width-1b">
                         <div class="mt-8px">@Model.AttendanceViewModel_Lists[i].Name</div>
                         <input asp-for=AttendanceViewModel_Lists[i].Name hidden />
                     </div>
@@ -76,8 +76,8 @@
                         <input asp-for=AttendanceViewModel_Lists[i].EventId hidden />
                         <input asp-for=AttendanceViewModel_Lists[i].IdScout hidden />
                     </div>
-                    <div class="display-flex width-1d mt-8px mr-16px">
-                        <label class="checkboxsimple">
+                    <div class="display-flex width-1d mt-8px mr-16px justify-content-end">
+                        <label class="checkboxsimple mt-4px">
                             <input type="checkbox" asp-for=AttendanceViewModel_Lists[i].IsPresent />
                         </label>
                     </div>

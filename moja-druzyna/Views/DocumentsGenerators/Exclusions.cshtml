@@ -37,14 +37,14 @@
                         <div class="height100p ml-16px">
                             @if (ViewBag.AreThereScoutsToAdd)
                             {
-                                <button asp-action="exclusionsadd" class="mt-32px round-corners-5px no-border text-white large-light" style="background-color:yellowgreen;width:200px">
+                                <button asp-action="exclusionsadd" class="mt-32px round-corners-5px no-border text-white large-light" style="background-color:yellowgreen">
                                     <img src="~/icons/managment/add.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
                                     Dodaj skreślenie harcerza
                                 </button>
                             }
                             else
                             {
-                                <button asp-action="exclusionsadd" class="mt-32px round-corners-5px no-border text-white large-light" style="background-color:gray;width:270px" disabled>
+                                <button asp-action="exclusionsadd" class="mt-32px round-corners-5px no-border text-white large-light" style="background-color:gray" disabled>
                                     <img src="~/icons/managment/cancel.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
                                     Nie ma więcej harcerzy do dodania
                                 </button>
