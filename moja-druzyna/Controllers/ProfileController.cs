@@ -107,8 +107,9 @@ namespace moja_druzyna.Controllers
             {
                 achievementsViewModels.Add(new AchievementsViewModel()
                 {
-                    AchievementDate = achievement.Key,
-                    AchievementType = achievement.Value
+                    AchievementDate = achievement.Value,
+                    //AchievementType = achievement.Key
+                    AchievementType = moja_druzyna.Const.ScoutAbilities.ScoutAbilitiesTranslation[achievement.Key]
                 });
             }
 
