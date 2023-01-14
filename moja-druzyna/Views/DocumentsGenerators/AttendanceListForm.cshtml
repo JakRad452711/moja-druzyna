@@ -7,85 +7,96 @@
 
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/views/team/Team.css" asp-append-version="true" />
-<div class="text-center justify-content-center display-flex" style="min-width:650px">
-    <form>
-        <div class="list-item-width display-flex justify-content-center mb-32px">
-            <div class="mr-8px mt-4px">
-                <img src="~/icons/main/green/flag.svg" class="icon-size-32 mt-1px" />
+<div class="text-center justify-content-center display-flex" style="min-width:900px;height:85vh">
+    <form method="post" class="size100p">
+        <input id="team-id" value="@ViewBag.TeamId" disabled hidden />
+        <div style="height:50px" class="text-left display-flex mt-16px position-relative">
+            <div class="paragraph2-regular ml-8px font-weight-light bring-to-top">
+                <a asp-action="orders" class="font-muddy-black">
+                    Harcerze
+                </a>
             </div>
-            <div class="font-dark-green header1-light">
-                Lista obecności
+            <div class="paragraph2-regular ml-16px font-weight-light bring-to-top">
+                <a asp-action="events" class="font-muddy-black">
+                    Wydarzenia
+                </a>
             </div>
-        </div>
-        <div class="list-item-width medium-light font-muddy-black mb-32px">
-            @ViewBag.TeamName
-        </div>
-        <div class="list-item-width medium-light font-muddy-black mb-32px">
-            @ViewBag.Event.Type , @ViewBag.Event.DateStartDateNotNullDateEnd
+            <div class="position-absolute width100p text-center paragraph2-light font-weight-normal">
+                @ViewBag.HostName
+            </div>
         </div>
 
-        <div class="list-item-width height-fit-content mb-16px">
-            <button type="submit" asp-controller="documentsgenerators" asp-action="attendancelistform" formmethod="post" class="medium-light p-8px pt-2px pb-2px no-border round-corners-5px">
-                <img src="~/icons/managment/add.svg" style="width:18px;height:18px;margin-top:-2px" />
-                zapisz listę obecności
+        <!-- BUTTONS - Add host, ... -->
+        <div class="text-left">
+            <button asp-action="events" formmethod="post" class="ml-8px pr-8px mb-16px round-corners-5px no-border text-white large-light" style="background-color:gray">
+                <img src="~/icons/navigation/nav-left.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                Wróć
+            </button>
+            <button asp-action="attendancelistform" formmethod="post" class="ml-8px pr-8px mb-16px round-corners-5px no-border text-white large-light" style="background-color:darkgreen">
+                <img src="~/icons/managment/check_circle.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                Zapisz listę
+            </button>
+            <button asp-action="generatelistpdf" name="idEvent" value=@Model.EventId formmethod="post" class="ml-8px pr-8px mb-16px round-corners-5px no-border text-white large-light" style="background-color:darkgreen">
+                <img src="~/icons/managment/download-pdf-white.svg" class="mb-4px" style="width:20px" />
+                Zapisz i generuj listę obecności w PDF
+            </button>
+            <button asp-action="generateemptylistpdf" name="idEvent" value=@Model.EventId formmethod="post" class="ml-8px pr-8px mb-16px round-corners-5px no-border text-white large-light" style="background-color:gray">
+                <img src="~/icons/managment/download-pdf-white.svg" class="mb-4px" style="width:20px" />
+                Generuj pustą listę obecności
             </button>
         </div>
 
-        <div class="list-item-width height-fit-content mb-16px">
-            <button asp-controller="documentsgenerators" asp-action="generatelistpdf" name="idEvent" value=@Model.EventId formmethod="post" class="no-border size-fit-content clear-white round-corners-5px">
-                <img src="~/icons/managment/download-pdf.svg" class="width:18px;height:18px;margin-top:-2px" />
-                generuj listę obecności w PDF
-            </button>
-        </div>
-
-        <div class="list-item-width height-fit-content mb-16px">
-            <button asp-controller="documentsgenerators" asp-action="generateemptylistpdf" name="idEvent" value=@Model.EventId formmethod="post" class="no-border size-fit-content clear-white round-corners-5px">
-                <img src="~/icons/managment/download-pdf.svg" class="width:18px;height:18px;margin-top:-2px" />
-                generuj pustą listę obecności
-            </button>
-        </div>
-
-        <div class="display-flex list-item-width text-left medium-bold mb-4px">
-            <div class="display-flex justify-content-between width100p ml-64px mr-16px">
-                <span class="width-1a">nazwisko</span>
-                <span class="width-1b">imię</span>
-                <span class="width-1c">zastęp</span>
-                <span class="width-1d text-right">obecność</span>
-            </div>
-        </div>
-        <input asp-for=EventId hidden />
-        @for (int i = 0; i < Model.AttendanceViewModel_Lists.Count; i++)
-        {
-            AttendanceViewModel_List attendanceViewModel_List = Model.AttendanceViewModel_Lists[i];
-            <div class="display-flex list-item-size clear-white small-shadow round-corners-12px large-light mb-4px">
-                <div class="mt-4px ml-8px">
-                    <img id="profile-picture" src="~/icons/design/profile picture.svg" class="icon-size-40 mr-16px" />
+        <!-- MAIN PANEL -->
+        <div class="display-flex size100p justify-content-around">
+            <!-- LIST OF HOSTS IN THE TEAM -->
+            <div style="min-height:100%;min-width:160px;width:99%" class="height-fit-content display-flex justify-content-center big-shadow">
+                <div style="width:96%">
+                    <div class="display-flex justify-content-center paragraph2-light">
+                        Lista obecności
+                    </div>
+                    <div class="display-flex width100p text-left medium-bold mb-4px">
+                        <div class="display-flex justify-content-between width100p ml-64px mr-16px">
+                            <span class="width-1a">nazwisko</span>
+                            <span class="width-1b">imię</span>
+                            <span class="width-1c">zastęp</span>
+                            <span class="width-1d text-right">obecność</span>
+                        </div>
+                    </div>
+                    <input asp-for=EventId hidden />
+                    @for (int i = 0; i < Model.AttendanceViewModel_Lists.Count; i++)
+                    {
+                        AttendanceViewModel_List attendanceViewModel_List = Model.AttendanceViewModel_Lists[i];
+                        <div class="display-flex width100p list-item-height clear-white small-shadow round-corners-12px large-light mb-4px">
+                            <div class="mt-4px ml-8px">
+                                <img id="profile-picture" src="~/icons/design/profile picture.svg" class="icon-size-40 mr-16px" />
+                            </div>
+                            <div class="display-flex justify-content-between width100p text-left">
+                                <div class="width-1a">
+                                    <div class="mt-8px">@Model.AttendanceViewModel_Lists[i].Surname</div>
+                                    <input asp-for=AttendanceViewModel_Lists[i].Surname hidden />
+                                </div>
+                                <div class="width-1b">
+                                    <div class="mt-8px">@Model.AttendanceViewModel_Lists[i].Name</div>
+                                    <input asp-for=AttendanceViewModel_Lists[i].Name hidden />
+                                </div>
+                                <div class="width-1c mt-8px">
+                                    @Model.AttendanceViewModel_Lists[i].Host
+                                    <input asp-for=AttendanceViewModel_Lists[i].Host hidden />
+                                    <input asp-for=AttendanceViewModel_Lists[i].EventId hidden />
+                                    <input asp-for=AttendanceViewModel_Lists[i].IdScout hidden />
+                                </div>
+                                <div class="display-flex width-1d mt-8px mr-16px justify-content-end">
+                                    <label class="checkboxsimple mt-4px">
+                                        <input type="checkbox" asp-for=AttendanceViewModel_Lists[i].IsPresent />
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <div style="height: 60px">
+                    </div>
                 </div>
-                <div class="display-flex justify-content-between width100p text-left">
-                    <div class="width-1a">
-                        <div class="mt-8px">@Model.AttendanceViewModel_Lists[i].Surname</div>
-                        <input asp-for=AttendanceViewModel_Lists[i].Surname hidden />
-                    </div>
-                    <div class="width-1b">
-                        <div class="mt-8px">@Model.AttendanceViewModel_Lists[i].Name</div>
-                        <input asp-for=AttendanceViewModel_Lists[i].Name hidden />
-                    </div>
-                    <div class="width-1c mt-8px">
-                        @Model.AttendanceViewModel_Lists[i].Host
-                        <input asp-for=AttendanceViewModel_Lists[i].Host hidden />
-                        <input asp-for=AttendanceViewModel_Lists[i].EventId hidden />
-                        <input asp-for=AttendanceViewModel_Lists[i].IdScout hidden />
-                    </div>
-                    <div class="display-flex width-1d mt-8px mr-16px justify-content-end">
-                        <label class="checkboxsimple mt-4px">
-                            <input type="checkbox" asp-for=AttendanceViewModel_Lists[i].IsPresent />
-                        </label>
-                    </div>
-                </div>
             </div>
-        }
-
-        <div style="height: 60px">
         </div>
     </form>
 </div>

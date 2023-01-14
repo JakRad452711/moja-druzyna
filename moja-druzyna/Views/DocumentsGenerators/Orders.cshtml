@@ -10,6 +10,14 @@
     <form method="post" class="size100p">
         <input id="team-id" value="@ViewBag.TeamId" disabled hidden />
         <div style="height:50px" class="text-left display-flex mt-16px position-relative">
+            <div class="paragraph2-regular ml-8px font-weight-normal bring-to-top">
+                Rozkazy
+            </div>
+            <div class="paragraph2-regular ml-16px font-weight-light bring-to-top">
+                <a asp-action="events" class="font-muddy-black">
+                    Wydarzenia
+                </a>
+            </div>
             <div class="position-absolute width100p text-center paragraph2-light font-weight-normal" style="width:">
                 @ViewBag.TeamName
             </div>
@@ -17,7 +25,7 @@
 
         <!-- BUTTONS - Add host, ... -->
         <div class="text-left">
-            <button asp-action="ordergenerator" formmethod="get" class="ml-8px pr-8px mb-16px round-corners-5px no-border text-white large-light" style="background-color:yellowgreen">
+            <button asp-action="ordergenerator" formmethod="get" class="ml-8px pr-8px mb-16px round-corners-5px no-border text-white large-light" style="background-color:darkgreen">
                 <img src="~/icons/managment/add.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
                 Stwórz rozkaz
             </button>

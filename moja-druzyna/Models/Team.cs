@@ -74,7 +74,7 @@ namespace moja_druzyna.Models​
                 Team = this,
                 TeamIdTeam = this.IdTeam,
                 Location = creationLocation,
-                CreationDate = DateTime.Now
+                CreationDate = formOrder.CreationDate
             };
 
             _dbContext.Orders.Add(order);

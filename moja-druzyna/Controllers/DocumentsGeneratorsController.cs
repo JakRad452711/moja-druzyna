@@ -99,14 +99,36 @@ namespace moja_druzyna.Controllers
 
             List<Event> events = _dbContext.EventTeams.Where(eventTeam => eventTeam.TeamIdTeam == sessionAccesser.CurrentTeamId).OrderByDescending(et => et.TeamIdTeam).Select(_eventTeam => _eventTeam.Event).ToList();
 
+            events.Reverse();
+
             ViewBag.EventsList = events;
 
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Events(Event evnt)
+        public IActionResult AddEvent()
         {
+            if (sessionAccesser.OperationFailed == true)
+                ViewBag.additionFailed = true;
+
+            if (sessionAccesser.OperationSucceeded == true)
+                ViewBag.additionSucceeded = true;
+
+            sessionAccesser.OperationFailed = false;
+            sessionAccesser.OperationSucceeded = false;
+
+            return View();
+        }
+        [HttpPost]
+        public IActionResult AddEvent(Event evnt)
+        {
+            if(string.IsNullOrEmpty(evnt.Type))
+            {
+                sessionAccesser.OperationFailed = true;
+
+                return RedirectToAction("AddEvent");
+            }
+
             Team team = GetTeam(_dbContext, sessionAccesser.CurrentTeamId);
 
             ViewBag.UserRole = team.GetScoutRole(sessionAccesser.UserPesel);
@@ -128,7 +150,9 @@ namespace moja_druzyna.Controllers
 
             ViewBag.EventsList = events;
 
-            return RedirectToAction("events");
+            sessionAccesser.OperationSucceeded = true;
+
+            return RedirectToAction("addevent");
         }
 
         public IActionResult AttendanceListForm(int eventId)
@@ -220,8 +244,29 @@ namespace moja_druzyna.Controllers
         }
 
         [HttpPost]
-        public FileResult GenerateListPdf(int idEvent)
+        public FileResult GenerateListPdf(int idEvent, AttendanceViewModel attendanceVM)
         {
+            foreach (var attendance in attendanceVM.AttendanceViewModel_Lists)
+            {
+                AttendanceList item = _dbContext.AttendanceLists.FirstOrDefault(al => al.EventIdEvent == attendance.EventId && al.ScoutIdScout == attendance.IdScout);
+
+                if (attendance.IsPresent && item == null)
+                {
+                    AttendanceList attendanceList = new AttendanceList();
+                    attendanceList.EventIdEvent = attendance.EventId;
+                    attendanceList.TeamIdTeam = sessionAccesser.CurrentTeamId;
+                    attendanceList.ScoutIdScout = attendance.IdScout;
+
+                    _dbContext.AttendanceLists.Add(attendanceList);
+                }
+                else if (!attendance.IsPresent && item != null)
+                {
+                    _dbContext.AttendanceLists.Remove(item);
+                }
+            }
+
+            _dbContext.SaveChanges();
+
             Event evnt = _dbContext.Events.Where(ev => ev.IdEvent == idEvent).First();
 
             int currentTeamId = sessionAccesser.CurrentTeamId;
@@ -253,14 +298,35 @@ namespace moja_druzyna.Controllers
 
             sessionAccesser.OperationFailed = false;
 
+            OrderGeneratorViewModel orderGeneratorViewModel = new()
+            {
+                OrderNumber = sessionAccesser.FormOrder.Name,
+                Location = sessionAccesser.FormOrder.CreationPlace,
+                CreationDate = sessionAccesser.FormOrder.CreationDate
+            };
+
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
-            return View();
+            return View(orderGeneratorViewModel);
+        }
+        [HttpPost]
+        public IActionResult OrderGeneratorGoToSection(string section, OrderGeneratorViewModel orderGeneratorViewModel)
+        {
+            SessionFormOrderContext formOrder = sessionAccesser.FormOrder;
+
+            formOrder.Name = orderGeneratorViewModel.OrderNumber;
+            formOrder.CreationPlace = orderGeneratorViewModel.Location;
+            if (orderGeneratorViewModel.CreationDate != null)
+                formOrder.CreationDate = (DateTime) orderGeneratorViewModel.CreationDate;
+
+            sessionAccesser.FormOrder = formOrder;
+
+            return RedirectToAction(section);
         }
 
-        public IActionResult OrderForm_Submit(string orderNumber)
+        public IActionResult OrderForm_Submit(OrderGeneratorViewModel orderGeneratorViewModel)
         {
-            if (string.IsNullOrEmpty(orderNumber))
+            if (string.IsNullOrEmpty(orderGeneratorViewModel.OrderNumber))
             {
                 sessionAccesser.OperationFailed = true;
 
@@ -312,9 +378,9 @@ namespace moja_druzyna.Controllers
 
             FormOrder formOrder = new FormOrder()
             {
-                CreationDate = sessionAccesser.FormOrder.CreationDate,
-                Location = sessionAccesser.FormOrder.CreationPlace,
-                OrderNumber = orderNumber,
+                CreationDate = orderGeneratorViewModel.CreationDate == null ? DateTime.Now : (DateTime) orderGeneratorViewModel.CreationDate,
+                Location = orderGeneratorViewModel.Location,
+                OrderNumber = orderGeneratorViewModel.OrderNumber,
                 TrialClosings = sessionAccesser.FormOrder.TrialClosingsSaved,
                 Appointments = sessionAccesser.FormOrder.AppointmentsSaved,
                 Exclusions = sessionAccesser.FormOrder.ExclusionsSaved,
@@ -326,7 +392,7 @@ namespace moja_druzyna.Controllers
             };
 
             formOrder.OrderNumber = formOrder.OrderNumber.Replace("/", " ");
-            team.AddOrder(formOrder, sessionAccesser.UserPesel, sessionAccesser.FormOrder.CreationPlace);
+            team.AddOrder(formOrder, sessionAccesser.UserPesel, formOrder.Location);
 
             sessionAccesser.FormOrder = new SessionFormOrderContext();
 
@@ -451,8 +517,6 @@ namespace moja_druzyna.Controllers
 
             formOrder.Exclusions = exclusions;
 
-            formOrder.Location = "LOKALIZACJA";
-
             new GeneratorPdf().GenerateOrder(formOrder);
 
             return File("file.pdf", "text/plain", string.Format("{0}.pdf", formOrder.OrderNumber));
@@ -479,8 +543,7 @@ namespace moja_druzyna.Controllers
                 new() {Text = "przyboczny", Value = TeamRoles.ViceCaptain},
                 new() {Text = "chorąży drużyny", Value = TeamRoles.Ensign},
                 new() {Text = "kwatermistrz", Value = TeamRoles.Quatermaster},
-                new() {Text = "kronikarz", Value = TeamRoles.Chronicler},
-                new() {Text = "zastępowy", Value = TeamRoles.HostCaptain}
+                new() {Text = "kronikarz", Value = TeamRoles.Chronicler}
             };
             List<SelectListItem> dropDownList_Hosts = new List<SelectListItem>();
 
@@ -502,13 +565,11 @@ namespace moja_druzyna.Controllers
                 });
             }
 
-            int numberOfScoutsInTheTeam = scoutsInTheTeam.Count();
-
             ViewBag.DropDownList_Scouts = dropDownList_Scouts;
             ViewBag.DropDownList_Roles = dropDownList_Roles;
             ViewBag.DropDownList_Hosts = dropDownList_Hosts;
 
-            ViewBag.AreThereScoutsToAdd = !(peselsOfScoutsThatAreAlreadyInTheAppointment.Count() == (numberOfScoutsInTheTeam - 1));
+            ViewBag.AreThereScoutsToAdd = scoutsThatCanBeAdded.Count() != 0;
             ViewBag.OrderName = sessionAccesser.FormOrder.Name;
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
@@ -523,7 +584,7 @@ namespace moja_druzyna.Controllers
 
             sessionAccesser.FormOrder = formOrder;
 
-            return Redirect("appointments");
+            return Redirect("ordergenerator");
         }
         public IActionResult AppointmentsRevert()
         {
@@ -541,12 +602,17 @@ namespace moja_druzyna.Controllers
             return Redirect("appointments");
         }
         [HttpPost]
-        public IActionResult AppointmentsAdd(AppointmentsViewModel appointmentsViewModel)
+        public IActionResult AppointmentsAdd(string role, AppointmentsViewModel appointmentsViewModel)
         {
             SessionFormOrderContext formOrder = sessionAccesser.FormOrder;
 
             List<Appointment> appointments = AddScoutEntryToFormOrderViewModel(appointmentsViewModel, formOrder.Appointments.ConvertAll(x => (IOrderElement)x), false)
                 .ConvertAll(x => (Appointment)x);
+
+            if(role == TeamRoles.HostCaptain)
+            {
+                appointments.Last().Role = TeamRoles.HostCaptain;
+            }
 
             if (appointments != null)
             {
@@ -625,7 +691,7 @@ namespace moja_druzyna.Controllers
 
             sessionAccesser.FormOrder = formOrder;
 
-            return Redirect("exclusions");
+            return Redirect("ordergenerator");
         }
         public IActionResult ExclusionsRevert()
         {
@@ -695,9 +761,11 @@ namespace moja_druzyna.Controllers
 
             foreach (Scout scout in scoutsThatCanBeAdded.OrderBy(s => s.Name).OrderBy(s => s.Surname))
             {
+                string rolePL = TeamRoles.TeamRolesTranslationsWithPolishLetters[team.GetScoutRole(scout.PeselScout)];
+
                 dropDownList_Scouts.Add(new SelectListItem()
                 {
-                    Text = string.Format("{0} {1} ({2})", scout.Surname, scout.Name, scout.PeselScout),
+                    Text = string.Format("{0} {1} ({2}) [{3}]", scout.Surname, scout.Name, scout.PeselScout, rolePL),
                     Value = scout.IdentityId
                 });
             }
@@ -728,7 +796,7 @@ namespace moja_druzyna.Controllers
 
             sessionAccesser.FormOrder = formOrder;
 
-            return Redirect("layoffs");
+            return RedirectToAction("ordergenerator");
         }
         public IActionResult LayoffsRevert()
         {
@@ -798,7 +866,7 @@ namespace moja_druzyna.Controllers
 
             sessionAccesser.FormOrder = formOrder;
 
-            return Redirect("other");
+            return Redirect("ordergenerator");
         }
         public IActionResult OtherRevert()
         {
@@ -850,7 +918,7 @@ namespace moja_druzyna.Controllers
 
             sessionAccesser.FormOrder = formOrder;
 
-            return RedirectToAction("gamepoints");
+            return RedirectToAction("ordergenerator");
         }
         public IActionResult GamePointsRevert()
         {
@@ -942,7 +1010,7 @@ namespace moja_druzyna.Controllers
 
             sessionAccesser.FormOrder = formOrder;
 
-            return Redirect("reprimendsandpraises");
+            return Redirect("ordergenerator");
         }
         public IActionResult ReprimendsAndPraisesRevert()
         {
@@ -997,17 +1065,26 @@ namespace moja_druzyna.Controllers
         {
             Team team = GetTeam(_dbContext, sessionAccesser.CurrentTeamId);
 
-            List<Scout> scoutsThatCanBeAdded = team.GetScouts();
+            List<string> peselsOfScoutsWithRankEntry = sessionAccesser.FormOrder.TrialClosings
+                .Where(tc => tc.TrialType == TrialTypes.Rank)
+                .Select(tc => tc.ScoutPesel)
+                .ToList();
+            List<string> peselsOfScoutsWithCrossEntry = sessionAccesser.FormOrder.TrialClosings
+                .Where(tc => tc.TrialType == TrialTypes.ScoutCross)
+                .Select(tc => tc.ScoutPesel)
+                .ToList();
 
-            List<Host> hostsFromTheTeam = team.Hosts.ToList();
+            List<Scout> scoutsThatCanBeAddedRanks = team.GetScouts();
+            List<Scout> scoutsThatCanBeAddedAbilities = team.GetScouts();
+            List<Scout> scoutsThatCanBeAddedCrosses = team.GetScouts();
 
-            List<SelectListItem> dropDownList_Scouts = new List<SelectListItem>();
-            List<SelectListItem> dropDownList_TrialTypes = new List<SelectListItem>()
-            {
-                new() {Text = "krzyż harcerski", Value = TrialTypes.ScoutCross},
-                new() {Text = "stopień", Value = TrialTypes.Rank},
-                new() {Text = "sprawność", Value = TrialTypes.Ability}
-            };
+            scoutsThatCanBeAddedRanks.RemoveAll(s => peselsOfScoutsWithRankEntry.Contains(s.PeselScout));
+            scoutsThatCanBeAddedCrosses.RemoveAll(s => peselsOfScoutsWithCrossEntry.Contains(s.PeselScout));
+
+            List<SelectListItem> dropDownList_ScoutsRanks = new List<SelectListItem>();
+            List<SelectListItem> dropDownList_ScoutsAbilities = new List<SelectListItem>();
+            List<SelectListItem> dropDownList_ScoutsCrosses = new List<SelectListItem>();
+
             List<SelectListItem> dropDownList_Ranks = new List<SelectListItem>()
             {
                 new() {Text = "młodzik/ochotniczka", Value = ScoutRanks.Rank1},
@@ -1040,21 +1117,39 @@ namespace moja_druzyna.Controllers
                 new() {Text = "fotograf", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Photograph).First().IdAchievement.ToString()},
             };
 
-            foreach (Scout scout in scoutsThatCanBeAdded.OrderBy(s => s.Name).OrderBy(s => s.Surname))
+            foreach (Scout scout in scoutsThatCanBeAddedRanks.OrderBy(s => s.Name).OrderBy(s => s.Surname))
             {
-                dropDownList_Scouts.Add(new SelectListItem()
+                dropDownList_ScoutsRanks.Add(new SelectListItem()
+                {
+                    Text = string.Format("{0} {1} ({2})", scout.Surname, scout.Name, scout.PeselScout),
+                    Value = scout.IdentityId
+                });
+            }
+            foreach (Scout scout in scoutsThatCanBeAddedAbilities.OrderBy(s => s.Name).OrderBy(s => s.Surname))
+            {
+                dropDownList_ScoutsAbilities.Add(new SelectListItem()
+                {
+                    Text = string.Format("{0} {1} ({2})", scout.Surname, scout.Name, scout.PeselScout),
+                    Value = scout.IdentityId
+                });
+            }
+            foreach (Scout scout in scoutsThatCanBeAddedCrosses.OrderBy(s => s.Name).OrderBy(s => s.Surname))
+            {
+                dropDownList_ScoutsCrosses.Add(new SelectListItem()
                 {
                     Text = string.Format("{0} {1} ({2})", scout.Surname, scout.Name, scout.PeselScout),
                     Value = scout.IdentityId
                 });
             }
 
-            ViewBag.DropDownList_Scouts = dropDownList_Scouts;
-            ViewBag.DropDownList_TrialTypes = dropDownList_TrialTypes;
+            ViewBag.DropDownList_ScoutsRanks = dropDownList_ScoutsRanks;
+            ViewBag.DropDownList_ScoutsAbilities = dropDownList_ScoutsAbilities;
+            ViewBag.DropDownList_ScoutsCrosses = dropDownList_ScoutsCrosses;
             ViewBag.DropDownList_Ranks = dropDownList_Ranks;
             ViewBag.DropDownList_Abilities = dropDownList_Abilities;
 
-            ViewBag.AreThereScoutsToAdd = scoutsThatCanBeAdded.Count() != 0;
+            ViewBag.AreThereScoutsToAddRank = scoutsThatCanBeAddedRanks.Count() != 0;
+            ViewBag.AreThereScoutsToAddCross = scoutsThatCanBeAddedCrosses.Count() != 0;
             ViewBag.OrderName = sessionAccesser.FormOrder.Name;
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
@@ -1069,7 +1164,7 @@ namespace moja_druzyna.Controllers
 
             sessionAccesser.FormOrder = formOrder;
 
-            return Redirect("trialclosings");
+            return Redirect("ordergenerator");
         }
         public IActionResult TrialClosingsRevert()
         {
@@ -1087,12 +1182,15 @@ namespace moja_druzyna.Controllers
             return Redirect("trialclosings");
         }
         [HttpPost]
-        public IActionResult TrialClosingsAdd(TrialClosingsViewModel trialClosingsViewModel)
+        public IActionResult TrialClosingsAdd(string trialType, TrialClosingsViewModel trialClosingsViewModel)
         {
             SessionFormOrderContext formOrder = sessionAccesser.FormOrder;
+            trialClosingsViewModel.TrialType = trialType;
 
             List<TrialClosing> trialClosings = AddScoutEntryToFormOrderViewModel(trialClosingsViewModel, formOrder.TrialClosings.ConvertAll(x => (IOrderElement)x), true)
                 .ConvertAll(x => (TrialClosing) x);
+
+            trialClosings.Last().TrialType = trialType;
 
             if(trialClosings != null)
             {
@@ -1122,7 +1220,25 @@ namespace moja_druzyna.Controllers
         {
             Team team = GetTeam(_dbContext, sessionAccesser.CurrentTeamId);
 
-            List<Scout> scoutsThatCanBeAdded = team.GetScouts();
+            List<string> peselsOfScoutsWithRankEntry = sessionAccesser.FormOrder.TrialOpenings
+                .Where(tc => tc.TrialType == TrialTypes.Rank)
+                .Select(tc => tc.ScoutPesel)
+                .ToList();
+            List<string> peselsOfScoutsWithCrossEntry = sessionAccesser.FormOrder.TrialOpenings
+                .Where(tc => tc.TrialType == TrialTypes.ScoutCross)
+                .Select(tc => tc.ScoutPesel)
+                .ToList();
+
+            List<Scout> scoutsThatCanBeAddedRanks = team.GetScouts();
+            List<Scout> scoutsThatCanBeAddedAbilities = team.GetScouts();
+            List<Scout> scoutsThatCanBeAddedCrosses = team.GetScouts();
+
+            scoutsThatCanBeAddedRanks.RemoveAll(s => peselsOfScoutsWithRankEntry.Contains(s.PeselScout));
+            scoutsThatCanBeAddedCrosses.RemoveAll(s => peselsOfScoutsWithCrossEntry.Contains(s.PeselScout));
+
+            List<SelectListItem> dropDownList_ScoutsRanks = new List<SelectListItem>();
+            List<SelectListItem> dropDownList_ScoutsAbilities = new List<SelectListItem>();
+            List<SelectListItem> dropDownList_ScoutsCrosses = new List<SelectListItem>();
 
             List<SelectListItem> dropDownList_Scouts = new List<SelectListItem>();
             List<SelectListItem> dropDownList_TrialTypes = new List<SelectListItem>()
@@ -1163,9 +1279,25 @@ namespace moja_druzyna.Controllers
                 new() {Text = "fotograf", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Photograph).First().IdAchievement.ToString()},
             };
 
-            foreach (Scout scout in scoutsThatCanBeAdded.OrderBy(s => s.Name).OrderBy(s => s.Surname))
+            foreach (Scout scout in scoutsThatCanBeAddedRanks.OrderBy(s => s.Name).OrderBy(s => s.Surname))
             {
-                dropDownList_Scouts.Add(new SelectListItem()
+                dropDownList_ScoutsRanks.Add(new SelectListItem()
+                {
+                    Text = string.Format("{0} {1} ({2})", scout.Surname, scout.Name, scout.PeselScout),
+                    Value = scout.IdentityId
+                });
+            }
+            foreach (Scout scout in scoutsThatCanBeAddedAbilities.OrderBy(s => s.Name).OrderBy(s => s.Surname))
+            {
+                dropDownList_ScoutsAbilities.Add(new SelectListItem()
+                {
+                    Text = string.Format("{0} {1} ({2})", scout.Surname, scout.Name, scout.PeselScout),
+                    Value = scout.IdentityId
+                });
+            }
+            foreach (Scout scout in scoutsThatCanBeAddedCrosses.OrderBy(s => s.Name).OrderBy(s => s.Surname))
+            {
+                dropDownList_ScoutsCrosses.Add(new SelectListItem()
                 {
                     Text = string.Format("{0} {1} ({2})", scout.Surname, scout.Name, scout.PeselScout),
                     Value = scout.IdentityId
@@ -1174,12 +1306,15 @@ namespace moja_druzyna.Controllers
 
             int numberOfScoutsInTheTeam = team.GetScouts().Count();
 
-            ViewBag.DropDownList_Scouts = dropDownList_Scouts;
+            ViewBag.DropDownList_ScoutsRanks = dropDownList_ScoutsRanks;
+            ViewBag.DropDownList_ScoutsAbilities = dropDownList_ScoutsAbilities;
+            ViewBag.DropDownList_ScoutsCrosses = dropDownList_ScoutsCrosses;
             ViewBag.DropDownList_TrialTypes = dropDownList_TrialTypes;
             ViewBag.DropDownList_Ranks = dropDownList_Ranks;
             ViewBag.DropDownList_Abilities = dropDownList_Abilities;
 
-            ViewBag.AreThereScoutsToAdd = scoutsThatCanBeAdded.Count() != 0;
+            ViewBag.AreThereScoutsToAddRank = scoutsThatCanBeAddedRanks.Count() != 0;
+            ViewBag.AreThereScoutsToAddCross = scoutsThatCanBeAddedCrosses.Count() != 0;
             ViewBag.OrderName = sessionAccesser.FormOrder.Name;
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
@@ -1194,7 +1329,7 @@ namespace moja_druzyna.Controllers
 
             sessionAccesser.FormOrder = formOrder;
 
-            return Redirect("trialopenings");
+            return Redirect("ordergenerator");
         }
         public IActionResult TrialOpeningsRevert()
         {
@@ -1212,12 +1347,15 @@ namespace moja_druzyna.Controllers
             return Redirect("trialopenings");
         }
         [HttpPost]
-        public IActionResult TrialOpeningsAdd(TrialOpeningsViewModel trialOpeningsViewModel)
+        public IActionResult TrialOpeningsAdd(string trialType, TrialOpeningsViewModel trialOpeningsViewModel)
         {
             SessionFormOrderContext formOrder = sessionAccesser.FormOrder;
-
+            trialOpeningsViewModel.TrialType = trialType;
+            
             List<TrialOpening> trialOpenings = AddScoutEntryToFormOrderViewModel(trialOpeningsViewModel, formOrder.TrialOpenings.ConvertAll(x => (IOrderElement)x), true)
                 .ConvertAll(x => (TrialOpening)x);
+
+            trialOpenings.Last().TrialType = trialType;
 
             if (trialOpenings != null)
             {
