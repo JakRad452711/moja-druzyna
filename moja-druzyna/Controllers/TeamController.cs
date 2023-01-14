@@ -13,8 +13,10 @@ using System.Linq;
 using static moja_druzyna.Models.Host;
 using static moja_druzyna.Models.Scout;
 using static moja_druzyna.Models.Team;
+using static moja_druzyna.Models.Role;
 using static moja_druzyna.ViewModels.Team.HostsViewModel;
 using static moja_druzyna.ViewModels.Team.HostViewModel;
+using static moja_druzyna.ViewModels.Team.RolesViewModel;
 
 namespace moja_druzyna.Controllers
 {
@@ -527,6 +529,45 @@ namespace moja_druzyna.Controllers
         private bool UserHasOneOfRoles(Team team, List<string> roles)
         {
             return team.ScoutHasOneOfRoles(sessionAccesser.UserPesel, roles);
+        }
+
+        public IActionResult Roles()
+        {
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
+
+            var roles = GetRoles(_dbContext, sessionAccesser.CurrentTeamId);
+
+            ICollection<RolesViewModel> rolesVM = new List<RolesViewModel>();
+
+            foreach (KeyValuePair<string, string> role in roles)
+            {
+                var temp = "";
+
+                if (role.Value == "scout")
+                {
+                    temp = "";// "Harcerz";
+                }
+                else
+                {
+                    temp = moja_druzyna.Const.TeamRoles.TeamRolesTranslations[role.Value];
+                }
+
+                rolesVM.Add(new RolesViewModel()
+
+                {
+                    ScoutName = role.Key,
+
+
+                    RoleName = temp
+                }
+                );
+
+            }
+
+            rolesVM = rolesVM.OrderBy(x => x.ScoutName).ToList();
+
+
+            return View(rolesVM);
         }
     }
 }

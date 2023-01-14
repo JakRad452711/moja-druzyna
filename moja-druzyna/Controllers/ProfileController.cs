@@ -118,48 +118,6 @@ namespace moja_druzyna.Controllers
             return View(achievementsViewModels);
         }
 
-        public IActionResult Roles()
-        {
-            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
-
-            var roles = GetRoles(_dbContext, sessionAccesser.CurrentTeamId);
-
-            ICollection<RolesViewModel> rolesVM = new List<RolesViewModel>();
-
-            foreach (KeyValuePair<string, string> role in roles)
-            {
-                var temp = "";
-
-                if (role.Value == "scout")
-                {
-                    temp = "";// "Harcerz";
-                }
-                else
-                {
-                    temp = moja_druzyna.Const.TeamRoles.TeamRolesTranslations[role.Value];
-                }
-
-                rolesVM.Add(new RolesViewModel()
-                
-                {
-                    ScoutName = role.Key,
-
-                    
-                    RoleName = temp
-                }
-                );
-
-                //var d = moja_druzyna.Const.TeamRoles.[role.Value];
-
-
-            }
-
-            rolesVM = rolesVM.OrderBy(x => x.ScoutName).ToList();
-
-
-            return View(rolesVM);
-        }
-
         public IActionResult CoursesAndPermissions()
         {
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
