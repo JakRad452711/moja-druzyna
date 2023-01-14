@@ -145,8 +145,9 @@ namespace moja_druzyna.Controllers
                 return Redirect(WebsiteAddresses.AccessDeniedAddress);
 
             bool peselIsAvailable = _dbContext.Scouts.Find(addScoutViewModel.Pesel) == null;
+            bool peselIsValid = new Pesel(addScoutViewModel.Pesel).IsValid();
 
-            if (ModelState.IsValid && peselIsAvailable)
+            if (ModelState.IsValid && peselIsAvailable && peselIsValid)
             {
                 Scout addedScout = new Scout
                 {
@@ -178,6 +179,9 @@ namespace moja_druzyna.Controllers
 
             if (!peselIsAvailable)
                 ViewBag.peselIsTaken = true;
+
+            if (!string.IsNullOrEmpty(addScoutViewModel.Pesel) && !peselIsValid)
+                ViewBag.peselIsInvalid = true;
 
             return View();
         }
@@ -406,7 +410,7 @@ namespace moja_druzyna.Controllers
                     scoutsThatAreNotInAnyHost.RemoveAll(s => s.PeselScout == pesel);
             }
 
-            foreach (Scout scout in scoutsThatAreNotInAnyHost)
+            foreach (Scout scout in scoutsThatAreNotInAnyHost.OrderBy(s => s.Name).OrderBy(s => s.Surname))
             {
                 dropDownList_Scouts.Add(new SelectListItem
                 {
@@ -452,7 +456,7 @@ namespace moja_druzyna.Controllers
                     scoutsThatAreNotInAnyHost.RemoveAll(s => s.PeselScout == pesel);
             }
 
-            foreach (Scout scout in scoutsThatAreNotInAnyHost)
+            foreach (Scout scout in scoutsThatAreNotInAnyHost.OrderBy(s => s.Name).OrderBy(s => s.Surname))
             {
                 dropDownList_Scouts.Add(new SelectListItem
                 {
@@ -559,7 +563,7 @@ namespace moja_druzyna.Controllers
             List<Scout> scoutsThatAreNotInAnyHost = team.GetScoutsThatDoNotHaveAHost();
             List<SelectListItem> dropDownList_Scouts = new List<SelectListItem>();
 
-            foreach (Scout scout in scoutsThatAreNotInAnyHost)
+            foreach (Scout scout in scoutsThatAreNotInAnyHost.OrderBy(s => s.Name).OrderBy(s => s.Surname))
             {
                 dropDownList_Scouts.Add(new SelectListItem
                 {

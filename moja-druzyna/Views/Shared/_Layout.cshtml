@@ -12,7 +12,7 @@
     <div id="screen">
         <header>
             <nav id="upper-panel" class="emerald-green navbar-expand-sm">
-                <img src="~/icons/layout/split-bar.png" style="position:absolute;width:2px;height:49px;left:256px;top:8px;" />
+                <img src="~/icons/main/logo.png" class="ml-4px" style="height:64px" />
                 <div style="position:absolute;right:0px;top:8px;">
                     <partial name="_LoginPartial" />
                 </div>
@@ -26,7 +26,7 @@
                 bool isCollapsed = (bool) TempData["isSidebarCollapsed"];
                 TempData.Keep("isSidebarCollapsed");
 
-                <input type="checkbox" id="is-sb-collapsed" checked=@isCollapsed />
+                                    <input type="checkbox" id="is-sb-collapsed" checked=@isCollapsed />
             }
             <label id="hamburger" for="is-sb-collapsed">
                 <img id="hamburger-icon" src="~/icons/navigation/nav-hamburger.svg" />

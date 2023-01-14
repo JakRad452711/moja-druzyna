@@ -74,7 +74,7 @@ namespace moja_druzyna.Models​
                 Team = this,
                 TeamIdTeam = this.IdTeam,
                 Location = creationLocation,
-                CreationDate = DateTime.Now
+                CreationDate = formOrder.CreationDate
             };
 
             _dbContext.Orders.Add(order);
@@ -184,7 +184,7 @@ namespace moja_druzyna.Models​
             if (!TeamRoles.TeamRolesList.Contains(appointment.Role))
                 throw new ArgumentException("void Layoff(Layoff layoff): illegal appointment.Role in 'Appointment appointment' argument");
 
-            if (appointment.Role == TeamRoles.HostCaptain)
+            if (appointment.Role == TeamRoles.HostCaptain && appointment.Host != null)
             {
                 Host oldHost = GetScoutsHost(appointment.ScoutPesel);
 

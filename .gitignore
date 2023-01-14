@@ -5,6 +5,7 @@
 
 /moja-druzyna/bin/
 /moja-druzyna/obj/
+/moja-druzyna/wwwroot/file.pdf
 
 # User-specific files
 *.rsuser

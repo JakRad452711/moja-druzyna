@@ -27,7 +27,7 @@ namespace moja_druzyna.Data.Session
         }
 
         public string Name { get; set; }
-        public DateTime CreationDate { get; set; }
+        public DateTime? CreationDate { get; set; }
         public string CreationPlace { get; set; }
 
         public List<Layoff> Layoffs { get; set; }

@@ -1,4 +1,5 @@
-﻿using moja_druzyna.Lib.Order;
+﻿using moja_druzyna.Const;
+using moja_druzyna.Lib.Order;
 using System.Collections.Generic;
 
 namespace moja_druzyna.ViewModels.DocumentsGenerators
@@ -10,7 +11,10 @@ namespace moja_druzyna.ViewModels.DocumentsGenerators
             TrialOpenings = new();
         }
 
-        public string AddedScoutId { get; set; }
+        public string AddedScoutIdRank { get; set; }
+        public string AddedScoutIdAbility { get; set; }
+        public string AddedScoutIdCross { get; set; }
+        public string TrialType { get; set; }
         public List<TrialOpening> TrialOpenings { get; set; }
 
         public void AddElement(string scoutId, string pesel, string name, string surname)
@@ -32,7 +36,12 @@ namespace moja_druzyna.ViewModels.DocumentsGenerators
 
         public string GetScoutId()
         {
-            return AddedScoutId;
+            if (TrialType == TrialTypes.Rank)
+                return AddedScoutIdRank;
+            else if (TrialType == TrialTypes.Ability)
+                return AddedScoutIdAbility;
+            else
+                return AddedScoutIdCross;
         }
     }
 }

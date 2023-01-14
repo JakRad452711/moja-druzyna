@@ -41,4 +41,11 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\icons\managment\download-pdf-white.svg">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

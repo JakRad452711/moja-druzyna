@@ -57,7 +57,7 @@ namespace moja_druzyna.Lib.PdfGeneration
             posX = 50;
             posY = 100;
 
-            if (order.Layoffs != null)
+            if (order.Layoffs != null && order.Layoffs.Count > 0)
             {
                 page.Canvas.DrawString($"{mainCounter}.Zwolnienia",
                     trueTypeFont,
@@ -106,7 +106,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                 secondaryCounter = 1;
             }
 
-            if (order.Appointments != null)
+            if (order.Appointments != null && order.Appointments.Count() > 0)
             {
                 page.Canvas.DrawString($"{mainCounter}.Mianowania",
                     trueTypeFont,
@@ -155,7 +155,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                 secondaryCounter = 1;
             }
 
-            if (order.TrialClosings != null)
+            if (order.TrialClosings != null && order.TrialClosings.Count() > 0)
             {
                 page.Canvas.DrawString($"{mainCounter}.Zamknięcia prób",
                     trueTypeFont,
@@ -198,7 +198,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                 secondaryCounter = 1;
             }
 
-            if (order.TrialOpenings != null)
+            if (order.TrialOpenings != null && order.TrialOpenings.Count() > 0)
             {
                 page.Canvas.DrawString($"{mainCounter}.Otwarcia prób",
                     trueTypeFont,
@@ -247,72 +247,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                 secondaryCounter = 1;
             }
 
-            if (order.TrialClosings != null)
-            {
-                page.Canvas.DrawString($"{mainCounter}.Przyznanie punktów za stopnie i sprawności",
-                    trueTypeFont,
-                    new PdfSolidBrush(Color.Black),
-                    new PointF(50, posY));
-
-                posY = posY + 20;
-                foreach (TrialClosing c in order.TrialClosings)
-                {
-                    if (posY > 700)
-                    {
-                        page = doc.Pages.Add();
-                        posY = 50;
-                        posX = 50;
-                    }
-                    string text;
-                    int points;
-                    if (c.TrialType == "sprawność")
-                    {
-                        points = 25;
-                        text = $"{mainCounter}.{secondaryCounter}.Za zdobycie {c.TrialType} {c.TrialName} przyznaję dh. {c.ScoutName} {c.ScoutSurname} {points} punktów do współzawodnictwa.";
-                    }
-                    else if (c.TrialType == "krzyż")
-                    {
-                        points = 50;
-                        text = $"{mainCounter}.{secondaryCounter}.Za zrealizowania próby harcerskiej przyznaję dh. {c.ScoutName} {c.ScoutSurname} {points} punktów do współzawodnictwa.";
-                    }
-                    else
-                    {
-                        points = 100;
-                        text = $"{mainCounter}.{secondaryCounter}.Za zdobycie {c.TrialType} {c.TrialName} przyznaję dh. {c.ScoutName} {c.ScoutSurname} {points} punktów do współzawodnictwa.";
-                    }
-                    List<string> words = new List<string>();
-                    words = text.Split(' ').ToList();
-                    foreach (string word in words)
-                    {
-                        if (posX < 480 - (word.Length * 6))
-                        {
-                            page.Canvas.DrawString(word,
-                                trueTypeFont,
-                                new PdfSolidBrush(Color.Black),
-                                new PointF(posX, posY));
-                            posX = posX + 7 * (word.Length + 1);
-                        }
-                        else
-                        {
-                            posX = 50;
-                            posY = posY + 20;
-                            page.Canvas.DrawString(word,
-                                trueTypeFont,
-                                new PdfSolidBrush(Color.Black),
-                                new PointF(posX, posY));
-                            posX = posX + 7 * (word.Length + 1);
-                        }
-                    }
-
-                    secondaryCounter = secondaryCounter + 1;
-                    posX = 50;
-                    posY = posY + 20;
-                }
-                mainCounter = mainCounter + 1;
-                secondaryCounter = 1;
-            }
-
-            if (order.GamePointsEntries != null)
+            if (order.GamePointsEntries != null && order.GamePointsEntries.Count() > 0)
             {
                 page.Canvas.DrawString($"{mainCounter}.Podsumowanie współzawodnictwa",
                     trueTypeFont,
@@ -361,7 +296,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                 secondaryCounter = 1;
             }
 
-            if (order.ReprimendsAndPraises != null)
+            if (order.ReprimendsAndPraises != null && order.ReprimendsAndPraises.Count() > 0)
             {
                 page.Canvas.DrawString($"{mainCounter}.Pochwały, wyróżnienia i nagany",
                     trueTypeFont,
@@ -410,7 +345,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                 secondaryCounter = 1;
             }
 
-            if (order.Exclusions != null)
+            if (order.Exclusions != null && order.Exclusions.Count() > 0)
             {
                 page.Canvas.DrawString($"{mainCounter}.Skreślenia z listy członków",
                     trueTypeFont,
@@ -459,7 +394,7 @@ namespace moja_druzyna.Lib.PdfGeneration
                 secondaryCounter = 1;
             }
 
-            if (order.Other != null && order.Other.Contents != null)
+            if (order.Other != null && !string.IsNullOrEmpty(order.Other.Contents))
             {
                 page.Canvas.DrawString($"{mainCounter}.Inne",
                     trueTypeFont,
