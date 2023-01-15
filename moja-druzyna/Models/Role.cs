@@ -56,7 +56,5 @@ namespace moja_druzyna.Models​
 
             return exroles;
         }
-
- 
     }
 }

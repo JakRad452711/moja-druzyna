@@ -49,25 +49,25 @@ namespace moja_druzyna.Const
 
         public static readonly Dictionary<string, string> ScoutAbilitiesTranslationWithPolishLetters = new()
         {
-            { Hygenist, "higienista" },
-            { Paramedic, "sanitariusz" },
-            { Lifesaver, "ratownik" },
-            { Glimmer, "ognik" },
-            { FireGuard, "strażnik ognia" },
-            { FireplaceMaster, "mistrz ognisk" },
-            { DrillExpert, "znawca musztry" },
-            { DrillMaster, "mistrz musztry" },
-            { Needle, "igiełka" },
-            { Tailor, "krawiec" },
-            { YoungSwimmer, "młody pływak" },
-            { Swimmer, "pływak" },
-            { ExcellentSwimmer, "pływak doskonały" },
-            { Internaut, "internauta" },
-            { FamilyHistorian, "historyk rodzinny" },
-            { European, "europejczyk" },
-            { HealthLeader, "lider zdrowia" },
-            { NatureFriend, "przyjaciel przyrody" },
-            { Photograph, "fotograf" }
+            { Hygenist, "Higienista" },
+            { Paramedic, "Sanitariusz" },
+            { Lifesaver, "Ratownik" },
+            { Glimmer, "Ognik" },
+            { FireGuard, "Strażnik ognia" },
+            { FireplaceMaster, "Mistrz ognisk" },
+            { DrillExpert, "Znawca musztry" },
+            { DrillMaster, "Mistrz musztry" },
+            { Needle, "Igiełka" },
+            { Tailor, "Krawiec" },
+            { YoungSwimmer, "Młody pływak" },
+            { Swimmer, "Pływak" },
+            { ExcellentSwimmer, "Pływak doskonały" },
+            { Internaut, "Internauta" },
+            { FamilyHistorian, "Historyk rodzinny" },
+            { European, "Europejczyk" },
+            { HealthLeader, "Lider zdrowia" },
+            { NatureFriend, "Przyjaciel przyrody" },
+            { Photograph, "Fotograf" }
         };
     }
 }

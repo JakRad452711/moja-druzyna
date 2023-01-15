@@ -60,7 +60,7 @@
                     }
                     <br />
                     @Html.DisplayFor(user => user.PeselScout) <br />
-                    @Html.DisplayFor(user => user.DateOfBirth) <br />
+                    @Model.DateOfBirth?.ToString("dd.MM.yyyy") <br />
                     @Html.DisplayFor(user => user.Nationality) <br />
                     @Html.DisplayFor(user => user.MembershipNumber) <br />
                 </div>
@@ -117,10 +117,10 @@
                     <br />
                     <br />
                     @Html.DisplayFor(user => user.Ns) <br />
-                    @Html.DisplayFor(user => user.DateOfEntry) <br />
+                    @Model.DateOfEntry?.ToString("dd.MM.yyyy") <br />
                     @if (Model.DateOfLeaving == null) 
                         { <span>n/a</span> } 
-                    else { Html.DisplayFor(user => user.DateOfLeaving); } <br />
+                    else { <a>@Model.DateOfLeaving?.ToString("dd.MM.yyyy")</a> } <br />
                 </div>
             </div>
         </div>

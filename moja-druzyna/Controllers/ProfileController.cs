@@ -108,12 +108,11 @@ namespace moja_druzyna.Controllers
                 achievementsViewModels.Add(new AchievementsViewModel()
                 {
                     AchievementDate = achievement.Value,
-                    //AchievementType = achievement.Key
-                    AchievementType = moja_druzyna.Const.ScoutAbilities.ScoutAbilitiesTranslation[achievement.Key]
+                    AchievementType = moja_druzyna.Const.ScoutAbilities.ScoutAbilitiesTranslationWithPolishLetters[achievement.Key]
                 });
             }
 
-            achievementsViewModels = achievementsViewModels.OrderBy(x => x.AchievementDate).ToList();
+            achievementsViewModels = achievementsViewModels.ToList();
 
             return View(achievementsViewModels);
         }

@@ -645,29 +645,20 @@ namespace moja_druzyna.Controllers
             {
                 var temp = "";
 
-                if (role.Value == "scout")
+                if (role.Value != "scout")
                 {
-                    temp = "";// "Harcerz";
+                    temp = TeamRoles.TeamRolesTranslationsWithPolishLetters[role.Value];
+
+                    rolesVM.Add(new RolesViewModel()
+                        {
+                            ScoutName = role.Key,
+                            RoleName = temp
+                        }
+                    );
                 }
-                else
-                {
-                    temp = moja_druzyna.Const.TeamRoles.TeamRolesTranslations[role.Value];
-                }
-
-                rolesVM.Add(new RolesViewModel()
-
-                {
-                    ScoutName = role.Key,
-
-
-                    RoleName = temp
-                }
-                );
-
             }
 
             rolesVM = rolesVM.OrderBy(x => x.ScoutName).ToList();
-
 
             return View(rolesVM);
         }

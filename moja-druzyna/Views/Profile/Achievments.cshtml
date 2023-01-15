@@ -4,41 +4,54 @@
     ViewData["Title"] = "osiągnięcia";
 }
 
-<div class="text-center" justify-content-center display-flex" style="min-width:650px">
-    <h1 class="display-4">Moje osiągnięcia</h1>
-    
-    <div class="display-flex list-item-width text-left medium-bold mb-4px">
-        <div class="display-flex justify-content-between width100p ml-64px">
-            <span class="width-1a">osiągnięcie</span>
-            <span class="width-1d mr-16px"></span>
-            <span class="width-1d mr-16px">data otrzymania</span>
-
-        </div>
-    </div>
-
-    <div class="text-center justify-content-center" style="min-width:650px" align="center">
-
-        @foreach (var achievementsVM in Model)
-        {
-            <div class="display-flex list-item-size clear-white small-shadow round-corners-12px large-light mb-4px">
-
-                <div class="display-flex justify-content-between width100p text-left">
-
-                    <div class="width-1a">
-                        <div class="mt-8px">@achievementsVM.AchievementType</div>
-                    </div>
-                    <div class="width-1c mt-8px">
-                        @achievementsVM.AchievementDate
-                    </div>
-
-                </div>
-
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<div class="text-center justify-content-center display-flex" style="min-width:900px;height:85vh">
+    <form method="post" class="size100p">
+        <input id="team-id" value="@ViewBag.TeamId" disabled hidden />
+        <div style="height:50px" class="text-left display-flex mt-16px position-relative">
+            <div class="position-absolute width100p text-center paragraph2-light font-weight-normal">
+                @ViewBag.TeamName
             </div>
-        }
+        </div>
 
-    </div>
-    <div style="height: 60px">
+        <!-- BUTTONS - Add host, ... -->
+        <div class="text-left" style="margin-bottom:44px">
+        </div>
 
-    </div>
+        <!-- MAIN PANEL -->
+        <div class="display-flex size100p justify-content-around">
+            <!-- LIST OF HOSTS IN THE TEAM -->
+            <div style="min-height:100%;min-width:160px;width:99%" class="height-fit-content display-flex justify-content-center big-shadow">
+                <div style="width:96%">
+                    <div class="paragraph2-light mb-16px">
+                        Osiągnięcia
+                    </div>
+                    <div class="display-flex width100p text-left medium-bold mb-4px">
+                        <div class="display-flex justify-content-between width100p ml-16px">
+                            <span class="width-1a">osiągnięcie</span>
+                            <span class="width-1d mr-16px">data otrzymania</span>
+                        </div>
+                    </div>
 
+                    <div class="text-center justify-content-center" style="min-width:650px" align="center">
+                        @foreach (var achievementsVM in Model)
+                        {
+                            <div class="display-flex width100p list-item-height clear-white small-shadow round-corners-12px large-light mb-4px">
+                                <div class="display-flex justify-content-between width100p text-left mr-16px ml-16px">
+                                    <div class="width-1a">
+                                        <div class="mt-8px">@achievementsVM.AchievementType</div>
+                                    </div>
+                                    <div class="width-1c mt-8px">
+                                        @achievementsVM.AchievementDate
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div style="height: 60px">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>

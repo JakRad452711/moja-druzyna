@@ -28,13 +28,13 @@ namespace moja_druzyna.Const
 
         public readonly static Dictionary<string, string> TeamRolesTranslationsWithPolishLetters = new()
         {
-            { Captain, "drużynowy" },
-            { ViceCaptain, "przyboczny" },
-            { HostCaptain, "zastępowy" },
-            { Ensign, "chorąży drużyny" },
-            { Chronicler, "kronikarz" },
-            { Quatermaster, "kwatermistrz" },
-            { Scout, "harcerz" }
+            { Captain, "Drużynowy" },
+            { ViceCaptain, "Przyboczny" },
+            { HostCaptain, "Zastępowy" },
+            { Ensign, "Chorąży drużyny" },
+            { Chronicler, "Kronikarz" },
+            { Quatermaster, "Kwatermistrz" },
+            { Scout, "Harcerz" }
         };
     }
 }

@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>mojadrużyna - @ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/css/views/shared/_Layout.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/views/shared/_Layout.css" asp-append-version="true" />
 </head>
 <body>
     <div id="screen">
@@ -23,10 +23,10 @@
                 if (TempData["isSidebarCollapsed"] == null)
                     TempData["isSidebarCollapsed"] = false;
 
-                bool isCollapsed = (bool) TempData["isSidebarCollapsed"];
+                bool isCollapsed = (bool)TempData["isSidebarCollapsed"];
                 TempData.Keep("isSidebarCollapsed");
 
-                                    <input type="checkbox" id="is-sb-collapsed" checked=@isCollapsed />
+                <input type="checkbox" id="is-sb-collapsed" checked=@isCollapsed />
             }
             <label id="hamburger" for="is-sb-collapsed">
                 <img id="hamburger-icon" src="~/icons/navigation/nav-hamburger.svg" />
@@ -52,6 +52,11 @@
                                     Dane
                                 </a>
                             </div>
+                            <div id="navigations-item-next">
+                                <a class="text-dark" asp-controller="profile" asp-action="achievments">
+                                    Osiągnięcia
+                                </a>
+                            </div>
                         </div>
                         <div id="sidebar-reports" class="muddy-white-2 pb-8px small-shadow">
                             <div id="sidebar-section-header" class="light-gray paragraph-regular small-shadow">
@@ -69,7 +74,7 @@
                             </div>
                             <div id="navigations-item-next">
                                 <a class="text-dark" asp-controller="documentsgenerators" asp-action="events">
-                                        Wydarzenia
+                                    Wydarzenia
                                 </a>
                             </div>
                         </div>
@@ -145,10 +150,10 @@
                 type: "POST",
                 url: "@Url.Action("ToggleIsSidebarCollapsed", "Api")",
                 dataType: "json",
-                success: function () {
+                success: function() {
                     // success
                 },
-                error: function () {
+                error: function() {
                     alert("_Layout.cshtml toggle sidebar on click: raised an error");
                 }
             });
@@ -159,11 +164,11 @@
                 type: "GET",
                 url: "@Url.Action("GetIsSidebarCollapsed", "Api")",
                 dataType: "json",
-                success: function(result) { 
-                    toExecute(result); 
+                success: function(result) {
+                    toExecute(result);
                 },
-                error: function(result) { 
-                    alert("_Layout.cshtml onSidebarCollapsed(f): raised an error"); 
+                error: function(result) {
+                    alert("_Layout.cshtml onSidebarCollapsed(f): raised an error");
                 }
             });
         };

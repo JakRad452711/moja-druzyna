@@ -46,7 +46,10 @@ namespace moja_druzyna.Models​
 
             var scoutAchievements = new Dictionary<string, string>();
 
-            List<ScoutAchievement> scoutAchiev = dbContext.ScoutAchievements.Where(t => t.ScoutPeselScout == pesel).ToList();
+            List<ScoutAchievement> scoutAchiev = dbContext.ScoutAchievements
+                .Where(t => t.ScoutPeselScout == pesel)
+                .OrderByDescending(t => t.Date)
+                .ToList();
             
             foreach (var a in scoutAchiev)
             {
@@ -55,12 +58,10 @@ namespace moja_druzyna.Models​
                 if (achievement != null)
                 {
                     var achievementName = achievement.Type;
-                    var achievementDate = a.Date.ToString();
+                    var achievementDate = a.Date.ToString("dd.MM.yyyy HH:mm");
 
                     scoutAchievements.Add(achievementName, achievementDate);
                 }
-
-
             }
 
             return scoutAchievements;
