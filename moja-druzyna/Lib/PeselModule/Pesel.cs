@@ -20,7 +20,7 @@ namespace moja_druzyna.Lib.PeselModule
 
         private bool IsPesel()
         {
-            if (PESEL.Length != 11)
+            if (string.IsNullOrEmpty(PESEL) || PESEL.Length != 11)
             {
                 return false;
             }

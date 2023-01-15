@@ -203,6 +203,27 @@ namespace moja_druzyna.Models​
             _dbContext.SaveChanges();
         }
 
+        public Scout GetShallowCopy()
+        {
+            Scout scout = new()
+            {
+                PeselScout = this.PeselScout,
+                Name = this.Name,
+                SecondName = this.SecondName,
+                Surname = this.Surname,
+                DateOfBirth = this.DateOfBirth,
+                Nationality = this.Nationality,
+                MembershipNumber = this.MembershipNumber,
+                DateOfEntry = this.DateOfEntry,
+                Ns = this.Ns,
+                DateOfLeaving = this.DateOfLeaving,
+                ParentParentPesel = this.ParentParentPesel,
+                IdentityId = this.IdentityId
+            };
+
+            return scout;
+        }
+
         public List<ScoutAchievement> GetScoutAchievements()
         {
             CheckDbContextInstance("List<ScoutAchievement> GetAchievements()");

@@ -1,207 +1,161 @@
-﻿@{
+﻿@model moja_druzyna.ViewModels.DocumentsGenerators.OrderGeneratorViewModel
+
+@{
     ViewData["Title"] = "Edytor Rozkazów";
 }
 
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-<link rel="stylesheet" href="~/css/views/documents-generators/DocumentsGenerators.css" asp-append-version="true" />
-<div id="big-box">
-    <div id="content-title" class="text-center">
-        <div id="header-box" class="large-regular font-dark-green">
-            <div id="header-box-inside">
-                <div id="text-center">
-                    <h1 class="display-4"> Tworzenie nowego wzoru rozkazu </h1> 
-                </div>
-                <div style="width:1px"><br /></div>
+<div class="text-center justify-content-center display-flex" style="min-width:900px;height:85vh">
+    <form method="post" class="size100p">
+        <div style="height:50px" class="text-left display-flex mt-16px position-relative">
+            <div class="paragraph2-regular ml-8px font-weight-light bring-to-top">
+                <a asp-action="orders" class="font-muddy-black">
+                    Rozkazy
+                </a>
+            </div>
+            <div class="paragraph2-regular ml-16px font-weight-light bring-to-top">
+                <a asp-action="events" class="font-muddy-black">
+                    Wydarzenia
+                </a>
+            </div>
+            <div class="position-absolute width100p text-center paragraph2-light font-weight-normal">
+                @ViewBag.TeamName
             </div>
         </div>
-        <p class="large-regular"> Wydaj rozkaz: </p>              
-    </div>
 
-    <div id="parentdiv" class="borderadded">
-        <form  asp-action="OrderForm_Submit">
-            <div id="base-form-id">
-                <div class="field-and-name">
-                    Numer:
-                    <br />
-                    <input type="text">
-                </div>
-                <div class="field-and-name">
-                    Data:
-                    <br />
-                    <input type="text">
-                </div>
-                <div class="field-and-name extend-to-border">
-                    Miejscowość:
-                    <br />
-                    <input type="text">
-                </div>
-            </div>
- 
-            <div class="content text-left" style="height: auto">
-                <div class="account-content-left">
-                    <!-- Rounded switch -->
-                    <div class="smallborderadded">
-                        <meta name="viewport" content="width=device-width, initial-scale=1">
-                        <label class="checkboxsimple">
-                            <input type="checkbox" name="checkbox" value="text"> 1. Zwolnienia
-                        </label>
-                        <div class="account-content-right">
-                            <div class="buttonedit">
-                                <a asp-action="layoffs"> 
-                                    wprowadź zmiany w sekcji
-                                </a>
-                            </div>
-                        </div>
-                        <br />
+        <!-- BUTTONS - Add host, ... -->
+        <div class="text-left">
+            <button asp-action="orders" formmethod="get" class="ml-8px mb-16px round-corners-5px no-border text-white large-light" style="background-color:gray">
+                <img src="~/icons/navigation/nav-left.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                Wróć
+            </button>
+        </div>
+
+        <!-- MAIN PANEL -->
+        <div class="display-flex size100p justify-content-around">
+            <div style="min-height:100%;min-width:160px;width:99%" class="height-fit-content display-flex justify-content-center big-shadow">
+                <div style="width:96%">
+                    <div class="paragraph2-light mb-16px">
+                        Wydawanie rozkazu
                     </div>
-
-                    <div class="smallborderadded">
-                        <meta name="viewport" content="width=device-width, initial-scale=1">
-                        <label class="checkboxsimple">
-                            <input type="checkbox" name="checkbox" value="text"> 2. Mianowania
-                        </label>
-                        <div class="account-content-right">
-                            <div class="buttonedit">
-                                <a asp-action="appointments"> 
-                                    wprowadź zmiany w sekcji
-                                </a>
-                            </div>
+                    <div class="display-flex p-8px pb-8px text-left justify-content-start" style="position:relative;z-index:1000;margin-bottom:-8px">
+                        <div class="form-group size-fit-content mr-8px">
+                            <label class="width100p text-left" style="max-width:260px">numer rozkazu</label> <br />
+                            <input asp-for="OrderNumber" class="width100p" style="max-width:260px" />
+                            @if (ViewBag.SubmittingOrderFailed == true)
+                            {
+                                <div class="text-danger text-left position-absolute" style="margin-top:1px">
+                                    wypełnij numer rozkazu i miejsce wydania
+                                </div>
+                            }
                         </div>
-                        <br />
-                    </div>
-
-                    <div class="smallborderadded">
-                        <meta name="viewport" content="width=device-width, initial-scale=1">
-                        <label class="checkboxsimple">
-                            <input type="checkbox" name="checkbox" value="text"> 3. Zamknięcia prób
-                        </label>
-                        <div class="account-content-right">
-                            <div class="buttonedit">
-                                <a asp-action="trialclosings"> 
-                                    wprowadź zmiany w sekcji
-                                </a>
-                            </div>
+                        <div class="form-group size-fit-content mr-8px">
+                            <label class="width100p text-left" style="max-width:260px">miejsce wydania</label> <br />
+                            <input asp-for="Location" class="width100p" style="max-width:260px" />
                         </div>
-                        <br />
-                    </div>
-
-                    <div class="smallborderadded">
-                        <meta name="viewport" content="width=device-width, initial-scale=1">
-                        <label class="checkboxsimple">
-                            <input type="checkbox" name="checkbox" value="text"> 4. Otwarcia prób
-                        </label>
-                        <div class="account-content-right">
-                            <div class="buttonedit">
-                                <a asp-action="trialopenings"> 
-                                    wprowadź zmiany w sekcji
-                                </a>
-                            </div>
+                        <div class="form-group size-fit-content">
+                            <label class="width100p text-left" style="max-width:260px">data wydania</label> <br />
+                            <input asp-for="CreationDate" type="datetime-local" class="width100p" style="max-width:180px" />
                         </div>
-                        <br />
-                    </div>
-
-                    <div class="smallborderadded">
-                        <meta name="viewport" content="width=device-width, initial-scale=1">
-                        <label class="checkboxsimple">
-                            <input type="checkbox" name="checkbox" value="text"> 5. Przyznanie punktów za stopnie i sprawności
-                        </label>
-                        <div class="account-content-right">
-                            <div class="buttonedit">
-                                <button> 
-                                    wprowadź zmiany w sekcji
-                                </button>
-                            </div>
+                        <div class="height100p ml-16px" style="margin-top:1px">
+                            <button asp-action="orderform_submit" type="submit" class="mt-32px round-corners-5px no-border text-white large-light" style="background-color:darkgreen;width:130px">
+                                <img src="~/icons/managment/check_circle.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                                Wydaj rozkaz
+                            </button>
                         </div>
-                        <br />
+                        
                     </div>
-
-                    <div class="smallborderadded">
-                        <meta name="viewport" content="width=device-width, initial-scale=1">
-                        <label class="checkboxsimple">
-                            <input type="checkbox" name="checkbox" value="text"> 6. Podsumowanie gier
-                        </label>
-                        <div class="account-content-right">
-                            <div class="buttonedit">
-                                <button> 
-                                    wprowadź zmiany w sekcji
-                                </button>
-                            </div>
-                        </div>
-                        <br />
+                    <div class="display-flex width100p p-4px pl-8px pr-8px justify-content-between">
                     </div>
-
-                    <div class="smallborderadded">
-                        <meta name="viewport" content="width=device-width, initial-scale=1">
-                        <label class="checkboxsimple">
-                            <input type="checkbox" name="checkbox" value="text"> 7. Pochwały, wyróżnienia, nagany
-                        </label>
-                        <div class="account-content-right">
-                            <div class="buttonedit">
-                                <a asp-action="reprimendsandpraises"> 
-                                    wprowadź zmiany w sekcji
-                                </a>
-                            </div>
-                        </div>
-                        <br />
-                    </div>
-
-                    <div class="smallborderadded">
-                        <meta name="viewport" content="width=device-width, initial-scale=1">
-                        <label class="checkboxsimple">
-                            <input type="checkbox" name="checkbox" value="text"> 8. Skreślenia ze stanu
-                        </label>
-                        <div class="account-content-right">
-                            <div class="buttonedit">
-                                <a asp-action="exclusions"> 
-                                    wprowadź zmiany w sekcji
-                                </a>
-                            </div>
-                        </div>
-                        <br />
-                    </div>
-
-                    <div class="smallborderadded">
-                        <meta name="viewport" content="width=device-width, initial-scale=1">
-                        <label class="checkboxsimple">
-                            <input type="checkbox" name="checkbox" value="text"> 9. Inne
-                        </label>
-                        <div class="account-content-right">
-                            <div class="buttonedit">
-                                <a asp-action="other"> 
-                                    wprowadź zmiany w sekcji
-                                </a>
-                            </div>
-                        </div>
-                        <br />
-                    </div>
-                </div>
-            </div>
-
-            <div id="content-title" class="text-center extra-padding">
-                <p> wydaj rozkaz po wprowadzeniu zmian do wybranych sekcji </p>
-            </div>
-
-            <div class="center">
-                <div class="accept-decline-buttons">
-                    <div class="buttonedit accept-decline-button">
-                        <div class="buttonedit">
-                            <button asp-action="orderform_submit"> 
-                                wydaj rozkaz
+                    <div class="display-flex width100p pl-8px pr-8px text-left">
+                        <div class="form-group width100p">
+                            <label class="width100p text-left">Zwolnienia</label>
+                            <button name="section" value="layoffs" asp-action="ordergeneratorgotosection" class="round-corners-5px no-border text-white large-light" style="background-color:darkorange">
+                                <img src="~/icons/managment/edit.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                                Wprowadź zmiany w sekcji zwolnienia
                             </button>
                         </div>
                     </div>
-                    <div class="buttonedit accept-decline-button">
-                        <div class="buttonedit">
-                            <button asp-action="orders"> 
-                                porzuć
+                    <div class="display-flex width100p pl-8px pr-8px text-left">
+                        <div class="form-group width100p">
+                            <label class="width100p text-left">Mianowania</label>
+                            <button name="section" value="appointments" asp-action="ordergeneratorgotosection" class="round-corners-5px no-border text-white large-light" style="background-color:darkorange">
+                                <img src="~/icons/managment/edit.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                                Wprowadź zmiany w sekcji mianowania
                             </button>
                         </div>
                     </div>
+                    <div class="display-flex width100p pl-8px pr-8px text-left">
+                        <div class="form-group width100p">
+                            <label class="width100p text-left">Zamknięcia prób</label>
+                            <button name="section" value="trialclosings" asp-action="ordergeneratorgotosection" class="round-corners-5px no-border text-white large-light" style="background-color:darkorange">
+                                <img src="~/icons/managment/edit.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                                Wprowadź zmiany w sekcji zamknięcia prób
+                            </button>
+                        </div>
+                    </div>
+                    <div class="display-flex width100p pl-8px pr-8px text-left">
+                        <div class="form-group width100p">
+                            <label class="width100p text-left">Otwarcia prób</label>
+                            <button name="section" value="trialopenings" asp-action="ordergeneratorgotosection" class="round-corners-5px no-border text-white large-light" style="background-color:darkorange">
+                                <img src="~/icons/managment/edit.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                                Wprowadź zmiany w sekcji otwarcia prób
+                            </button>
+                        </div>
+                    </div>
+                    <div class="display-flex width100p pl-8px pr-8px text-left">
+                        <div class="form-group width100p">
+                            <label class="width100p text-left">Podsumowanie gier</label>
+                            <button name="section" value="gamepoints" asp-action="ordergeneratorgotosection" class="round-corners-5px no-border text-white large-light" style="background-color:darkorange">
+                                <img src="~/icons/managment/edit.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                                Wprowadź zmiany w sekcji podsumowania gier
+                            </button>
+                        </div>
+                    </div>
+                    <div class="display-flex width100p pl-8px pr-8px text-left">
+                        <div class="form-group width100p">
+                            <label class="width100p text-left">Pochwały, wyróżnienia, nagany</label>
+                            <button name="section" value="reprimendsandpraises" asp-action="ordergeneratorgotosection" class="round-corners-5px no-border text-white large-light" style="background-color:darkorange">
+                                <img src="~/icons/managment/edit.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                                Wprowadź zmiany w sekcji pochwały, wyróżnienia, nagany
+                            </button>
+                        </div>
+                    </div>
+                    <div class="display-flex width100p pl-8px pr-8px text-left">
+                        <div class="form-group width100p">
+                            <label class="width100p text-left">Skreślenia ze stanu</label>
+                            <button name="section" value="exclusions" asp-action="ordergeneratorgotosection" class="round-corners-5px no-border text-white large-light" style="background-color:darkorange">
+                                <img src="~/icons/managment/edit.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                                Wprowadź zmiany w sekcji skreślenia ze stanu
+                            </button>
+                        </div>
+                    </div>
+                    <div class="display-flex width100p pl-8px pr-8px text-left">
+                        <div class="form-group width100p">
+                            <label class="width100p text-left">Inne</label>
+                            <button name="section" value="other" asp-action="ordergeneratorgotosection" class="round-corners-5px no-border text-white large-light" style="background-color:darkorange">
+                                <img src="~/icons/managment/edit.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                                Wprowadź zmiany w sekcji inne
+                            </button>
+                        </div>
+                    </div>
+                    <div style="height:60px">
+                    </div>
                 </div>
             </div>
-        </form>
-    </div>
-
-    
-
+        </div>
+    </form>
 </div>
+
+@section Scripts
+    {
+    <script>
+        $(document).keypress(function(e) {
+            var keyCode = (window.event) ? e.which : e.keyCode;
+            if (keyCode && keyCode == 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+}

@@ -10,6 +10,9 @@
 #upper-panel {
     width: 100%;
     height: 64px;
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
+    position:relative;
+    z-index:100;
 }
 
 #center-section-container {
@@ -29,7 +32,7 @@
 #sidebar {
     position: fixed;
     flex-shrink: 0;
-    box-shadow: 1px 0 0 #383838;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.25);
     height: 100%;
     width: 256px;
 }
@@ -91,10 +94,10 @@
 }
 
 #navigations-icon {
-    width: 24px;
-    height: 24px;
-    margin-left: 8px;
-    margin-top: 4px;
+    width: 22px;
+    height: 22px;
+    margin-left: 9px;
+    margin-top: 5px;
 }
 
 #navigations-item-first {
@@ -104,49 +107,50 @@
 
 #navigations-item-next {
     margin-left: 16px;
-    margin-top: 10px;
+    margin-top: 6px;
 }
 
 #sidebar-profile {
     position: relative;
-    border-radius: 15px;
+    border-radius: 2px;
     width: 240px;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 #sidebar-reports {
     position: relative;
-    border-radius: 15px;
+    border-radius: 2px;
     width: 240px;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 #sidebar-team {
     position: relative;
-    border-radius: 15px;
+    border-radius: 2px;
     width: 240px;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 #sidebar-ranking {
     position: relative;
-    border-radius: 15px;
+    border-radius: 2px;
     width: 240px;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 #sidebar-section-header {
     position: relative;
     display: flex;
-    border-radius: 15px;
+    border-radius: 2px;
     width: 100%;
     height: 32px;
     text-align: left;
 }
 
 #sidebar-section-header-text {
+    font-weight:400;
     margin-left: 10px;
-    margin-top: -2px;
+    margin-top: -1px;
 }
 
 #is-sb-collapsed {
@@ -159,30 +163,30 @@
 
 #is-sb-collapsed:checked ~ #sidebar {
     left: -257px;
-    transition: .2s;
+    transition: .4s;
 }
 
 #is-sb-collapsed:checked ~ #left-panel {
     width: 0px;
-    transition: .2s;
+    transition: .4s;
 }
 
 #is-sb-collapsed:checked ~ #hamburger {
     left: 0px;
-    transition: .2s;
+    transition: .4s;
 }
 
 #is-sb-collapsed:not(:checked) ~ #sidebar {
     left: 0px;
-    transition: .2s;
+    transition: .4s;
 }
 
 #is-sb-collapsed:not(:checked) ~ #left-panel {
     width: 256px;
-    transition: .2s;
+    transition: .4s;
 }
 
 #is-sb-collapsed:not(:checked) ~ #hamburger {
     left: 212px;
-    transition: .2s;
+    transition: .4s;
 }

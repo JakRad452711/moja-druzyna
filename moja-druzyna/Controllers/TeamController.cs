@@ -6,6 +6,8 @@ using Microsoft.Extensions.Logging;
 using moja_druzyna.Const;
 using moja_druzyna.Data;
 using moja_druzyna.Data.Session;
+using moja_druzyna.Lib.PeselModule;
+using moja_druzyna.Lib.PdfGeneration;
 using moja_druzyna.Models;
 using moja_druzyna.ViewModels.Team;
 using System.Collections.Generic;
@@ -47,8 +49,9 @@ namespace moja_druzyna.Controllers
 
             ViewBag.UserRole = team.GetScoutRole(sessionAccesser.UserPesel);
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
+            ViewBag.TeamId = sessionAccesser.CurrentTeamId;
 
-            ICollection<TeamViewModel> scoutsInfo = new List<TeamViewModel>();
+            List<TeamViewModel.TeamViewModelEntry> entries = new List<TeamViewModel.TeamViewModelEntry>();
 
             foreach (string scoutPesel in scoutPesels)
             {
@@ -61,12 +64,25 @@ namespace moja_druzyna.Controllers
                 string pesel = scout.PeselScout;
                 string hostName = host == null ? "" : host.Name;
 
-                scoutsInfo.Add(new TeamViewModel() { Id = id, Title = title, Rank = rankName, Host = hostName, Pesel = pesel });
+                entries.Add(new TeamViewModel.TeamViewModelEntry() { Id = id, Title = title, Rank = rankName, Host = hostName, Pesel = pesel });
             }
 
-            scoutsInfo = scoutsInfo.OrderBy(si => si.Title).ToList();
+            entries = entries.OrderBy(si => si.Title).ToList();
+            TeamViewModel teamVM = new TeamViewModel(_dbContext, sessionAccesser.CurrentTeamId, entries);
 
-            return View(scoutsInfo);
+            return View(teamVM);
+        }
+
+        public IActionResult TeamChangeName()
+        {
+            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
+
+            if (sessionAccesser.OperationFailed == true)
+                ViewBag.nameWasEmpty = true;
+
+            sessionAccesser.OperationFailed = false;
+
+            return View();
         }
 
         [HttpPost]
@@ -77,13 +93,17 @@ namespace moja_druzyna.Controllers
             if (!UserHasOneOfRoles(team, new() { TeamRoles.Captain }))
                 return Redirect(WebsiteAddresses.AccessDeniedAddress);
 
-            if (newName != null)
+            if (!string.IsNullOrEmpty(newName))
             {
                 team.UpdateName(newName);
                 sessionAccesser.CurrentTeamName = newName;
             }
+            else
+            {
+                sessionAccesser.OperationFailed = true;
+            }
 
-            return Redirect("team");
+            return Redirect("teamchangename");
         }
 
         [HttpPost]
@@ -126,7 +146,10 @@ namespace moja_druzyna.Controllers
             if (!UserHasOneOfRoles(team, new() { TeamRoles.Captain, TeamRoles.ViceCaptain }))
                 return Redirect(WebsiteAddresses.AccessDeniedAddress);
 
-            if (ModelState.IsValid)
+            bool peselIsAvailable = _dbContext.Scouts.Find(addScoutViewModel.Pesel) == null;
+            bool peselIsValid = new Pesel(addScoutViewModel.Pesel).IsValid();
+
+            if (ModelState.IsValid && peselIsAvailable && peselIsValid)
             {
                 Scout addedScout = new Scout
                 {
@@ -135,6 +158,7 @@ namespace moja_druzyna.Controllers
                     Surname = addScoutViewModel.Surname,
                     SecondName = addScoutViewModel.SecondName,
                     MembershipNumber = addScoutViewModel.MembershipNumber,
+                    DateOfBirth = new Pesel(addScoutViewModel.Pesel).GetBirthday(),
                     Nationality = addScoutViewModel.Nationality,
                     Ns = addScoutViewModel.Ns
                 };
@@ -153,6 +177,13 @@ namespace moja_druzyna.Controllers
             }
 
             sessionAccesser.ScoutWasAdded = false;
+            ViewBag.scoutAdditionFailed = true;
+
+            if (!peselIsAvailable)
+                ViewBag.peselIsTaken = true;
+
+            if (!string.IsNullOrEmpty(addScoutViewModel.Pesel) && !peselIsValid)
+                ViewBag.peselIsInvalid = true;
 
             return View();
         }
@@ -273,29 +304,9 @@ namespace moja_druzyna.Controllers
         public IActionResult Hosts()
         {
             Team team = GetTeam(_dbContext, sessionAccesser.CurrentTeamId);
-            List<Scout> scoutsThatAreNotInAnyHost = team.GetScoutsThatDoNotHaveAHost();
-            List<string> peselsOfScoutsThatAreNotInAnyHost = scoutsThatAreNotInAnyHost.Select(s => s.PeselScout).ToList();
-            List<SelectListItem> dropDownList_Scouts = new List<SelectListItem>();
 
             ViewBag.UserRole = team.GetScoutRole(sessionAccesser.UserPesel);
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
-
-            foreach (string pesel in peselsOfScoutsThatAreNotInAnyHost)
-            {
-                if (!(team.GetScoutRole(pesel) == TeamRoles.Scout))
-                    scoutsThatAreNotInAnyHost.RemoveAll(s => s.PeselScout == pesel);
-            }
-
-            foreach (Scout scout in scoutsThatAreNotInAnyHost)
-            {
-                dropDownList_Scouts.Add(new SelectListItem
-                {
-                    Value = scout.PeselScout,
-                    Text = string.Format("{0} {1}\t({2})", scout.Surname, scout.Name, scout.PeselScout)
-                });
-            }
-
-            ViewBag.DropDownList_Scouts = dropDownList_Scouts;
 
             List<int> hostIds = team.Hosts.OrderBy(h => h.Name).Select(h => h.IdHost).ToList();
             List<HostsViewModel_Host> hostsViewModels_Host = new List<HostsViewModel_Host>();
@@ -309,6 +320,7 @@ namespace moja_druzyna.Controllers
                 {
                     HostId = host.IdHost,
                     HostName = host.Name,
+                    NumberOfScouts = host.GetScouts().Count(),
                     HostCaptainLabel = hostCaptain == null ? "zastęp nie ma zastępowego!" : string.Format("{0} {1}", hostCaptain.Name, hostCaptain.Surname)
                 }
                 );
@@ -386,14 +398,79 @@ namespace moja_druzyna.Controllers
         public IActionResult AddHost()
         {
             Team team = GetTeam(_dbContext, sessionAccesser.CurrentTeamId);
-            Host host = new Host() { Name = sessionAccesser.AddedHostName };
 
             if (!UserHasOneOfRoles(team, new() { TeamRoles.Captain, TeamRoles.ViceCaptain }))
                 return Redirect(WebsiteAddresses.AccessDeniedAddress);
 
-            team.CreateHost(host, sessionAccesser.AddedHostCaptainPesel);
+            List<Scout> scoutsThatAreNotInAnyHost = team.GetScoutsThatDoNotHaveAHost();
+            List<string> peselsOfScoutsThatAreNotInAnyHost = scoutsThatAreNotInAnyHost.Select(s => s.PeselScout).ToList();
+            List<SelectListItem> dropDownList_Scouts = new List<SelectListItem>();
 
-            return Redirect("hosts");
+            foreach (string pesel in peselsOfScoutsThatAreNotInAnyHost)
+            {
+                if (!(team.GetScoutRole(pesel) == TeamRoles.Scout))
+                    scoutsThatAreNotInAnyHost.RemoveAll(s => s.PeselScout == pesel);
+            }
+
+            foreach (Scout scout in scoutsThatAreNotInAnyHost.OrderBy(s => s.Name).OrderBy(s => s.Surname))
+            {
+                dropDownList_Scouts.Add(new SelectListItem
+                {
+                    Value = scout.PeselScout,
+                    Text = string.Format("{0} {1}\t({2})", scout.Surname, scout.Name, scout.PeselScout)
+                });
+            }
+
+            ViewBag.DropDownList_Scouts = dropDownList_Scouts;
+            ViewBag.hostWasAdded = sessionAccesser.OperationSucceeded;
+
+            sessionAccesser.OperationSucceeded = false;
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddHost(AddHostViewModel addHostViewModel)
+        {
+            Team team = GetTeam(_dbContext, sessionAccesser.CurrentTeamId);
+
+            if (!UserHasOneOfRoles(team, new() { TeamRoles.Captain, TeamRoles.ViceCaptain }))
+                return Redirect(WebsiteAddresses.AccessDeniedAddress);
+
+            Host host = new Host() { Name = addHostViewModel.HostName };
+
+            if (ModelState.IsValid)
+            {
+                team.CreateHost(host, addHostViewModel.HostCaptainPesel);
+
+                sessionAccesser.OperationSucceeded = true;
+
+                return Redirect("addhost");
+            }
+
+            List<Scout> scoutsThatAreNotInAnyHost = team.GetScoutsThatDoNotHaveAHost();
+            List<string> peselsOfScoutsThatAreNotInAnyHost = scoutsThatAreNotInAnyHost.Select(s => s.PeselScout).ToList();
+            List<SelectListItem> dropDownList_Scouts = new List<SelectListItem>();
+
+            foreach (string pesel in peselsOfScoutsThatAreNotInAnyHost)
+            {
+                if (!(team.GetScoutRole(pesel) == TeamRoles.Scout))
+                    scoutsThatAreNotInAnyHost.RemoveAll(s => s.PeselScout == pesel);
+            }
+
+            foreach (Scout scout in scoutsThatAreNotInAnyHost.OrderBy(s => s.Name).OrderBy(s => s.Surname))
+            {
+                dropDownList_Scouts.Add(new SelectListItem
+                {
+                    Value = scout.PeselScout,
+                    Text = string.Format("{0} {1}\t({2})", scout.Surname, scout.Name, scout.PeselScout)
+                });
+            }
+
+            ViewBag.DropDownList_Scouts = dropDownList_Scouts;
+            ViewBag.hostAdditionFailed = true;
+
+            return View(addHostViewModel);
         }
 
         [HttpPost]
@@ -464,24 +541,47 @@ namespace moja_druzyna.Controllers
 
             ViewBag.DropDownList_Scouts = dropDownList_Scouts;
 
-            HostViewModel _hostViewModel = new HostViewModel() { Scouts = hostViewModel_Scouts };
+            HostViewModel _hostViewModel = new HostViewModel() { HostId = host.IdHost, Scouts = hostViewModel_Scouts };
 
             return View(_hostViewModel);
         }
 
         [HttpPost]
-        public IActionResult Host(int hostId, HostViewModel hostViewModel)
+        public IActionResult Host(int hostId)
         {
-            if (hostId > 0)
+            sessionAccesser.CurrentHostId = hostId;
+            sessionAccesser.CurrentHostName = _dbContext.Hosts.Find(hostId).Name;
+
+            return RedirectToAction("Host");
+        }
+
+        public IActionResult AddScoutToHost(int hostId)
+        {
+            Team team = GetTeam(_dbContext, sessionAccesser.CurrentTeamId);
+
+            if (!UserHasOneOfRoles(team, new() { TeamRoles.Captain, TeamRoles.ViceCaptain }))
+                return Redirect(WebsiteAddresses.AccessDeniedAddress);
+
+            List<Scout> scoutsThatAreNotInAnyHost = team.GetScoutsThatDoNotHaveAHost();
+            List<SelectListItem> dropDownList_Scouts = new List<SelectListItem>();
+
+            foreach (Scout scout in scoutsThatAreNotInAnyHost.OrderBy(s => s.Name).OrderBy(s => s.Surname))
             {
-                sessionAccesser.CurrentHostId = hostId;
-                sessionAccesser.CurrentHostName = _dbContext.Hosts.Find(hostId).Name;
+                dropDownList_Scouts.Add(new SelectListItem
+                {
+                    Value = scout.PeselScout,
+                    Text = string.Format("{0} {1}\t({2})", scout.Surname, scout.Name, scout.PeselScout)
+                });
             }
 
-            if (hostViewModel != null && hostViewModel.AddedScoutPesel != null)
-                return RedirectToAction("addscouttohost", hostViewModel);
+            ViewBag.DropDownList_Scouts = dropDownList_Scouts;
+            ViewBag.hostWasAdded = sessionAccesser.OperationSucceeded;
+            ViewBag.hostName = sessionAccesser.CurrentHostName;
+            ViewBag.numberOfScoutsToAdd = scoutsThatAreNotInAnyHost.Count();
 
-            return Redirect("host");
+            sessionAccesser.OperationSucceeded = false;
+
+            return View(new HostViewModel() { HostId = hostId });
         }
 
         [HttpPost]
@@ -501,9 +601,11 @@ namespace moja_druzyna.Controllers
             if (hostViewModel != null && hostViewModel.AddedScoutPesel != null && peselsOfScoutsThatAreNotInAnyHost.Contains(hostViewModel.AddedScoutPesel))
             {
                 host.AddScout(hostViewModel.AddedScoutPesel);
+
+                sessionAccesser.OperationSucceeded = true;
             }
 
-            return Redirect("host");
+            return Redirect("addscouttohost");
         }
 
         [HttpPost]

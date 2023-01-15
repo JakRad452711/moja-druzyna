@@ -7,116 +7,102 @@
 
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/views/team/Hosts.css" asp-append-version="true" />
-<div class="text-center justify-content-center display-flex" style="min-width:650px">
-    <form asp-action="hosts">
-        <div class="list-item-width display-flex justify-content-center mb-32px">
-            <div class="mr-8px mt-4px">
-                <img src="~/icons/main/green/flag.svg" class="icon-size-32 mt-1px" />
+<div class="text-center justify-content-center display-flex" style="min-width:900px;height:85vh">
+    <form method="post" class="size100p">
+        <input id="team-id" value="@ViewBag.TeamId" disabled hidden />
+        <div style="height:50px" class="text-left display-flex mt-16px">
+            <div class="paragraph2-regular ml-8px font-weight-light">
+                <a asp-action="team" class="font-muddy-black">
+                    Harcerze
+                </a>
             </div>
-            <div class="font-dark-green header1-light">
-                Moje zastępy
+            <div class="paragraph2-regular ml-16px font-weight-normal">
+                Zastępy
             </div>
         </div>
-        <div class="list-item-width medium-light font-muddy-black mb-32px">
-            @ViewBag.TeamName <br />
+
+        <!-- BUTTONS - Add host, ... -->
+        <div class="text-left">
+            <button asp-action="addhost" formmethod="get" class="ml-8px pr-8px mb-16px round-corners-5px no-border text-white large-light" style="background-color:darkgreen">
+                <img src="~/icons/managment/add.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                Dodaj zastęp
+            </button>
         </div>
-        @if (ViewBag.DropDownList_Scouts.Count > 0 && (ViewBag.UserRole == TeamRoles.Captain || ViewBag.UserRole == TeamRoles.ViceCaptain))
-        {
-            <div class="display-flex justify-content-center">
-                <div class="clear-white big-shadow size-fit-content medium-light display-block mb-32px">
-                    <div class="large-light mb-16px">
-                        dodaj zastęp
+        
+        <!-- MAIN PANEL -->
+        <div class="display-flex size100p justify-content-around">
+            <!-- LIST OF HOSTS IN THE TEAM -->
+            <div style="min-height:100%;min-width:160px;width:99%" class="height-fit-content display-flex justify-content-center big-shadow">
+                <div style="width:96%">
+                    <div class="paragraph2-light mb-16px">
+                        Zastępy
                     </div>
-                    <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
-                        <div class="form-group">
-                            <label asp-for="addedHostName" class="input-box-width text-left">nazwa zastępu</label> <br />
-                            <input asp-for="addedHostName" class="input-box-width" /><br />
-                            <span asp-validation-for="addedHostName" class="input-box-width text-left text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="display-flex size-fit-content p-4px pl-8px pr-8px">
-                        <div class="form-group">
-                            <label asp-for="hostCaptainPesel" class="input-box-width text-left">zastępowy</label> <br />
-                            <select asp-for="hostCaptainPesel" class="input-box-width" asp-items="@ViewBag.DropDownList_Scouts"></select>
-                        </div>
-                    </div>
-                    <div class="display-flex p-8px justify-content-center width-100p">
-                        <button type="submit" class="round-corners-5px font-muddy-black button-padding">dodaj</button>
-                    </div>
-                </div>
-            </div>
-        }
-        else
-        {
-            <div class="display-flex justify-content-center">
-                <div class="clear-white small-shadow size-fit-content medium-light display-block mb-32px" style="width: 420px">
-                    <div class="b-4px">
-                        aby dodać nowy zastęp musi istnieć przynajmniej jeden harcerz nie należący do żadnego innego zastępu w tej drużynie
-                    </div>
-                </div>
-            </div>
-        }
-        @if (Model.HostsViewModel_Hosts.Count() > 0)
-        {
-            <div class="display-flex list-item-width text-left medium-bold mb-4px">
-                <div class="display-flex justify-content-between width100p ml-64px">
-                    <span class="width-1a">zastęp</span>
-                    <span class="width-1b text-left">zastępowy</span>
-                    <span class="width-1c mr-16px"></span>
-                </div>
-            </div>
-        }
-        @foreach (var host in Model.HostsViewModel_Hosts)
-        {
-            <div class="display-flex list-item-size clear-white small-shadow round-corners-12px large-light mb-4px">
-                <div class="mt-4px ml-8px">
-                    <img id="profile-picture" src="~/icons/design/profile picture.svg" class="icon-size-40 mr-16px" />
-                </div>
-                <div class="display-flex justify-content-between width100p text-left">
-                    <div class="width-1a">
-                        <div class="mt-8px">@host.HostName</div>
-                    </div>
-                    <div class="width-1b">
-                        <div class="mt-8px">@host.HostCaptainLabel</div>
-                    </div>
-                    <div class="display-flex width-1c mt-8px mr-16px">
-                        @if (ViewBag.UserRole == "captain")
-                        {
-                            <button id="manage-icon" name="hostId" asp-controller="team" asp-action="host" value=@host.HostId class="no-border size-fit-content clear-white round-corners-5px">
-                                <img src="~/icons/managment/show.svg" class="icon-size-24" />
-                            </button>
-                            <button id="manage-icon" name="hostId" asp-controller="team" asp-action="deletehost" value=@host.HostId class="no-border size-fit-content clear-white round-corners-5px">
-                                <img src="~/icons/managment/delete.svg" class="icon-size-24" />
-                            </button>
-                        }
-                        else if (ViewBag.UserRoleInTheHost == "captain" || ViewBag.UserRole == "vice captain")
-                        {
-                            <button id="manage-icon" name="hostId" asp-controller="team" asp-action="host" value=@host.HostId class="no-border size-fit-content clear-white round-corners-5px">
-                                <img src="~/icons/managment/show.svg" class="icon-size-24" />
-                            </button>
-                            <button name="hostId" asp-controller="team" asp-action="deletehost" value=@host.HostId class="no-border size-fit-content clear-white round-corners-5px inactive" disabled>
-                                <img src="~/icons/managment/delete.svg" class="icon-size-24" />
-                            </button>
-                        }
-                        else
-                        {
-                            <div class="icon-size-24 mr-32px">
+                    @if (Model.HostsViewModel_Hosts.Count() > 0)
+                    {
+                        <div class="display-flex width100p text-left medium-bold mb-4px">
+                            <div class="display-flex justify-content-between width100p ml-64px">
+                                <span class="width-1a">zastęp</span>
+                                <span class="width-1b">liczba harcerzy</span>
+                                <span class="width-1c text-left">zastępowy</span>
+                                <span class="width-1d mr-16px"></span>
                             </div>
-                            <button id="manage-icon" name="hostId" asp-controller="team" asp-action="host" value=@host.HostId class="no-border size-fit-content clear-white round-corners-5px">
-                                <img src="~/icons/managment/show.svg" class="icon-size-24" />
-                            </button>
-                        }
-                    </div>
+                        </div>
+                    }
+                    @foreach (var host in Model.HostsViewModel_Hosts)
+                    {
+                        <div class="display-flex width100p clear-white small-shadow round-corners-12px large-light mb-4px">
+                            <div class="mt-4px ml-8px">
+                                <img id="profile-picture" src="~/icons/design/profile picture.svg" class="icon-size-40 mr-16px" />
+                            </div>
+                            <div class="display-flex justify-content-between width100p list-item-height text-left">
+                                <div class="width-1a">
+                                    <div class="mt-8px">@host.HostName</div>
+                                </div>
+                                <div class="display-flex width-1b justify-content-center">
+                                    <div class="mt-8px">@host.NumberOfScouts</div>
+                                </div>
+                                <div class="width-1c">
+                                    <div class="mt-8px">@host.HostCaptainLabel</div>
+                                </div>
+                                <div class="display-flex width-1d mt-8px mr-16px">
+                                    @if (ViewBag.UserRole == "captain")
+                                    {
+                                        <button id="manage-icon" name="hostId" asp-controller="team" asp-action="host" value=@host.HostId class="no-border size-fit-content clear-white round-corners-5px">
+                                            <img src="~/icons/managment/show.svg" class="icon-size-24" />
+                                        </button>
+                                        <button id="manage-icon" name="hostId" asp-controller="team" asp-action="deletehost" value=@host.HostId class="no-border size-fit-content clear-white round-corners-5px">
+                                            <img src="~/icons/managment/delete.svg" class="icon-size-24" />
+                                        </button>
+                                    }
+                                    else if (ViewBag.UserRoleInTheHost == "captain" || ViewBag.UserRole == "vice captain")
+                                    {
+                                        <button id="manage-icon" name="hostId" asp-controller="team" asp-action="host" value=@host.HostId class="no-border size-fit-content clear-white round-corners-5px">
+                                            <img src="~/icons/managment/show.svg" class="icon-size-24" />
+                                        </button>
+                                        <button name="hostId" asp-controller="team" asp-action="deletehost" value=@host.HostId class="no-border size-fit-content clear-white round-corners-5px inactive" disabled>
+                                            <img src="~/icons/managment/delete.svg" class="icon-size-24" />
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <div class="icon-size-24 mr-32px">
+                                        </div>
+                                        <button id="manage-icon" name="hostId" asp-controller="team" asp-action="host" value=@host.HostId class="no-border size-fit-content clear-white round-corners-5px">
+                                            <img src="~/icons/managment/show.svg" class="icon-size-24" />
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    @if (Model.HostsViewModel_Hosts.Count == 0)
+                    {
+                        <div class="paragraph-light mt-64px">
+                            Aktualnie nie ma żadnych zastępów
+                        </div>
+                    }
                 </div>
             </div>
-        }
-        @if (Model.HostsViewModel_Hosts.Count == 0)
-        {
-            <div class="paragraph-light mt-64px">
-                Aktualnie nie ma żadnych zastępów
-            </div>
-        }
-        <div style="height: 60px">
         </div>
     </form>
 </div>

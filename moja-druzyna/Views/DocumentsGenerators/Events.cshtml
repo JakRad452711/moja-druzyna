@@ -1,0 +1,77 @@
+﻿@model moja_druzyna.Models.Event
+
+@{
+    ViewData["Title"] = "wydarzenia";
+}
+
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/views/documents-generators/Orders.css" asp-append-version="true" />
+<div class="text-center justify-content-center display-flex" style="min-width:900px;height:85vh">
+    <form method="post" class="size100p">
+        <input id="team-id" value="@ViewBag.TeamId" disabled hidden />
+        <div style="height:50px" class="text-left display-flex mt-16px position-relative">
+            <div class="paragraph2-regular ml-8px font-weight-light bring-to-top">
+                <a asp-action="orders" class="font-muddy-black">
+                    Rozkazy
+                </a>
+            </div>
+            <div class="paragraph2-regular ml-16px font-weight-normal bring-to-top">
+                Wydarzenia
+            </div>
+            <div class="position-absolute width100p text-center paragraph2-light font-weight-normal" style="width:">
+                @ViewBag.TeamName
+            </div>
+        </div>
+
+        <!-- BUTTONS - Add host, ... -->
+        <div class="text-left">
+            <button asp-action="AddEvent" formmethod="get" class="ml-8px pr-8px mb-16px round-corners-5px no-border text-white large-light" style="background-color:darkgreen">
+                <img src="~/icons/managment/add.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
+                Dodaj wydarzenie
+            </button>
+        </div>
+
+        <!-- MAIN PANEL -->
+        <div class="display-flex size100p justify-content-around">
+            <!-- LIST OF HOSTS IN THE TEAM -->
+            <div style="min-height:100%;min-width:160px;width:99%" class="height-fit-content display-flex justify-content-center big-shadow">
+                <div style="width:96%">
+                    <div class="display-flex justify-content-center paragraph2-light">
+                        Wydarzenia
+                    </div>
+                    <div class="display-flex width100p text-left medium-bold mb-4px">
+                        <div class="display-flex width100p justify-content-between ml-16px mr-8px">
+                            <span class="width-1a">ID wydarzenia</span>
+                            <span class="width-1b">rodzaj</span>
+                            <span class="width-1c text-left">data</span>
+                            <span class="width-1d"></span>
+                        </div>
+                    </div>
+                    @for (int i = 0; i < ViewBag.EventsList.Count; i++)
+                    {
+                        <div class="display-flex list-item-height width100p clear-white small-shadow round-corners-12px large-light mb-4px">
+                            <div class="display-flex justify-content-between width100p text-left">
+                                <div class="width-1a ml-16px">
+                                    <div class="mt-8px">@ViewBag.EventsList[i].IdEvent</div>
+                                </div>
+                                <div class="width-1b">
+                                    <div class="mt-8px">@ViewBag.EventsList[i].Type</div>
+                                </div>
+                                <div class="width-1c">
+                                    <div class="mt-8px">@ViewBag.EventsList[i].DateStartDateNotNullDateEnd.ToString("dd'.'MM'.'yyyy' 'HH':'mm")</div>
+                                </div>
+                                <div class="display-flex width-1d mt-8px mr-8px">
+                                    <button id="manage-icon" name="eventId" value=@ViewBag.EventsList[i].IdEvent asp-action="AttendanceListForm" formmethod="get" class="no-border size-fit-content clear-white round-corners-5px">
+                                        <img src="~/icons/managment/edit.svg" class="icon-size-24" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <div style="height: 68px">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
