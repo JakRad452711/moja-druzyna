@@ -4,7 +4,14 @@ using Microsoft.Extensions.Logging;
 using moja_druzyna.Data;
 using moja_druzyna.Data.Session;
 using moja_druzyna.Models;
+using moja_druzyna.ViewModels.Profile;
+using static moja_druzyna.Models.Rank;
+using static moja_druzyna.Models.Role;
+using static moja_druzyna.Models.ScoutAchievement;
+using static moja_druzyna.Models.Achievement;
+using static moja_druzyna.Models.ScoutRank;
 using System.Diagnostics;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace moja_druzyna.Controllers
@@ -59,21 +66,55 @@ namespace moja_druzyna.Controllers
         {
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
-            return View();
+            Rank rank = GetRanks(_dbContext, sessionAccesser.UserPesel, sessionAccesser.UserId);
+
+            ICollection<ScoutRank> ranks = rank.ScoutRanks;
+
+            ICollection<RankViewModel> scoutRanks = new List<RankViewModel>();
+
+            foreach (ScoutRank temp in ranks)
+            {
+
+                string temp_rank = temp.RankName;
+                string date_aquirement = temp.DateAcquirement.ToString();
+                string is_current = temp.IsCurrent.ToString();
+
+                scoutRanks.Add(new RankViewModel()
+                {
+                    Rank = temp_rank,
+                    IsCurrent = is_current,
+                    DateAquirement = date_aquirement
+                }
+                );
+
+
+            }
+
+            scoutRanks = scoutRanks.OrderBy(x => x.DateAquirement).ToList();
+
+            return View(scoutRanks);
         }
 
         public IActionResult Achievments()
         {
             ViewBag.TeamName = sessionAccesser.CurrentTeamName;
 
-            return View();
-        }
+            var achievements = GetScoutAchievements(_dbContext, sessionAccesser.UserPesel);
 
-        public IActionResult Roles()
-        {
-            ViewBag.TeamName = sessionAccesser.CurrentTeamName;
+            ICollection<AchievementsViewModel> achievementsViewModels = new List<AchievementsViewModel>();
+            
+            foreach (KeyValuePair<string, string> achievement in achievements)
+            {
+                achievementsViewModels.Add(new AchievementsViewModel()
+                {
+                    AchievementDate = achievement.Value,
+                    AchievementType = moja_druzyna.Const.ScoutAbilities.ScoutAbilitiesTranslationWithPolishLetters[achievement.Key]
+                });
+            }
 
-            return View();
+            achievementsViewModels = achievementsViewModels.ToList();
+
+            return View(achievementsViewModels);
         }
 
         public IActionResult CoursesAndPermissions()

@@ -1,7 +1,7 @@
-﻿@model ICollection<moja_druzyna.ViewModels.Profile.AchievementsViewModel>
+﻿@model ICollection<moja_druzyna.ViewModels.Team.RolesViewModel>
 
 @{
-    ViewData["Title"] = "osiągnięcia";
+    ViewData["Title"] = "role";
 }
 
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -9,6 +9,19 @@
     <form method="post" class="size100p">
         <input id="team-id" value="@ViewBag.TeamId" disabled hidden />
         <div style="height:50px" class="text-left display-flex mt-16px position-relative">
+            <div class="paragraph2-regular ml-8px font-weight-light bring-to-top">
+                <a asp-action="team" class="font-muddy-black">
+                    Harcerze
+                </a>
+            </div>
+            <div class="paragraph2-regular ml-16px font-weight-light bring-to-top">
+                <a asp-action="hosts" class="font-muddy-black">
+                    Zastępy
+                </a>
+            </div>
+            <div class="paragraph2-regular ml-16px font-weight-normal bring-to-top">
+                Role
+            </div>
             <div class="position-absolute width100p text-center paragraph2-light font-weight-normal">
                 @ViewBag.TeamName
             </div>
@@ -24,28 +37,33 @@
             <div style="min-height:100%;min-width:160px;width:99%" class="height-fit-content display-flex justify-content-center big-shadow">
                 <div style="width:96%">
                     <div class="paragraph2-light mb-16px">
-                        Osiągnięcia
+                        Role
                     </div>
                     <div class="display-flex width100p text-left medium-bold mb-4px">
-                        <div class="display-flex justify-content-between width100p ml-16px">
-                            <span class="width-1a">osiągnięcie</span>
-                            <span class="width-1d mr-16px">data otrzymania</span>
+                        <div class="display-flex justify-content-between width100p ml-64px">
+                            <span class="width-1a">godność</span>
+                            <span class="mr-16px" style="width:130px">rola</span>
                         </div>
                     </div>
 
                     <div class="text-center justify-content-center" style="min-width:650px" align="center">
-                        @foreach (var achievementsVM in Model)
+                        @foreach (var roleVM in Model)
                         {
-                            <div class="display-flex width100p list-item-height clear-white small-shadow round-corners-12px large-light mb-4px">
-                                <div class="display-flex justify-content-between width100p text-left mr-16px ml-16px">
+
+                            <div class="display-flex list-item-height width100p clear-white small-shadow round-corners-12px large-light mb-4px">
+                                <div class="mt-4px ml-8px">
+                                    <img id="profile-picture" src="~/icons/design/profile picture.svg" class="icon-size-40 mr-16px" />
+                                </div>
+                                <div class="display-flex justify-content-between width100p text-left">
                                     <div class="width-1a">
-                                        <div class="mt-8px">@achievementsVM.AchievementType</div>
+                                        <div class="mt-8px">@roleVM.ScoutName</div>
                                     </div>
-                                    <div class="width-1c mt-8px">
-                                        @achievementsVM.AchievementDate
+                                    <div class="mt-8px mr-16px" style="width:130px">
+                                        @roleVM.RoleName
                                     </div>
                                 </div>
                             </div>
+
                         }
                     </div>
                     <div style="height: 60px">

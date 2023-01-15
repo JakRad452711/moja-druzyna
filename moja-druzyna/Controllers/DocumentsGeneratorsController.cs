@@ -326,7 +326,7 @@ namespace moja_druzyna.Controllers
 
         public IActionResult OrderForm_Submit(OrderGeneratorViewModel orderGeneratorViewModel)
         {
-            if (string.IsNullOrEmpty(orderGeneratorViewModel.OrderNumber))
+            if (string.IsNullOrEmpty(orderGeneratorViewModel.OrderNumber) || string.IsNullOrEmpty(orderGeneratorViewModel.Location))
             {
                 sessionAccesser.OperationFailed = true;
 
@@ -433,14 +433,14 @@ namespace moja_druzyna.Controllers
             {
                 if(trialClosing.TrialType == TrialTypes.ScoutCross)
                 {
-                    trialClosing.TrialType = "krzyz harcerski";
+                    trialClosing.TrialType = "krzyż harcerski";
                     trialClosing.TrialName = "";
                 }
                 else
                 {
                     if (trialClosing.TrialType == TrialTypes.Rank)
                     {
-                        trialClosing.TrialType = "stopien";
+                        trialClosing.TrialType = "stopień";
 
                         if (ScoutRanks.ScoutRanksList.Contains(trialClosing.Rank))
                             trialClosing.TrialName = ScoutRanks.ScoutRanksTranslation[trialClosing.Rank];
@@ -448,12 +448,15 @@ namespace moja_druzyna.Controllers
 
                     if (trialClosing.TrialType == TrialTypes.Ability)
                     {
-                        trialClosing.TrialType = "sprawnosc";
+                        trialClosing.TrialType = "sprawność";
 
                         Achievement achievement = _dbContext.Achievements.Find(int.Parse(trialClosing.Ability));
 
                         if (achievement != null)
+                        {
                             trialClosing.Ability = ScoutAbilities.ScoutAbilitiesTranslation[achievement.Type];
+                            trialClosing.TrialName = ScoutAbilities.ScoutAbilitiesTranslationWithPolishLetters[achievement.Type];
+                        }
                     }
                 }
             }
@@ -464,14 +467,14 @@ namespace moja_druzyna.Controllers
             {
                 if (trialOpening.TrialType == TrialTypes.ScoutCross)
                 {
-                    trialOpening.TrialType = "krzyz harcerski";
+                    trialOpening.TrialType = "krzyż harcerski";
                     trialOpening.TrialName = "";
                 }
                 else
                 {
                     if (trialOpening.TrialType == TrialTypes.Rank)
                     {
-                        trialOpening.TrialType = "stopien";
+                        trialOpening.TrialType = "stopień";
 
                         if (ScoutRanks.ScoutRanksList.Contains(trialOpening.Rank))
                             trialOpening.TrialName = ScoutRanks.ScoutRanksTranslation[trialOpening.Rank];
@@ -479,12 +482,15 @@ namespace moja_druzyna.Controllers
 
                     if (trialOpening.TrialType == TrialTypes.Ability)
                     {
-                        trialOpening.TrialType = "sprawnosc";
+                        trialOpening.TrialType = "sprawność";
 
                         Achievement achievement = _dbContext.Achievements.Find(int.Parse(trialOpening.Ability));
 
                         if (achievement != null)
+                        {
                             trialOpening.Ability = ScoutAbilities.ScoutAbilitiesTranslation[achievement.Type];
+                            trialOpening.TrialName = ScoutAbilities.ScoutAbilitiesTranslationWithPolishLetters[achievement.Type];
+                        }
                     }
                 }
             }
@@ -494,7 +500,7 @@ namespace moja_druzyna.Controllers
             foreach(ReprimendsAndPraises reprimendsAndPraise in reprimendsAndPraises)
             {
                 if (reprimendsAndPraise.Type == "praise")
-                    reprimendsAndPraise.Type = "pochwala";
+                    reprimendsAndPraise.Type = "pochwała";
                 if (reprimendsAndPraise.Type == "reprimand")
                     reprimendsAndPraise.Type = "reprymenda";
                 if (reprimendsAndPraise.Type == "distinction")
@@ -508,7 +514,7 @@ namespace moja_druzyna.Controllers
                 if (exclusion.Reason == "resignation")
                     exclusion.Reason = "rezygnacja";
                 if (exclusion.Reason == "non-payment of contributions")
-                    exclusion.Reason = "nieoplacenie skladek";
+                    exclusion.Reason = "nieopłacenie składek";
                 if (exclusion.Reason == "banishment")
                     exclusion.Reason = "wydalenie";
                 if (exclusion.Reason == "other")
@@ -540,10 +546,10 @@ namespace moja_druzyna.Controllers
             List<SelectListItem> dropDownList_Scouts = new List<SelectListItem>();
             List<SelectListItem> dropDownList_Roles = new List<SelectListItem>()
             {
-                new() {Text = "przyboczny", Value = TeamRoles.ViceCaptain},
-                new() {Text = "chorąży drużyny", Value = TeamRoles.Ensign},
-                new() {Text = "kwatermistrz", Value = TeamRoles.Quatermaster},
-                new() {Text = "kronikarz", Value = TeamRoles.Chronicler}
+                new() {Text = "Przyboczny", Value = TeamRoles.ViceCaptain},
+                new() {Text = "Chorąży drużyny", Value = TeamRoles.Ensign},
+                new() {Text = "Kwatermistrz", Value = TeamRoles.Quatermaster},
+                new() {Text = "Kronikarz", Value = TeamRoles.Chronicler}
             };
             List<SelectListItem> dropDownList_Hosts = new List<SelectListItem>();
 
@@ -655,10 +661,10 @@ namespace moja_druzyna.Controllers
             List<SelectListItem> dropDownList_Scouts = new List<SelectListItem>();
             List<SelectListItem> dropDownList_Reasons = new List<SelectListItem>()
             {
-                new() {Text = "rezygnacja", Value = "resignation"},
-                new() {Text = "niepłacenie składek", Value = "non-payment of contributions"},
-                new() {Text = "wydalenie", Value = "banishment"},
-                new() {Text = "inne", Value = "other"}
+                new() {Text = "Rezygnacja", Value = "resignation"},
+                new() {Text = "Niepłacenie składek", Value = "non-payment of contributions"},
+                new() {Text = "Wydalenie", Value = "banishment"},
+                new() {Text = "Inne", Value = "other"}
             };
 
             foreach (Scout scout in scoutsThatCanBeAdded.OrderBy(s => s.Name).OrderBy(s => s.Surname))
@@ -978,9 +984,9 @@ namespace moja_druzyna.Controllers
             List<SelectListItem> dropDownList_Scouts = new List<SelectListItem>();
             List<SelectListItem> dropDownList_Types = new List<SelectListItem>()
             {
-                new() {Text = "pochwała", Value = "praise"},
-                new() {Text = "nagana", Value = "reprimand"},
-                new() {Text = "wyróżnienie", Value = "distinction"}
+                new() {Text = "Pochwała", Value = "praise"},
+                new() {Text = "Nagana", Value = "reprimand"},
+                new() {Text = "Wyróżnienie", Value = "distinction"}
             };
 
             foreach (Scout scout in scoutsThatCanBeAdded.OrderBy(s => s.Name).OrderBy(s => s.Surname))
@@ -1087,34 +1093,34 @@ namespace moja_druzyna.Controllers
 
             List<SelectListItem> dropDownList_Ranks = new List<SelectListItem>()
             {
-                new() {Text = "młodzik/ochotniczka", Value = ScoutRanks.Rank1},
-                new() {Text = "wywiadowca/tropicielka", Value = ScoutRanks.Rank2},
-                new() {Text = "odkrywca/pionierka", Value = ScoutRanks.Rank3},
-                new() {Text = "ćwik/samarytanka", Value = ScoutRanks.Rank4},
-                new() {Text = "harcerz orli/harcerka orla", Value = ScoutRanks.Rank5},
-                new() {Text = "harcerz rzeczypospolitej/harcerka rzeczypospolitej", Value = ScoutRanks.Rank6}
+                new() {Text = "Młodzik/Ochotniczka", Value = ScoutRanks.Rank1},
+                new() {Text = "Wywiadowca/Tropicielka", Value = ScoutRanks.Rank2},
+                new() {Text = "Odkrywca/Pionierka", Value = ScoutRanks.Rank3},
+                new() {Text = "Ćwik/Samarytanka", Value = ScoutRanks.Rank4},
+                new() {Text = "Harcerz orli/Harcerka orla", Value = ScoutRanks.Rank5},
+                new() {Text = "Harcerz rzeczypospolitej/Harcerka rzeczypospolitej", Value = ScoutRanks.Rank6}
             };
             List<SelectListItem> dropDownList_Abilities = new List<SelectListItem>()
             {
-                new() {Text = "higienista", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Hygenist).First().IdAchievement.ToString()},
-                new() {Text = "sanitariusz", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Paramedic).First().IdAchievement.ToString()},
-                new() {Text = "ratownik", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Lifesaver).First().IdAchievement.ToString()},
-                new() {Text = "ognik", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Glimmer).First().IdAchievement.ToString()},
-                new() {Text = "strażnik ognia", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.FireGuard).First().IdAchievement.ToString()},
-                new() {Text = "mistrz ognisk", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.FireplaceMaster).First().IdAchievement.ToString()},
-                new() {Text = "znawca musztry", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.DrillExpert).First().IdAchievement.ToString()},
-                new() {Text = "mistrz musztry", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.DrillMaster).First().IdAchievement.ToString()},
-                new() {Text = "igiełka", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Needle).First().IdAchievement.ToString()},
-                new() {Text = "krawiec", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Tailor).First().IdAchievement.ToString()},
-                new() {Text = "młody pływak", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.YoungSwimmer).First().IdAchievement.ToString()},
-                new() {Text = "pływak", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Swimmer).First().IdAchievement.ToString()},
-                new() {Text = "pływak doskonały", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.ExcellentSwimmer).First().IdAchievement.ToString()},
-                new() {Text = "internauta", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Internaut).First().IdAchievement.ToString()},
-                new() {Text = "historyk rodzinny", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.FamilyHistorian).First().IdAchievement.ToString()},
-                new() {Text = "europejczyk", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.European).First().IdAchievement.ToString()},
-                new() {Text = "lider zdrowia", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.HealthLeader).First().IdAchievement.ToString()},
-                new() {Text = "przyjaciel przyrody", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.NatureFriend).First().IdAchievement.ToString()},
-                new() {Text = "fotograf", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Photograph).First().IdAchievement.ToString()},
+                new() {Text = "Higienista", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Hygenist).First().IdAchievement.ToString()},
+                new() {Text = "Sanitariusz", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Paramedic).First().IdAchievement.ToString()},
+                new() {Text = "Ratownik", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Lifesaver).First().IdAchievement.ToString()},
+                new() {Text = "Ognik", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Glimmer).First().IdAchievement.ToString()},
+                new() {Text = "Strażnik ognia", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.FireGuard).First().IdAchievement.ToString()},
+                new() {Text = "Mistrz ognisk", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.FireplaceMaster).First().IdAchievement.ToString()},
+                new() {Text = "Znawca musztry", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.DrillExpert).First().IdAchievement.ToString()},
+                new() {Text = "Mistrz musztry", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.DrillMaster).First().IdAchievement.ToString()},
+                new() {Text = "Igiełka", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Needle).First().IdAchievement.ToString()},
+                new() {Text = "Krawiec", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Tailor).First().IdAchievement.ToString()},
+                new() {Text = "Młody pływak", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.YoungSwimmer).First().IdAchievement.ToString()},
+                new() {Text = "Pływak", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Swimmer).First().IdAchievement.ToString()},
+                new() {Text = "Pływak doskonały", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.ExcellentSwimmer).First().IdAchievement.ToString()},
+                new() {Text = "Internauta", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Internaut).First().IdAchievement.ToString()},
+                new() {Text = "Historyk rodzinny", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.FamilyHistorian).First().IdAchievement.ToString()},
+                new() {Text = "Europejczyk", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.European).First().IdAchievement.ToString()},
+                new() {Text = "Lider zdrowia", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.HealthLeader).First().IdAchievement.ToString()},
+                new() {Text = "Przyjaciel przyrody", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.NatureFriend).First().IdAchievement.ToString()},
+                new() {Text = "Fotograf", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Photograph).First().IdAchievement.ToString()},
             };
 
             foreach (Scout scout in scoutsThatCanBeAddedRanks.OrderBy(s => s.Name).OrderBy(s => s.Surname))
@@ -1243,40 +1249,40 @@ namespace moja_druzyna.Controllers
             List<SelectListItem> dropDownList_Scouts = new List<SelectListItem>();
             List<SelectListItem> dropDownList_TrialTypes = new List<SelectListItem>()
             {
-                new() {Text = "krzyż harcerski", Value = TrialTypes.ScoutCross},
-                new() {Text = "stopień", Value = TrialTypes.Rank},
-                new() {Text = "sprawność", Value = TrialTypes.Ability}
+                new() {Text = "Krzyż harcerski", Value = TrialTypes.ScoutCross},
+                new() {Text = "Stopień", Value = TrialTypes.Rank},
+                new() {Text = "Sprawność", Value = TrialTypes.Ability}
             };
             List<SelectListItem> dropDownList_Ranks = new List<SelectListItem>()
             {
-                new() {Text = "młodzik/ochotniczka", Value = ScoutRanks.Rank1},
-                new() {Text = "wywiadowca/tropicielka", Value = ScoutRanks.Rank2},
-                new() {Text = "odkrywca/pionierka", Value = ScoutRanks.Rank3},
-                new() {Text = "ćwik/samarytanka", Value = ScoutRanks.Rank4},
-                new() {Text = "harcerz orli/harcerka orla", Value = ScoutRanks.Rank5},
-                new() {Text = "harcerz rzeczypospolitej/harcerka rzeczypospolitej", Value = ScoutRanks.Rank6}
+                new() {Text = "Młodzik/Ochotniczka", Value = ScoutRanks.Rank1},
+                new() {Text = "Wywiadowca/Tropicielka", Value = ScoutRanks.Rank2},
+                new() {Text = "Odkrywca/Pionierka", Value = ScoutRanks.Rank3},
+                new() {Text = "Ćwik/Samarytanka", Value = ScoutRanks.Rank4},
+                new() {Text = "Harcerz orli/Harcerka orla", Value = ScoutRanks.Rank5},
+                new() {Text = "Harcerz rzeczypospolitej/Harcerka rzeczypospolitej", Value = ScoutRanks.Rank6}
             };
             List<SelectListItem> dropDownList_Abilities = new List<SelectListItem>()
             {
-                new() {Text = "higienista", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Hygenist).First().IdAchievement.ToString()},
-                new() {Text = "sanitariusz", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Paramedic).First().IdAchievement.ToString()},
-                new() {Text = "ratownik", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Lifesaver).First().IdAchievement.ToString()},
-                new() {Text = "ognik", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Glimmer).First().IdAchievement.ToString()},
-                new() {Text = "strażnik ognia", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.FireGuard).First().IdAchievement.ToString()},
-                new() {Text = "mistrz ognisk", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.FireplaceMaster).First().IdAchievement.ToString()},
-                new() {Text = "znawca musztry", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.DrillExpert).First().IdAchievement.ToString()},
-                new() {Text = "mistrz musztry", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.DrillMaster).First().IdAchievement.ToString()},
-                new() {Text = "igiełka", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Needle).First().IdAchievement.ToString()},
-                new() {Text = "krawiec", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Tailor).First().IdAchievement.ToString()},
-                new() {Text = "młody pływak", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.YoungSwimmer).First().IdAchievement.ToString()},
-                new() {Text = "pływak", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Swimmer).First().IdAchievement.ToString()},
-                new() {Text = "pływak doskonały", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.ExcellentSwimmer).First().IdAchievement.ToString()},
-                new() {Text = "internauta", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Internaut).First().IdAchievement.ToString()},
-                new() {Text = "historyk rodzinny", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.FamilyHistorian).First().IdAchievement.ToString()},
-                new() {Text = "europejczyk", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.European).First().IdAchievement.ToString()},
-                new() {Text = "lider zdrowia", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.HealthLeader).First().IdAchievement.ToString()},
-                new() {Text = "przyjaciel przyrody", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.NatureFriend).First().IdAchievement.ToString()},
-                new() {Text = "fotograf", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Photograph).First().IdAchievement.ToString()},
+                new() {Text = "Higienista", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Hygenist).First().IdAchievement.ToString()},
+                new() {Text = "Sanitariusz", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Paramedic).First().IdAchievement.ToString()},
+                new() {Text = "Ratownik", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Lifesaver).First().IdAchievement.ToString()},
+                new() {Text = "Ognik", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Glimmer).First().IdAchievement.ToString()},
+                new() {Text = "Strażnik ognia", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.FireGuard).First().IdAchievement.ToString()},
+                new() {Text = "Mistrz ognisk", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.FireplaceMaster).First().IdAchievement.ToString()},
+                new() {Text = "Znawca musztry", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.DrillExpert).First().IdAchievement.ToString()},
+                new() {Text = "Mistrz musztry", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.DrillMaster).First().IdAchievement.ToString()},
+                new() {Text = "Igiełka", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Needle).First().IdAchievement.ToString()},
+                new() {Text = "Krawiec", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Tailor).First().IdAchievement.ToString()},
+                new() {Text = "Młody pływak", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.YoungSwimmer).First().IdAchievement.ToString()},
+                new() {Text = "Pływak", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Swimmer).First().IdAchievement.ToString()},
+                new() {Text = "Pływak doskonały", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.ExcellentSwimmer).First().IdAchievement.ToString()},
+                new() {Text = "Internauta", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Internaut).First().IdAchievement.ToString()},
+                new() {Text = "Historyk rodzinny", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.FamilyHistorian).First().IdAchievement.ToString()},
+                new() {Text = "Europejczyk", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.European).First().IdAchievement.ToString()},
+                new() {Text = "Lider zdrowia", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.HealthLeader).First().IdAchievement.ToString()},
+                new() {Text = "Przyjaciel przyrody", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.NatureFriend).First().IdAchievement.ToString()},
+                new() {Text = "Fotograf", Value = _dbContext.Achievements.Where(a => a.Type == ScoutAbilities.Photograph).First().IdAchievement.ToString()},
             };
 
             foreach (Scout scout in scoutsThatCanBeAddedRanks.OrderBy(s => s.Name).OrderBy(s => s.Surname))

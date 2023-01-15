@@ -14,12 +14,12 @@ namespace moja_druzyna.Const
         public static readonly List<string> ScoutRanksList = new() { Rank1, Rank2, Rank3, Rank4, Rank5, Rank6 };
         public static readonly Dictionary<string, string> ScoutRanksTranslation = new()
         {
-            { Rank1, "mlodzik" },
-            { Rank2, "wywiadowca" },
-            { Rank3, "odkrywca" },
-            { Rank4, "cwik" },
-            { Rank5, "harcerz orli" },
-            { Rank6, "harcerz rzeczypospolitej" }
+            { Rank1, "Młodzik" },
+            { Rank2, "Wywiadowca" },
+            { Rank3, "Odkrywca" },
+            { Rank4, "Ćwik" },
+            { Rank5, "Harcerz orli" },
+            { Rank6, "Harcerz rzeczypospolitej" }
         };
     }
 }
