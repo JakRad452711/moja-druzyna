@@ -37,6 +37,9 @@
 .display-block {
     display: block;
 }
+.display-none {
+    display: none;
+}
 
 .size-fit-content {
     width: fit-content;

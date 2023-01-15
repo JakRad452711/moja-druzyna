@@ -25,10 +25,13 @@
 
         <!-- MAIN PANEL -->
         <div class="display-flex size100p justify-content-around">
-            <!-- LIST OF HOSTS IN THE TEAM -->
-            <div style="height:100%;min-width:160px;width:99%" class="display-flex justify-content-center big-shadow">
+            <!-- LIST OF SCORES -->
+            <div style="min-height:100%;height:fit-content;min-width:160px;width:99%" class="display-flex justify-content-center big-shadow">
                 <div style="width:96%">
-                    <div class="display-flex width100p round-corners-12px large-light mb-4px justify-content-between">
+                    <div class="paragraph2-light">
+                        Punktacje
+                    </div>
+                    <div class="display-flex width100p round-corners-12px large-light mb-4px justify-content-between medium-bold">
                         <div class="ml-8px" style="width:40px;position:relative">
                         </div>
                         <div style="width:50px">
@@ -43,12 +46,12 @@
                         <div class="mr-8px" style="width:60px">
                             punkty
                         </div>
-                    </div> 
+                    </div>
                     @foreach (ScoresViewModel.ScoreEntry score in Model.Scores)
                     {
                         <div class="display-flex width100p clear-white small-shadow round-corners-12px large-light mb-4px list-item-height justify-content-between">
                             <div class="ml-8px" style="width:40px;position:relative">
-                                @if(score.Points > 0)
+                                @if (score.Points > 0)
                                 {
                                     string laurel = "none";
                                     laurel = i == 1 ? "gold_" : laurel;
@@ -65,15 +68,18 @@
                             </div>
                             <div style="width:50px">
                                 <div class="mt-8px">
-                                    @if(score.Points > 0){
+                                    @{
                                         string accents = "no-accents";
-                                        accents = i == 1 ? "gold-accents" : accents;
-                                        accents = i == 2 ? "silver-accents" : accents;
-                                        accents = i == 3 ? "bronze-accents" : accents;
+                                        if (score.Points > 0)
+                                        {
+                                            accents = i == 1 ? "gold-accents" : accents;
+                                            accents = i == 2 ? "silver-accents" : accents;
+                                            accents = i == 3 ? "bronze-accents" : accents;
+                                        }
 
                                         string rankPath = Url.Content(string.Format("~/icons/design/ranks/{0}/rank-{1}.svg", accents, score.Rank));
 
-                                        <img src="@rankPath" alt="" class="rank-icon-size-1" />
+                                            <img src="@rankPath" alt="" class="rank-icon-size-1" />
                                     }
                                 </div>
                             </div>
@@ -92,7 +98,7 @@
                                     @{
                                         string gradient = "";
 
-                                        if(score.Points > 0)
+                                        if (score.Points > 0)
                                         {
                                             gradient = i == 1 ? "gold-gradient" : gradient;
                                             gradient = i == 2 ? "silver-gradient" : gradient;
@@ -104,10 +110,12 @@
                                     </div>
                                 </div>
                             </div>
-                        </div> 
+                        </div>
 
                         i++;
                     }
+                    <div style="height:70px">
+                    </div>
                 </div>
             </div>
         </div>

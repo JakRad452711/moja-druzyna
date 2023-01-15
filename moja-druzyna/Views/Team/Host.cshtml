@@ -32,7 +32,7 @@
                 <img src="~/icons/navigation/nav-left.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
                 Wróć
             </button>
-            <button name="hostId" value=@Model.HostId asp-action="addscouttohost" formmethod="get" class="ml-8px pr-8px mb-16px round-corners-5px no-border text-white large-light" style="background-color:yellowgreen">
+            <button name="hostId" value=@Model.HostId asp-action="addscouttohost" formmethod="get" class="ml-8px pr-8px mb-16px round-corners-5px no-border text-white large-light" style="background-color:darkgreen">
                 <img src="~/icons/managment/add.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
                 Dodaj harcerza do zastępu
             </button>
@@ -68,7 +68,7 @@
                                     @if (scout.IsHostCaptain)
                                     {
                                         <div class="display-flex ml-16px mt-4px">
-                                            <img src="~/icons/main/green/flag.svg" class="icon-size-24 ml-4px" />
+                                            <img src="~/icons/main/flag.svg" class="icon-size-24 ml-4px" />
                                         </div>
                                     }
                                 </div>

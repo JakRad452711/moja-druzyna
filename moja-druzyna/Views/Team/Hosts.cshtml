@@ -23,7 +23,7 @@
 
         <!-- BUTTONS - Add host, ... -->
         <div class="text-left">
-            <button asp-action="addhost" formmethod="get" class="ml-8px pr-8px mb-16px round-corners-5px no-border text-white large-light" style="background-color:yellowgreen">
+            <button asp-action="addhost" formmethod="get" class="ml-8px pr-8px mb-16px round-corners-5px no-border text-white large-light" style="background-color:darkgreen">
                 <img src="~/icons/managment/add.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
                 Dodaj zastęp
             </button>
@@ -34,6 +34,9 @@
             <!-- LIST OF HOSTS IN THE TEAM -->
             <div style="min-height:100%;min-width:160px;width:99%" class="height-fit-content display-flex justify-content-center big-shadow">
                 <div style="width:96%">
+                    <div class="paragraph2-light mb-16px">
+                        Zastępy
+                    </div>
                     @if (Model.HostsViewModel_Hosts.Count() > 0)
                     {
                         <div class="display-flex width100p text-left medium-bold mb-4px">

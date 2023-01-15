@@ -16,7 +16,7 @@
 
         <!-- BUTTONS - Add host, ... -->
         <div class="text-left">
-            <button asp-action="ordergenerator" formmethod="post" class="ml-8px mb-16px round-corners-5px no-border text-white large-light" style="background-color:gray">
+            <button type="submit" formmethod="post" class="ml-8px mb-16px round-corners-5px no-border text-white large-light" style="background-color:gray">
                 <img src="~/icons/navigation/nav-left.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
                 Wróć
             </button>
@@ -37,24 +37,18 @@
                         <div class="height100p ml-16px">
                             @if (ViewBag.AreThereScoutsToAdd)
                             {
-                                <button asp-action="exclusionsadd" class="mt-32px round-corners-5px no-border text-white large-light" style="background-color:yellowgreen;width:200px">
+                                <button asp-action="exclusionsadd" class="mt-32px round-corners-5px no-border text-white large-light" style="background-color:darkgreen">
                                     <img src="~/icons/managment/add.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
                                     Dodaj skreślenie harcerza
                                 </button>
                             }
                             else
                             {
-                                <button asp-action="exclusionsadd" class="mt-32px round-corners-5px no-border text-white large-light" style="background-color:gray;width:270px" disabled>
+                                <button asp-action="exclusionsadd" class="mt-32px round-corners-5px no-border text-white large-light" style="background-color:gray" disabled>
                                     <img src="~/icons/managment/cancel.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
                                     Nie ma więcej harcerzy do dodania
                                 </button>
                             }
-                        </div>
-                        <div class="height100p ml-16px">
-                            <button type="submit" class="mt-32px round-corners-5px no-border text-white large-light" style="background-color:yellowgreen;width:130px">
-                                <img src="~/icons/managment/check_circle.svg" class="icon-size-16 mb-4px" style="filter:brightness(1000%)" />
-                                Zapisz zmiany
-                            </button>
                         </div>
                     </div>
                     @for (int i = Model.Exclusions.Count() - 1; i >= 0; i--)
@@ -65,10 +59,10 @@
                                     <div class="large-light mb-8px mt-8px min-width-fit-content">
                                         @string.Format("{0} {1}", Model.Exclusions[i].ScoutName, Model.Exclusions[i].ScoutSurname)
                                     </div>
-                                    <div class="width100p height-fit-content mt-4px" style="margin-right:-8px">
+                                    <div class="width100p height-fit-content mt-4px" style="margin-right:-14px">
                                         <div class="float-right mt-2px">
                                             <button asp-action="exclusionsremove" name="scoutId" value=@Model.Exclusions[i].ScoutId class="no-border muddy-white-2 round-corners-5px">
-                                                <img src="~/icons/managment/remove.svg" class="icon-size-24" />
+                                                <img src="~/icons/managment/delete.svg" class="icon-size-24" style="filter: invert(47%) sepia(54%) saturate(701%) hue-rotate(314deg) brightness(86%) contrast(98%);" />
                                             </button>
                                         </div>
                                     </div>
